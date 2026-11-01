@@ -2,7 +2,7 @@
 
 다른 컴퓨터나 새 세션에서 이어서 작업할 때 가장 먼저 읽는 문서이다. 세션을 마칠 때마다 갱신한다. 그동안 무엇을 왜 했는지, 지금 코드가 어떻게 생겼는지, 이어서 할 때 조심할 점은 [worklog.md](worklog.md)에 있다. 주제 재정의 이전(HR 헬프데스크 챗봇)의 인수인계 문서는 [archive/handoff-v1-hr.md](archive/handoff-v1-hr.md)에 보관했다.
 
-기준일: 2026-11-02 (Z 1차 측정과 보고서 완료. 가명 안내문을 붙인 Z 2차 측정은 자동 수집과 채점까지 끝났고, 사람 판정 20개가 남음. 코드 읽기는 보류 중).
+기준일: 2026-11-02 (Z 1차와 2차(가명 안내문) 측정과 보고서 완료. 2차의 사람 판정은 하지 않기로 함. 코드 읽기는 보류 중).
 
 ## 1. 한눈에 보기
 
@@ -21,12 +21,12 @@
 | 3 | 처리 결정, 가림과 복원, 게이트웨이 재조립, 감사 로그, 운영 경로에서 Jev 제거 | 완료 |
 | 4 | 포털 화면, 시연용 응답 모델, 가림 응답에 보낸 문장(AC-6.4) | 완료 |
 | 5 | 평가 세트 생성과 동결, X·Y·T 측정, Z 준비 | 완료 (평가 세트 596문장, X·Y·T 1차 측정, Z 도구와 시험. [결과](eval/results/report_xyt_v1.md)) |
-| 6 | Z 측정(Jev 검증 후), 우회 소량 시험, README와 결과 | **Z 1차 측정 완료(2026-11-01, [결과](eval/results/report_z_v1.md), Jev 불채택·사람 판정 주 결과), Z 2차(가명 안내문)는 사람 판정 대기**. 아래는 이전 기록: **진행 중** 우회 시험 완료([결과](eval/results/report_bypass_v1.md)), 출처 표기와 README 정리 완료. **Z 실행(사용자 컴퓨터)이 남음**, 그 뒤 Z 보고서 |
+| 6 | Z 측정(Jev 검증 후), 우회 소량 시험, README와 결과 | **Z 1차 측정 완료(2026-11-01, [결과](eval/results/report_z_v1.md), Jev 불채택·사람 판정 주 결과), Z 2차(가명 안내문)도 완료([결과](eval/results/report_z2_v1.md))**. 아래는 이전 기록: **진행 중** 우회 시험 완료([결과](eval/results/report_bypass_v1.md)), 출처 표기와 README 정리 완료. **Z 실행(사용자 컴퓨터)이 남음**, 그 뒤 Z 보고서 |
 | 코드 읽기 | 핵심 코드를 사용자가 읽고 설명할 수 있게 하기 | 1일차 진행 중. [docs/code-reading/](code-reading/)와 [progress.md](code-reading/progress.md) |
 | 7 | 여유분, 마무리 정리 | 대기 (`main` 병합은 2026-10-30 끝냄) |
 
 - **시험:** Java 109건과 Python 69건이 통과한다(2026-10-29 확인, 키 없이 통과). Java는 `cd backend`, `mvn -B test`. Python은 `cd backend/scripts`에서 `python -m unittest test_fake_values test_measure test_build_eval_set test_build_bypass_set test_z_measure`이다. 옛 HR용 `run_batch.py`와 `domain_candidates.py`는 시험과 함께 `backend/scripts/archive_hr/`로 옮겼다(보관, 실행하지 않는다).
-- **멈춘 지점:** Z 2차 측정(가명 안내문)의 **사람 판정 20개를 기다리는 중**이다(3절 "Z 2차 측정"). 그 판정만 끝나면 2차 보고서를 쓴다. 코드 읽기는 사용자가 보류했다.
+- **멈춘 지점:** Z 1차, 2차 보고서까지 끝났다. 작업 중인 파일은 없다. 코드 읽기는 사용자가 보류했고, 다음은 코드 읽기 또는 마무리 정리이다.
 
 ## 3. 다음 작업
 
@@ -40,7 +40,9 @@
 
 5일차(측정 도구 v2, 업무 요청 틀 3종, 평가 세트 596문장 동결, X·Y·T 1차 측정)는 끝났다. 결과는 [eval/results/report_xyt_v1.md](eval/results/report_xyt_v1.md)이다. 6단계의 Z 도구(`backend/scripts/z_measure.py`, 시험 포함)도 만들어 두었고, **실제 호출은 키가 있는 사용자 컴퓨터에서 한다.**
 
-### Z 2차 측정: 가명 안내문 (진행 중, 2026-11-02 기준)
+### Z 2차 측정: 가명 안내문 (완료, 사람 판정은 선택 사항)
+
+**결과는 [report_z2_v1.md](eval/results/report_z2_v1.md)이다. 아래 "남은 것"은 사용자가 사람 판정을 하고 싶을 때만 한다(하지 않기로 했다, DECISIONS 2026-11-02).**
 
 가림 요청 앞에 고정 안내문을 붙이면(AC-4.6, `gateway.mask-notice`) 가림 처리 후 답이 좋아지는지 같은 평가 세트로 다시 쟀다. 결정과 방식은 [DECISIONS.md](../DECISIONS.md) 2026-11-01 "Z 2차 측정 준비"에 있다. 코드는 커밋되어 있고(`89af255`) 안내문 문구는 동결했다.
 
