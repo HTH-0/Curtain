@@ -210,6 +210,28 @@ class CollectTest(unittest.TestCase):
         z.collect_baseline([record(1), record(2)], self.tmp / "a2.jsonl", self.gem, pacer=pacer)
         self.assertEqual(pacer.n, 2)
 
+    def test_답_A를_다시_쓰면_Gemini를_부르지_않고_B만_받는다(self):
+        status = z.collect([record(1)], self.out, self.gem, self.gw, reuse_a={"r1": "이전 답 A"})
+        self.assertEqual(status, {"done": 1, "skipped": 0, "stopped": None})
+        row = json.loads(self.out.read_text(encoding="utf-8").splitlines()[0])
+        self.assertEqual(row["answer_a"], "이전 답 A")
+        self.assertEqual(row["action_b"], "MASK")
+        self.assertEqual([c for c in self.srv.calls if c[0].endswith(":generateContent")], [])
+
+    def test_답_A를_다시_쓸_수_없는_문장이면_멈춘다(self):
+        with self.assertRaises(KeyError):
+            z.collect([record(1)], self.out, self.gem, self.gw, reuse_a={})
+
+    def test_답_A를_다시_쓰면_조절기는_B_호출_앞에서만_기다린다(self):
+        class Counter:
+            n = 0
+
+            def wait(self):
+                self.n += 1
+        pacer = Counter()
+        z.collect([record(1), record(2)], self.out, self.gem, self.gw, pacer=pacer, reuse_a={"r1": "a", "r2": "a"})
+        self.assertEqual(pacer.n, 2)
+
     def test_인증_오류는_즉시_멈춘다(self):
         class Denied(z.GeminiClient):
             def answer(self, text):

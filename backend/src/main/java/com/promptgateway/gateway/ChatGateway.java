@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  *   1. 입력 검증   실패하면 InvalidPromptException (컨트롤러에서 400)
  *   2. 탐지       게이트웨이 안의 코드만 쓴다. 외부 서비스를 부르지 않는다(NFR-4)
  *   3. 처리 결정   차단 > 경고 > 가림 > 허용. 경고는 직원이 확인(confirmed)하면 가림으로 보낸다
- *   4. 외부 AI    허용이면 원문, 가림이면 가명으로 바꾼 문장을 보낸다. 차단과 확인 전 경고는 부르지 않는다
+ *   4. 외부 AI    허용이면 원문, 가림이면 가명으로 바꾼 문장을 보낸다(mask-notice를 켜면 앞에 안내문, AC-4.6). 차단과 확인 전 경고는 부르지 않는다
  *   5. 복원       답의 가명을 원래 값으로 되돌린다
  *   6. 로그       모든 경로에서 정확히 한 줄. 원문과 값은 남기지 않는다
  *
@@ -36,9 +36,15 @@ public class ChatGateway {
     private final AnswerGenerator answerGenerator;
     private final GatewayLogger logger;
     private final boolean measurementMode;
+    private final boolean maskNotice;
+
+    /** 가림 요청 앞에 붙이는 안내문(AC-4.6). 측정 전에 고정하며, 가명 모양 글자를 담지 않는다. */
+    public static final String MASK_NOTICE = "[안내] 아래 요청에서 대괄호로 묶인 글자(항목 이름과 번호)는 개인정보나 기밀을 가려 둔 자리표시자이다. "
+            + "실제 값이 아니므로 뜻을 풀이하거나 되묻지 말고, 요청한 작업을 하면서 같은 표시를 글자 그대로 답에 사용하라.\n\n";
 
     public ChatGateway(InputValidator validator, DetectionEngine engine, ActionDecider decider, Masker masker,
-                       AnswerGenerator answerGenerator, GatewayLogger logger, boolean measurementMode) {
+                       AnswerGenerator answerGenerator, GatewayLogger logger, boolean measurementMode,
+                       boolean maskNotice) {
         this.validator = validator;
         this.engine = engine;
         this.decider = decider;
@@ -46,6 +52,7 @@ public class ChatGateway {
         this.answerGenerator = answerGenerator;
         this.logger = logger;
         this.measurementMode = measurementMode;
+        this.maskNotice = maskNotice;
     }
 
     public boolean isMeasurementMode() {
@@ -98,7 +105,7 @@ public class ChatGateway {
         MaskResult mask = masker.mask(prompt, findings);
         long maskMs = ms(t1);
         long t2 = System.nanoTime();
-        String answer = callAnswer(mask.maskedText(), prompt);
+        String answer = callAnswer(maskNotice ? MASK_NOTICE + mask.maskedText() : mask.maskedText(), prompt);
         long answerMs = ms(t2);
         long t3 = System.nanoTime();
         RestoreResult restored = masker.restore(answer, mask);

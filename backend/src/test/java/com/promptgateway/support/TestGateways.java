@@ -28,8 +28,12 @@ public final class TestGateways {
     }
 
     public static ChatGateway gateway(AnswerGenerator answerer, GatewayLogger logger, boolean measurementMode) {
+        return gateway(answerer, logger, measurementMode, false);
+    }
+
+    public static ChatGateway gateway(AnswerGenerator answerer, GatewayLogger logger, boolean measurementMode, boolean maskNotice) {
         return new ChatGateway(new InputValidator(4000), engine(), new ActionDecider(20), new Masker(), answerer, logger,
-                measurementMode);
+                measurementMode, maskNotice);
     }
 
     /** 휴대전화 번호 n개가 든 명단 문장(대량 경고 시험용). */

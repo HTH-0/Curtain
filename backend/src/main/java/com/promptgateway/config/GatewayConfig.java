@@ -63,6 +63,7 @@ public class GatewayConfig {
         if (gateway.measurementMode()) {
             log.warn("측정 모드가 켜져 있습니다. 같은 컴퓨터에서 온 요청은 외부 AI를 부르지 않고 탐지 결과를 받습니다. 사용자에게 노출하는 환경에서는 꺼야 합니다.");
         }
-        return new ChatGateway(validator, engine, decider, masker, answerGenerator, gatewayLogger, gateway.measurementMode());
+        return new ChatGateway(validator, engine, decider, masker, answerGenerator, gatewayLogger, gateway.measurementMode(),
+                gateway.maskNotice());
     }
 }

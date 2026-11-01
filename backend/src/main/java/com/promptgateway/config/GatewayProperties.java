@@ -5,12 +5,14 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 /**
  * application.yml의 gateway 아래 설정. 입력 최대 길이(기본 4,000자, 명세 v2 S1)와 측정 모드(기본 꺼짐).
+ * maskNotice는 가림 요청 앞에 가명 안내문을 붙일지 정한다(AC-4.6, 기본 꺼짐).
  * 측정 모드는 켜도 같은 컴퓨터에서 온 요청에만 적용된다(ChatController).
  */
 @ConfigurationProperties(prefix = "gateway")
 public record GatewayProperties(
         @DefaultValue("4000") int maxPromptLength,
-        @DefaultValue("false") boolean measurementMode) {
+        @DefaultValue("false") boolean measurementMode,
+        @DefaultValue("false") boolean maskNotice) {
 
     public GatewayProperties {
         if (maxPromptLength <= 0) {

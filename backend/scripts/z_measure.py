@@ -207,7 +207,8 @@ def _stop_reason(exc):
     return {RateLimitError: "rate_limit", TransientError: "server_error", FatalError: "fatal"}[type(exc)]
 
 
-def collect(records, out_path, gemini, gateway, pacer=None):
+def collect(records, out_path, gemini, gateway, pacer=None, reuse_a=None):
+    """reuse_a: {id: 답 A}. 주면 답 A는 Gemini를 부르지 않고 여기서 가져온다(2차 측정에서 1차 답 A를 다시 쓴다)."""
     done_ids = {r["id"] for r in _read_jsonl(out_path)}
     done = skipped = 0
     for rec in records:
@@ -215,9 +216,12 @@ def collect(records, out_path, gemini, gateway, pacer=None):
             skipped += 1
             continue
         try:
-            if pacer:
-                pacer.wait()
-            answer_a = gemini.answer(rec["text"])
+            if reuse_a is not None:
+                answer_a = reuse_a[rec["id"]]
+            else:
+                if pacer:
+                    pacer.wait()
+                answer_a = gemini.answer(rec["text"])
             if pacer:
                 pacer.wait()
             b = gateway.chat(rec["text"])
@@ -380,6 +384,7 @@ def main(argv=None):
     ap.add_argument("--gemini-base", default="https://generativelanguage.googleapis.com/v1beta/models")
     ap.add_argument("--gemini-model", default="gemini-3.5-flash-lite",
                     help="게이트웨이의 gemini.model과 반드시 같아야 한다(A와 B가 같은 응답 모델이어야 비교가 성립한다)")
+    ap.add_argument("--reuse-a", help="collect: 이 collected.jsonl의 답 A를 다시 쓴다(Gemini를 부르지 않는다)")
     ap.add_argument("--min-interval", type=float, default=5.0,
                     help="응답 모델 호출 사이 최소 간격(초). 분당 15회 한도라면 4초 이상, 분당 5회라면 12초 이상")
     ap.add_argument("--jev-base", default="https://api.typesafe.ai")
@@ -399,7 +404,8 @@ def main(argv=None):
 
     if args.command == "collect":
         res = collect(targets, collected, GeminiClient(args.gemini_base, args.gemini_model, _env("GEMINI_API_KEY")),
-                      GatewayClient(args.gateway), pacer=Pacer(args.min_interval))
+                      GatewayClient(args.gateway), pacer=Pacer(args.min_interval),
+                      reuse_a=({r["id"]: r["answer_a"] for r in _read_jsonl(Path(args.reuse_a))} if args.reuse_a else None))
         print(res)
         return 0 if res["stopped"] is None else 2
     if args.command == "baseline":

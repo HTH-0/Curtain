@@ -19,6 +19,7 @@ gemini:
 # 게이트웨이 설정
 gateway:
   max-prompt-length: 4000      # 명단과 설정 파일을 붙여넣는 업무 문장이 길다(명세 v2 S1)
+  mask-notice: false           # true이면 가림 요청 앞에 가명 안내문을 붙인다(AC-4.6). Z 2차 측정에서만 켠다.
   measurement-mode: false      # 개발용. true이면 같은 컴퓨터에서 온 요청에만 외부 AI를 부르지 않고 탐지 결과를 200으로 돌려준다(AC-9.2, 9.3). 사용자에게 노출하는 환경에서는 켜지 않는다.
 
 # 탐지 설정 (docs/design.md 6장). 대량 기준은 측정 전에 동결한다.
