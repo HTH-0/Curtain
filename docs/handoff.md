@@ -2,7 +2,7 @@
 
 다른 컴퓨터나 새 세션에서 이어서 작업할 때 가장 먼저 읽는 문서이다. 세션을 마칠 때마다 갱신한다. 그동안 무엇을 왜 했는지, 지금 코드가 어떻게 생겼는지, 이어서 할 때 조심할 점은 [worklog.md](worklog.md)에 있다. 주제 재정의 이전(HR 헬프데스크 챗봇)의 인수인계 문서는 [archive/handoff-v1-hr.md](archive/handoff-v1-hr.md)에 보관했다.
 
-기준일: 2026-11-01 (Z 측정과 사람 판정, 보고서까지 끝냄. 남은 것은 코드 읽기와 마무리 정리).
+기준일: 2026-11-02 (Z 1차 측정과 보고서 완료. 가명 안내문을 붙인 Z 2차 측정은 자동 수집과 채점까지 끝났고, 사람 판정 20개가 남음. 코드 읽기는 보류 중).
 
 ## 1. 한눈에 보기
 
@@ -21,12 +21,12 @@
 | 3 | 처리 결정, 가림과 복원, 게이트웨이 재조립, 감사 로그, 운영 경로에서 Jev 제거 | 완료 |
 | 4 | 포털 화면, 시연용 응답 모델, 가림 응답에 보낸 문장(AC-6.4) | 완료 |
 | 5 | 평가 세트 생성과 동결, X·Y·T 측정, Z 준비 | 완료 (평가 세트 596문장, X·Y·T 1차 측정, Z 도구와 시험. [결과](eval/results/report_xyt_v1.md)) |
-| 6 | Z 측정(Jev 검증 후), 우회 소량 시험, README와 결과 | **Z 측정 완료(2026-11-01, [결과](eval/results/report_z_v1.md), Jev 불채택·사람 판정 주 결과)**. 아래는 이전 기록: **진행 중** 우회 시험 완료([결과](eval/results/report_bypass_v1.md)), 출처 표기와 README 정리 완료. **Z 실행(사용자 컴퓨터)이 남음**, 그 뒤 Z 보고서 |
+| 6 | Z 측정(Jev 검증 후), 우회 소량 시험, README와 결과 | **Z 1차 측정 완료(2026-11-01, [결과](eval/results/report_z_v1.md), Jev 불채택·사람 판정 주 결과), Z 2차(가명 안내문)는 사람 판정 대기**. 아래는 이전 기록: **진행 중** 우회 시험 완료([결과](eval/results/report_bypass_v1.md)), 출처 표기와 README 정리 완료. **Z 실행(사용자 컴퓨터)이 남음**, 그 뒤 Z 보고서 |
 | 코드 읽기 | 핵심 코드를 사용자가 읽고 설명할 수 있게 하기 | 1일차 진행 중. [docs/code-reading/](code-reading/)와 [progress.md](code-reading/progress.md) |
 | 7 | 여유분, 마무리 정리 | 대기 (`main` 병합은 2026-10-30 끝냄) |
 
 - **시험:** Java 109건과 Python 69건이 통과한다(2026-10-29 확인, 키 없이 통과). Java는 `cd backend`, `mvn -B test`. Python은 `cd backend/scripts`에서 `python -m unittest test_fake_values test_measure test_build_eval_set test_build_bypass_set test_z_measure`이다. 옛 HR용 `run_batch.py`와 `domain_candidates.py`는 시험과 함께 `backend/scripts/archive_hr/`로 옮겼다(보관, 실행하지 않는다).
-- **멈춘 지점:** Z 보고서까지 끝났고 코드 읽기 1일차를 하던 중이다. 게이트웨이 프로세스는 꺼도 된다.
+- **멈춘 지점:** Z 2차 측정(가명 안내문)의 **사람 판정 20개를 기다리는 중**이다(3절 "Z 2차 측정"). 그 판정만 끝나면 2차 보고서를 쓴다. 코드 읽기는 사용자가 보류했다.
 
 ## 3. 다음 작업
 
@@ -40,7 +40,16 @@
 
 5일차(측정 도구 v2, 업무 요청 틀 3종, 평가 세트 596문장 동결, X·Y·T 1차 측정)는 끝났다. 결과는 [eval/results/report_xyt_v1.md](eval/results/report_xyt_v1.md)이다. 6단계의 Z 도구(`backend/scripts/z_measure.py`, 시험 포함)도 만들어 두었고, **실제 호출은 키가 있는 사용자 컴퓨터에서 한다.**
 
-### Z 측정 실행 절차 (사용자 컴퓨터, Windows PowerShell)
+### Z 2차 측정: 가명 안내문 (진행 중, 2026-11-02 기준)
+
+가림 요청 앞에 고정 안내문을 붙이면(AC-4.6, `gateway.mask-notice`) 가림 처리 후 답이 좋아지는지 같은 평가 세트로 다시 쟀다. 결정과 방식은 [DECISIONS.md](../DECISIONS.md) 2026-11-01 "Z 2차 측정 준비"에 있다. 코드는 커밋되어 있고(`89af255`) 안내문 문구는 동결했다.
+
+- **끝난 것:** 2차 수집 263/263(`docs/eval/results/z2/collected.jsonl`, 답 A는 1차 것을 재사용), Jev 채점과 보고(`z2/scores.jsonl`, `z2/report.json`, 답 A 판정은 1차 값으로 고정). 자동 수치(Jev 참고값): 복원 성공 92.0→93.9%, 값 보존 84.5→99.6%, 유지율 56.8→73.7%, 응답 잘림 26→17.
+- **남은 것 1, 사람 판정(사용자):** 1차와 같은 45문장 중 고정 seed(20261101)로 뽑은 20문장의 2차 답 B를 판정한다. 판정 화면은 `docs/eval/results/z2/human_judge.html`(브라우저로 열기, 키 없이 동작)이다. 진행은 그 브라우저에만 저장되므로, **다른 컴퓨터에서 이어서 할 때는 처음부터 다시 판정**한다(아직 시작하지 않았다). 판정이 끝나면 화면의 "CSV 저장"으로 `human_sheet_z2_filled.csv`를 내려받아 알려 준다. 기준은 1차와 같다: 받은 직원이 요청한 일을 그대로 쓸 수 있으면 예.
+- **남은 것 2, 비교와 보고서(Claude):** 20문장에 대해 1차 사람 판정(`z/human_sheet.csv`와 `z/human_key.json`으로 1차 답 B의 판정을 찾는다)과 2차 사람 판정을 나란히 놓는다. 표본이 작으므로 방향만 보고 구간을 함께 적는다. 이어서 `docs/eval/results/report_z2_v1.md`를 쓰고 README의 Z 칸과 DECISIONS를 갱신한다. 사람 판정을 하지 않기로 하면 Jev 참고값과 값 보존(코드 지표, 믿을 수 있음)만 적고 "사람 판정 미실시"를 한계로 적는다.
+- **재현 명령(필요할 때만):** 게이트웨이를 `mvn spring-boot:run "-Dspring-boot.run.arguments=--gemini.model=gemini-3.5-flash-lite --gateway.mask-notice=true"`로 띄우고 `python z_measure.py collect --dir ../../docs/eval/results/z2 --reuse-a ../../docs/eval/results/z/collected.jsonl`을 실행한다.
+
+### Z 측정 실행 절차 (1차, 사용자 컴퓨터, Windows PowerShell)
 
 Z는 평가 세트에서 가림 처리되는 문장 263개에 대해 답 A(원문 직접)와 답 B(게이트웨이 경유, 복원)를 Gemini로 받고, Jev로 채점한다. 입력은 가짜 데이터뿐이다. 기준은 [spec.md](spec.md) AC-10.4a~g, AC-10.5a~b이다.
 
