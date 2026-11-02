@@ -156,6 +156,23 @@ class ConversationGatewayTest {
     }
 
     @Test
+    @DisplayName("AC-11.14 이전 답의 맨 앞에 우리가 붙인 안내 줄은 외부 AI로 보내지 않는다(모델이 흉내 내 안내가 두 번 나오는 것을 막는다). 사용자 메시지는 그대로 둔다")
+    void stripsOwnNoticeFromEarlierAnswersOnly() {
+        ConversationResult first = gateway.handle(List.of(user("김민수 010-2345-6789 정리해 줘")));
+        String notice = "[Deskguard] 휴대전화 1건을 가려서 보냈습니다.\n\n";
+        assertThat(first.answer()).startsWith(notice);
+
+        gateway.handle(List.of(
+                user("김민수 010-2345-6789 정리해 줘"),
+                assistant(first.answer()),
+                user(notice + "이 문장은 사용자가 직접 쓴 것이다")));
+
+        List<ChatTurn> sent = answerer.calls().get(1);
+        assertThat(sent.get(1).text()).isEqualTo("답: 김민수 [전화1] 정리해 줘");
+        assertThat(sent.get(2).text()).isEqualTo(notice + "이 문장은 사용자가 직접 쓴 것이다");
+    }
+
+    @Test
     @DisplayName("AC-11.8 잘못된 대화(없음, 비어 있음, 허용 밖 역할, 모두 공백, 길이 초과)는 외부 AI를 부르지 않고 거부하며 로그 한 줄을 남긴다")
     void rejectsInvalidConversations() {
         ConversationGateway small = TestConversations.gateway(answerer, new GatewayLogger(logLines::add), 50);

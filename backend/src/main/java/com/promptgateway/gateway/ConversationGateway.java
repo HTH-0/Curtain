@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -37,6 +38,8 @@ import java.util.stream.IntStream;
 public class ConversationGateway {
 
     private static final Set<String> ROLES = Set.of("system", "user", "assistant");
+    /** notice()가 만드는 줄과 뒤의 빈 줄. 이전 답에서 떼어 낼 때 쓴다. */
+    private static final Pattern OWN_NOTICE = Pattern.compile("^\\[Deskguard\\] [^\\n]*을 가려서 보냈습니다\\.\\n\\n");
 
     private final DetectionEngine engine;
     private final ActionDecider decider;
@@ -65,7 +68,8 @@ public class ConversationGateway {
         }
 
         long t0 = System.nanoTime();
-        List<String> texts = conversation.stream().map(ChatTurn::text).toList();
+        List<ChatTurn> turns = withoutOwnNotice(conversation);
+        List<String> texts = turns.stream().map(ChatTurn::text).toList();
         List<List<Finding>> perText = texts.stream().map(engine::detect).toList();
         List<Finding> all = perText.stream().flatMap(List::stream).toList();
         Action decided = decider.decide(all);
@@ -82,7 +86,7 @@ public class ConversationGateway {
         }
         if (action == Action.ALLOW) {
             long t1 = System.nanoTime();
-            String answer = callAnswer(conversation, joined);
+            String answer = callAnswer(turns, joined);
             long answerMs = ms(t1);
             logged(joined, new GatewayResult(Action.ALLOW, counts, answer, false, null, null,
                     new GatewayResult.Timings(detectMs, null, answerMs, null), 0, false));
@@ -91,8 +95,8 @@ public class ConversationGateway {
 
         long t1 = System.nanoTime();
         ConversationMask mask = masker.maskAll(texts, perText);
-        List<ChatTurn> sent = IntStream.range(0, conversation.size())
-                .mapToObj(i -> new ChatTurn(conversation.get(i).role(), mask.maskedTexts().get(i))).toList();
+        List<ChatTurn> sent = IntStream.range(0, turns.size())
+                .mapToObj(i -> new ChatTurn(turns.get(i).role(), mask.maskedTexts().get(i))).toList();
         long maskMs = ms(t1);
         long t2 = System.nanoTime();
         String answer = callAnswer(sent, joined);
@@ -114,6 +118,16 @@ public class ConversationGateway {
         Map<String, Finding> firstOfEachValue = new LinkedHashMap<>();
         all.forEach(f -> firstOfEachValue.putIfAbsent(Masker.valueKey(f.item(), f.value()), f));
         return FindingCount.of(List.copyOf(firstOfEachValue.values()));
+    }
+
+    /**
+     * 이전 답(assistant)의 맨 앞에 우리가 붙인 안내 줄을 뗀다(AC-11.14). 안내는 사람에게 보이는 용도이다. 외부 AI에 그대로 보내면
+     * 모델이 흉내 내 같은 줄로 답을 시작하고, 우리가 또 안내를 붙여 두 번 나온다. 사용자 메시지는 건드리지 않는다.
+     */
+    private static List<ChatTurn> withoutOwnNotice(List<ChatTurn> conversation) {
+        return conversation.stream()
+                .map(t -> "assistant".equals(t.role()) ? new ChatTurn(t.role(), OWN_NOTICE.matcher(t.text()).replaceFirst("")) : t)
+                .toList();
     }
 
     /** 가린 범주와 개수를 알리는 한 줄(AC-11.6). 값은 담지 않는다. */
