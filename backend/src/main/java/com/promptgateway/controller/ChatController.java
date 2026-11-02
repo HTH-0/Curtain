@@ -6,7 +6,10 @@ import com.promptgateway.dto.ChatResponse;
 import com.promptgateway.dto.MeasurementResponse;
 import com.promptgateway.gateway.ChatGateway;
 import com.promptgateway.gateway.GatewayResult;
+import com.promptgateway.service.AnswerGenerator;
+import com.promptgateway.service.UserKeyAnswerers;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,15 +35,24 @@ import java.net.InetAddress;
 public class ChatController {
 
     private final ChatGateway gateway;
+    private final UserKeyAnswerers userKeys;
 
     public ChatController(ChatGateway gateway) {
+        this(gateway, null);
+    }
+
+    @Autowired
+    public ChatController(ChatGateway gateway, UserKeyAnswerers userKeys) {
         this.gateway = gateway;
+        this.userKeys = userKeys;
     }
 
     @PostMapping("/chat")
     public ResponseEntity<?> chat(@RequestBody ChatRequest request, HttpServletRequest http) {
         boolean measure = gateway.isMeasurementMode() && isLocal(http.getRemoteAddr());
-        GatewayResult result = gateway.handle(request.prompt(), request.isConfirmed(), measure);
+        // 방문자가 넣은 Gemini 키(FR-12). 형식이 아니거나 없으면 서버 기본 응답을 쓴다. 값은 로그와 응답에 남기지 않는다.
+        AnswerGenerator visitor = userKeys == null ? null : userKeys.forKeyOrNull(http.getHeader("X-Gemini-Key"));
+        GatewayResult result = gateway.handle(request.prompt(), request.isConfirmed(), measure, visitor);
 
         // 측정 모드(개발용): 처리와 관계없이 200과 같은 형식으로 탐지 결과를 돌려준다.
         if (measure) {

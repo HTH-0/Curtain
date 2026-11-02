@@ -1,6 +1,7 @@
 package com.promptgateway.exception;
 
 import com.promptgateway.gateway.InvalidPromptException;
+import com.promptgateway.service.UserKeyRejectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleUnreadableBody(HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ApiErrorResponse("INVALID_REQUEST", "요청 본문을 읽을 수 없습니다. JSON 형식을 확인하세요."));
+    }
+
+    // 방문자가 넣은 Gemini 키를 Gemini가 거부한 경우(AC-12.4). 키와 외부 응답 본문은 싣지 않는다.
+    @ExceptionHandler(UserKeyRejectedException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserKeyRejected(UserKeyRejectedException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiErrorResponse("USER_KEY_REJECTED", ex.getMessage()));
     }
 
     // Gemini가 401을 주는 경우 - API 키가 잘못됐거나 만료된 경우

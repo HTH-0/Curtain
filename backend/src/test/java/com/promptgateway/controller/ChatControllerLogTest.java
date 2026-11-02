@@ -29,13 +29,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 /**
  * 요청이 들어와서 응답이 나갈 때까지 남은 모든 로그(INFO 이상)에 API 키가 없는지 시험한다(T10, AC-7.2).
- * 응답 모델은 실제 GeminiService에 가짜 키를 넣고 MockRestServiceServer로 오류를 흉내 낸다. 키는 URL 쿼리(?key=)로 가므로
- * 예외 메시지나 스택을 통해 로그에 섞일 수 있는 경로를 모두 지나가게 한다.
+ * 응답 모델은 실제 GeminiService에 가짜 키를 넣고 MockRestServiceServer로 오류를 흉내 낸다. 키는 헤더로 가지만(AC-12.3)
+ * 외부 응답 본문과 예외 메시지에 키가 섞여 돌아오는 경우까지 모든 경로를 지나가게 한다.
  */
 class ChatControllerLogTest {
 
     static final String FAKE_KEY = "TEST-KEY-LOG-54321";
-    static final String GEMINI_URL = "https://gemini.test/v1beta/models/test-model:generateContent?key=" + FAKE_KEY;
+    static final String GEMINI_URL = "https://gemini.test/v1beta/models/test-model:generateContent";
     static final String OK_BODY = "{\"candidates\":[{\"content\":{\"parts\":[{\"text\":\"안녕하세요\"}]}}]}";
 
     MockRestServiceServer server;
@@ -67,9 +67,9 @@ class ChatControllerLogTest {
         server.expect(requestTo(GEMINI_URL)).andRespond(withSuccess(OK_BODY, MediaType.APPLICATION_JSON));
         server.expect(requestTo(GEMINI_URL)).andRespond(withStatus(HttpStatus.UNAUTHORIZED).body("{\"error\":\"key " + FAKE_KEY + "\"}"));
         server.expect(requestTo(GEMINI_URL)).andRespond(withStatus(HttpStatus.TOO_MANY_REQUESTS));
-        server.expect(requestTo(GEMINI_URL)).andRespond(withStatus(HttpStatus.BAD_REQUEST).body(GEMINI_URL));
-        server.expect(requestTo(GEMINI_URL)).andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR).body(GEMINI_URL));
-        server.expect(requestTo(GEMINI_URL)).andRespond(withException(new IOException("connect to " + GEMINI_URL + " refused")));
+        server.expect(requestTo(GEMINI_URL)).andRespond(withStatus(HttpStatus.BAD_REQUEST).body(GEMINI_URL + "?key=" + FAKE_KEY));
+        server.expect(requestTo(GEMINI_URL)).andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR).body(GEMINI_URL + "?key=" + FAKE_KEY));
+        server.expect(requestTo(GEMINI_URL)).andRespond(withException(new IOException("connect to " + GEMINI_URL + "?key=" + FAKE_KEY + " refused")));
         server.expect(requestTo(GEMINI_URL)).andRespond(withSuccess("not json", MediaType.APPLICATION_JSON));
 
         try (LogCapture logs = LogCapture.root()) {

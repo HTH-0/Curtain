@@ -1,6 +1,7 @@
 package com.promptgateway.compat;
 
 import com.promptgateway.gateway.InvalidPromptException;
+import com.promptgateway.service.UserKeyRejectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -42,6 +43,12 @@ public class CompatExceptionHandler {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResponseEntity<OpenAiError> handleMediaType(HttpMediaTypeNotSupportedException ex) {
         return error(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Content-Type은 application/json이어야 합니다.", "invalid_request_error", "invalid_request");
+    }
+
+    // 방문자가 넣은 Gemini 키를 Gemini가 거부했다(AC-12.4). 키와 외부 응답 본문은 싣지 않는다.
+    @ExceptionHandler(UserKeyRejectedException.class)
+    public ResponseEntity<OpenAiError> handleUserKeyRejected(UserKeyRejectedException ex) {
+        return error(HttpStatus.UNAUTHORIZED, ex.getMessage(), "invalid_request_error", "invalid_api_key");
     }
 
     @ExceptionHandler(HttpClientErrorException.Unauthorized.class)

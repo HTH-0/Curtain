@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withException;
@@ -42,7 +43,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class ChatControllerCharacterizationTest {
 
     static final String FAKE_KEY = "TEST-KEY-12345";
-    static final String GEMINI_URL = "https://gemini.test/v1beta/models/test-model:generateContent?key=" + FAKE_KEY;
+    static final String GEMINI_URL = "https://gemini.test/v1beta/models/test-model:generateContent";
     static final String OK_BODY = "{\"candidates\":[{\"content\":{\"parts\":[{\"text\":\"안녕하세요\"}]}}]}";
 
     MockRestServiceServer server;
@@ -92,13 +93,14 @@ class ChatControllerCharacterizationTest {
     }
 
     @Test
-    @DisplayName("Gemini 키는 URL 쿼리(?key=)로 전달된다 (위험으로 기록, 설계서 7.2)")
-    void keyIsSentAsUrlQuery() throws Exception {
-        server.expect(requestTo(GEMINI_URL)).andRespond(withSuccess(OK_BODY, MediaType.APPLICATION_JSON));
+    @DisplayName("[FR-12에서 바뀜] Gemini 키는 주소(?key=)가 아니라 x-goog-api-key 헤더로 간다 (AC-12.3, 설계서 7.2의 위험 해소)")
+    void keyIsSentAsHeader() throws Exception {
+        server.expect(requestTo(GEMINI_URL)).andExpect(header("x-goog-api-key", FAKE_KEY))
+                .andRespond(withSuccess(OK_BODY, MediaType.APPLICATION_JSON));
 
         chat("{\"prompt\":\"안녕\"}");
 
-        server.verify(); // GEMINI_URL에 ?key=가 포함되어 있어야 통과한다
+        server.verify(); // 주소가 키 없는 GEMINI_URL과 같고 헤더에 키가 있어야 통과한다
     }
 
     @Test

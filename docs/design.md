@@ -156,6 +156,7 @@ POST /v1/chat/completions {model, messages[], stream?}
 | 입력 오류, 읽을 수 없는 본문 | 400 | `invalid_request_error` | `invalid_request` |
 | Content-Type이 JSON이 아님 | 415 | `invalid_request_error` | `invalid_request` |
 | 차단 | 403 | `curtain_blocked` | `blocked` |
+| 방문자 키 거부(FR-12) | 401 | `invalid_request_error` | `invalid_api_key` |
 | 외부 AI 인증 실패 | 401 | `upstream_error` | `upstream_unauthorized` |
 | 외부 AI 한도 초과 | 429 | `upstream_error` | `upstream_rate_limited` |
 | 외부 AI 시간 초과 | 504 | `upstream_error` | `upstream_timeout` |

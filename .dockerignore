@@ -1,0 +1,12 @@
+# 이미지에는 backend/pom.xml과 backend/src만 쓴다
+.git
+.vscode
+.idea
+backend/target
+backend/scripts
+docs
+*.jpg
+*.png
+*.csv
+*.log
+.env

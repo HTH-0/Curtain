@@ -60,6 +60,12 @@ public class ChatGateway {
     }
 
     public GatewayResult handle(String prompt, boolean confirmed, boolean measure) {
+        return handle(prompt, confirmed, measure, null);
+    }
+
+    /** answerer가 있으면 이 요청에만 그 응답 모델(방문자 키, FR-12)을 쓰고, 없으면 서버 기본 응답 모델을 쓴다. */
+    public GatewayResult handle(String prompt, boolean confirmed, boolean measure, AnswerGenerator answerer) {
+        AnswerGenerator answerWith = answerer != null ? answerer : answerGenerator;
         try {
             validator.validate(prompt);
         } catch (InvalidPromptException e) {
@@ -96,7 +102,7 @@ public class ChatGateway {
         }
         if (action == Action.ALLOW) {
             long t2 = System.nanoTime();
-            String answer = callAnswer(prompt, prompt);
+            String answer = callAnswer(answerWith, prompt, prompt);
             return logged(prompt, new GatewayResult(action, counts, answer, false, null, null,
                     new GatewayResult.Timings(detectMs, null, ms(t2), null), 0, false));
         }
@@ -105,7 +111,7 @@ public class ChatGateway {
         MaskResult mask = masker.mask(prompt, findings);
         long maskMs = ms(t1);
         long t2 = System.nanoTime();
-        String answer = callAnswer(maskNotice ? MASK_NOTICE + mask.maskedText() : mask.maskedText(), prompt);
+        String answer = callAnswer(answerWith, maskNotice ? MASK_NOTICE + mask.maskedText() : mask.maskedText(), prompt);
         long answerMs = ms(t2);
         long t3 = System.nanoTime();
         RestoreResult restored = masker.restore(answer, mask);
@@ -114,9 +120,9 @@ public class ChatGateway {
     }
 
     /** 외부 AI에 text를 보낸다. 실패하면 원문(prompt)의 길이와 해시로 오류 로그를 남기고 그대로 알린다. */
-    private String callAnswer(String text, String prompt) {
+    private String callAnswer(AnswerGenerator answerWith, String text, String prompt) {
         try {
-            return answerGenerator.generateAnswer(text);
+            return answerWith.generateAnswer(text);
         } catch (RuntimeException e) {
             logger.logError(prompt, "ANSWER", e);
             throw e;

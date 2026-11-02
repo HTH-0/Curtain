@@ -59,6 +59,12 @@ public class ConversationGateway {
     }
 
     public ConversationResult handle(List<ChatTurn> conversation) {
+        return handle(conversation, null);
+    }
+
+    /** answerer가 있으면 이 요청에만 그 응답 모델(방문자 키, FR-12)을 쓰고, 없으면 서버 기본 응답 모델을 쓴다. */
+    public ConversationResult handle(List<ChatTurn> conversation, AnswerGenerator answerer) {
+        AnswerGenerator answerWith = answerer != null ? answerer : answerGenerator;
         String joined = join(conversation);
         try {
             validate(conversation);
@@ -86,7 +92,7 @@ public class ConversationGateway {
         }
         if (action == Action.ALLOW) {
             long t1 = System.nanoTime();
-            String answer = callAnswer(turns, joined);
+            String answer = callAnswer(answerWith, turns, joined);
             long answerMs = ms(t1);
             logged(joined, new GatewayResult(Action.ALLOW, counts, answer, false, null, null,
                     new GatewayResult.Timings(detectMs, null, answerMs, null), 0, false));
@@ -99,7 +105,7 @@ public class ConversationGateway {
                 .mapToObj(i -> new ChatTurn(turns.get(i).role(), mask.maskedTexts().get(i))).toList();
         long maskMs = ms(t1);
         long t2 = System.nanoTime();
-        String answer = callAnswer(sent, joined);
+        String answer = callAnswer(answerWith, sent, joined);
         long answerMs = ms(t2);
         long t3 = System.nanoTime();
         RestoreResult restored = masker.restore(answer, mask);
@@ -160,9 +166,9 @@ public class ConversationGateway {
     }
 
     /** 외부 AI에 대화를 보낸다. 실패하면 대화 전체의 길이와 해시로 오류 로그를 남기고 그대로 알린다. */
-    private String callAnswer(List<ChatTurn> conversation, String joined) {
+    private String callAnswer(AnswerGenerator answerWith, List<ChatTurn> conversation, String joined) {
         try {
-            return answerGenerator.generateAnswer(conversation);
+            return answerWith.generateAnswer(conversation);
         } catch (RuntimeException e) {
             logger.logError(joined, "ANSWER", e);
             throw e;

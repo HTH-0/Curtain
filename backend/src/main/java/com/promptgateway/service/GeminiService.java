@@ -1,16 +1,11 @@
 package com.promptgateway.service;
 
 import com.promptgateway.dto.gemini.GeminiRequest;
-import com.promptgateway.dto.gemini.GeminiResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -50,25 +45,8 @@ public class GeminiService implements AnswerGenerator {
         return call(GeminiRequest.of(conversation));
     }
 
+    // 실제 호출(키는 헤더로, 응답 JSON을 GeminiResponse로)은 방문자 키와 같이 쓰는 GeminiCall에 있다(AC-12.3).
     private String call(GeminiRequest requestBody) {
-        String url = baseUrl + "/" + model + ":generateContent?key=" + apiKey;
-
-        // Content-Type에 charset=UTF-8을 명시한다.
-        // (1단계 PowerShell에서 한글이 깨졌던 원인이 "전송 시 인코딩"이었다 - 자바의 Jackson은
-        //  HTTP body를 쓸 때 기본적으로 UTF-8 바이트로 직렬화하기 때문에 원래도 안전하지만,
-        //  헤더에도 명시적으로 UTF-8을 못박아서 서버가 다른 인코딩으로 오해할 여지를 아예 없앤다)
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8));
-
-        HttpEntity<GeminiRequest> entity = new HttpEntity<>(requestBody, headers);
-
-        // postForObject: POST 요청을 보내고, 응답 JSON을 바로 GeminiResponse 객체로 변환해서 받는다.
-        // (1단계 PowerShell의 Invoke-RestMethod가 응답을 자동으로 파워쉘 객체로 바꿔줬던 것과 같은 역할)
-        GeminiResponse response = restTemplate.postForObject(url, entity, GeminiResponse.class);
-
-        if (response == null) {
-            throw new IllegalStateException("Gemini API 응답이 비어 있습니다.");
-        }
-        return response.extractAnswerText();
+        return GeminiCall.call(restTemplate, baseUrl, model, apiKey, requestBody);
     }
 }
