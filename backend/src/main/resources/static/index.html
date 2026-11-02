@@ -10,7 +10,8 @@
 /* 글꼴(본문 Pretendard, 제목 Jua)은 저장소의 static/fonts에서 불러온다(외부 주소로 요청하지 않는다, AC-8.8). 글자와 버튼은 중립색과 포인트색 하나,
    파스텔 색은 그림과 처리 상태 표시에만 쓴다. 그림은 직접 그린 SVG이고 파일 하나씩 교체할 수 있다(AC-8.9). 밝은 화면만 지원한다(윤곽선이 검정이다) */
 @font-face { font-family: "Pretendard"; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; font-style: normal; font-display: swap }
-@font-face { font-family: "Jua"; src: url("fonts/Jua-subset.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap }
+/* Jua 부분 집합을 다시 만들면 ?v= 숫자를 올린다. 브라우저가 예전 파일을 캐시해 새 글자가 빠져 보이는 일을 막는다 */
+@font-face { font-family: "Jua"; src: url("fonts/Jua-subset.woff2?v=2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap }
 :root {
   color-scheme: light;
   --ink: #1d1b19; --bg: #e6e9ef; --paper2: #d9dee8; --surface: #f3f5f8; --fg: #1d1b19; --muted: #4f5662;
@@ -77,7 +78,6 @@ a { color: inherit }
   gap: 16px; text-align: center; pointer-events: none; color: var(--ink); opacity: calc((var(--p) - .75) * 4) }
 .drape-msg b { font: 400 clamp(28px, 4vw, 54px)/1.2 var(--display); background: var(--surface); border: 3px solid var(--ink);
   border-radius: var(--wobble); padding: 14px 30px; box-shadow: 4px 5px 0 var(--ink) }
-.drape-msg span { font-size: 16px; font-weight: 700; background: var(--yellow); border: 2px solid var(--ink); padding: 5px 14px; border-radius: 999px }
 
 /* 연결 안내 */
 section.band { padding: 72px 0 }
@@ -174,7 +174,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   <div class="wrap main">
     <div class="hero-grid">
       <div class="copy">
-        <h1>외부 AI에 이 내용을<br>보내도 될까요?</h1>
+        <h1>외부 AI에<br>이 내용을<br>보내도 될까요?</h1>
         <p class="lead">직원이 ChatGPT 같은 외부 AI에 보내는 문장을 나가기 전에 검사합니다. 개인정보와 비밀번호, 회사 기밀은 가리거나 막고, 업무는 계속 이어지게 합니다.</p>
         <div class="cta">
           <a class="pill dark" href="#portal">포털 열어보기</a>
@@ -189,7 +189,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   <div class="scroll-hint" aria-hidden="true">아래로 내리면 커튼이 닫힙니다 ↓</div>
   <div class="drape left" aria-hidden="true"></div>
   <div class="drape right" aria-hidden="true"></div>
-  <div class="drape-msg" aria-hidden="true"><b>민감한 내용은 커튼 뒤로</b><span>외부 AI에는 가린 문장만 나갑니다</span></div>
+  <div class="drape-msg" aria-hidden="true"><b>민감한 내용은 커튼 뒤로</b></div>
 </section>
 </div>
 <script>
