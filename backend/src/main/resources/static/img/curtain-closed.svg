@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<!-- 흐름도의 닫힌 커튼(가림). 두 자락이 가운데에서 만나 뒤를 가린다. 직접 그린 그림 -->
+<defs>
+<filter id="crayon" x="-10%" y="-10%" width="120%" height="120%">
+<feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="7" result="n"/>
+<feDisplacementMap in="SourceGraphic" in2="n" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+</defs>
+<g filter="url(#crayon)" stroke="#1d1b19" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M10 16 H110" stroke-width="5.5"/>
+  <circle cx="8" cy="16" r="5" fill="#ffd966" stroke-width="3.5"/>
+  <circle cx="112" cy="16" r="5" fill="#ffd966" stroke-width="3.5"/>
+  <path d="M16 22 H60 V104 Q52 110 45 104 Q38 110 31 104 Q24 110 16 104 Z" fill="#9ec8ff"/>
+  <path d="M60 22 H104 V104 Q96 110 89 104 Q82 110 75 104 Q68 110 60 104 Z" fill="#9ec8ff"/>
+  <path d="M31 28 V100 M89 28 V100" fill="none" stroke-width="3" opacity=".6"/>
+  <circle cx="50" cy="56" r="3.8" fill="#1d1b19" stroke="none"/>
+  <circle cx="70" cy="56" r="3.8" fill="#1d1b19" stroke="none"/>
+  <ellipse cx="42" cy="65" rx="5" ry="3" fill="#ff9fb2" stroke="none"/>
+  <ellipse cx="78" cy="65" rx="5" ry="3" fill="#ff9fb2" stroke="none"/>
+  <path d="M54 66 Q60 72 66 66" fill="none" stroke-width="3.2"/>
+</g>
+</svg>

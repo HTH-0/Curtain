@@ -76,7 +76,7 @@ SOFTWARE.
 
 ## 5-0-2. 웹 화면의 그림
 
-- `static/img/`의 `curtain.svg`(커튼 캐릭터), `curtain-icon.svg`(로고와 아이콘), `step-1~3.svg`, `me.svg`(흐름도의 나)는 이 프로젝트를 위해 Claude Code가 직접 그린 SVG이다. 이전의 방패 캐릭터 그림(`mascot.svg`, `masked-phone.svg`, `shield.svg`)은 2026-11-02 커튼 캐릭터로 바꾸면서 지웠다. 굵은 윤곽선과 크레용 질감의 손그림 화풍만 사용자가 준 참고 이미지(`귀여운.jpg`, 저장소에 올리지 않음)에서 가져왔다. 그 이미지 속 실존 캐릭터는 그리지 않았고 쓰지 않았다(spec AC-8.9).
+- `static/img/`의 `curtain.svg`(커튼 캐릭터), `curtain-icon.svg`(로고와 아이콘), `step-1~3.svg`, `me.svg`(흐름도의 나), `curtain-closed.svg`와 `curtain-open.svg`(흐름도의 닫힌 커튼과 걷힌 커튼)는 이 프로젝트를 위해 Claude Code가 직접 그린 SVG이다. 이전의 방패 캐릭터 그림(`mascot.svg`, `masked-phone.svg`, `shield.svg`)은 2026-11-02 커튼 캐릭터로 바꾸면서 지웠다. 굵은 윤곽선과 크레용 질감의 손그림 화풍만 사용자가 준 참고 이미지(`귀여운.jpg`, 저장소에 올리지 않음)에서 가져왔다. 그 이미지 속 실존 캐릭터는 그리지 않았고 쓰지 않았다(spec AC-8.9).
 
 ## 5-1. 사용하지 않은 자료
 

@@ -81,10 +81,13 @@ a { color: inherit }
 .drape-msg > b { font: 400 clamp(28px, 4vw, 54px)/1.2 var(--display); background: var(--surface); border: 3px solid var(--ink);
   border-radius: var(--wobble); padding: 14px 30px; box-shadow: 4px 5px 0 var(--ink) }
 /* 흐름도: 핵심 단어만. 커튼 칸은 노란색으로 강조한다 */
-.flow { list-style: none; margin: 8px 0 0; padding: 0; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap }
-.flow li:not(.arrow) { width: 112px; padding: 12px 8px 10px; background: var(--surface); border: 2.5px solid var(--ink); border-radius: var(--wobble);
+.flow { list-style: none; margin: 40px 0 6px; padding: 0; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap }
+.flow li:not(.arrow):not(.gate) { width: 112px; padding: 12px 8px 10px; background: var(--surface); border: 2.5px solid var(--ink); border-radius: var(--wobble);
   box-shadow: 3px 4px 0 var(--ink); display: flex; flex-direction: column; align-items: center; gap: 2px }
-.flow li.cur { background: var(--yellow) }
+/* 커튼 칸은 카드가 아니라 나와 AI 사이에 선 문처럼 크게 그린다. 가는 길은 닫힌 커튼(가림), 돌아오는 길은 걷힌 커튼(복원) */
+.flow li.gate { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 0 -2px }
+.flow li.gate img { width: 124px; height: 124px; padding: 8px; background: var(--surface); border: 2.5px solid var(--ink); border-radius: 50%; box-shadow: 3px 4px 0 var(--ink) }
+.flow li.gate span { font: 400 18px/1.2 var(--display); background: var(--yellow); border: 2px solid var(--ink); border-radius: 999px; padding: 3px 14px; color: var(--ink) }
 .flow img { width: 48px; height: 48px }
 .flow b { font: 400 20px var(--display) }
 .flow span { font-size: 13px; font-weight: 700; color: var(--muted) }
@@ -185,7 +188,10 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
 }
 @media (max-width: 860px) {
   .flow { flex-direction: column; gap: 4px }
-  .flow li:not(.arrow) { width: 180px; flex-direction: row; justify-content: center; gap: 10px; padding: 8px 12px }
+  .flow { margin-top: 24px }
+  .flow li:not(.arrow):not(.gate) { width: 180px; flex-direction: row; justify-content: center; gap: 10px; padding: 8px 12px }
+  .flow li.gate { flex-direction: row; gap: 10px }
+  .flow li.gate img { width: 80px; height: 80px; padding: 5px }
   .flow img { width: 34px; height: 34px }
   .flow .arrow { transform: rotate(90deg); font-size: 22px; line-height: 1 }
 }
@@ -235,14 +241,14 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   <div class="drape right" aria-hidden="true"></div>
   <div class="drape-msg">
     <b>민감한 내용은 커튼 뒤로</b>
-    <ol class="flow" aria-label="처리 흐름: 나, 커튼(가림), AI(가명만 봄), 커튼(복원), 나(완성된 답)">
+    <ol class="flow" aria-label="처리 흐름: 나의 원문이 닫힌 커튼에서 가려지고, AI는 가명만 보며, 돌아오는 답은 걷힌 커튼에서 복원되어 나에게 완성된 답으로 온다">
       <li><img src="img/me.svg" alt=""><b>나</b><span>원문</span></li>
       <li class="arrow" aria-hidden="true">→</li>
-      <li class="cur"><img src="img/curtain-icon.svg" alt=""><b>커튼</b><span>가림</span></li>
+      <li class="gate"><img src="img/curtain-closed.svg" alt=""><span>가림</span></li>
       <li class="arrow" aria-hidden="true">→</li>
       <li><img src="img/step-3.svg" alt=""><b>AI</b><span>가명만</span></li>
       <li class="arrow" aria-hidden="true">→</li>
-      <li class="cur"><img src="img/curtain-icon.svg" alt=""><b>커튼</b><span>복원</span></li>
+      <li class="gate"><img src="img/curtain-open.svg" alt=""><span>복원</span></li>
       <li class="arrow" aria-hidden="true">→</li>
       <li><img src="img/me.svg" alt=""><b>나</b><span>완성</span></li>
     </ol>
