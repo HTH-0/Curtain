@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+<!-- 커튼 캐릭터(대표 그림). 오른쪽 커튼 자락 뒤에 전화기가 숨어 있다(가린 번호). 직접 그린 그림 -->
+<defs>
+<filter id="crayon" x="-8%" y="-8%" width="116%" height="116%">
+<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/>
+<feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+<pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+<line x1="0" y1="0" x2="0" y2="9" stroke="#ffffff" stroke-opacity=".4" stroke-width="3"/>
+</pattern>
+</defs>
+<g filter="url(#crayon)" stroke="#1d1b19" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 커튼 뒤에 숨은 전화기 -->
+  <rect x="318" y="226" width="62" height="100" rx="12" fill="#ffd966"/>
+  <rect x="330" y="240" width="38" height="52" rx="5" fill="#fffdf8" stroke-width="4"/>
+  <circle cx="343" cy="260" r="3.5" fill="#1d1b19" stroke="none"/>
+  <circle cx="356" cy="260" r="3.5" fill="#1d1b19" stroke="none"/>
+  <!-- 커튼 봉과 고리 -->
+  <path d="M34 58 H366" stroke-width="9"/>
+  <circle cx="30" cy="58" r="10" fill="#ffd966" stroke-width="5"/>
+  <circle cx="370" cy="58" r="10" fill="#ffd966" stroke-width="5"/>
+  <!-- 커튼 몸 -->
+  <path d="M70 70 L330 70 C334 160 342 258 350 338 Q329 352 307 340 Q285 352 263 340 Q241 352 219 340 Q197 352 175 340 Q153 352 131 340 Q109 352 87 340 Q66 352 50 338 C58 258 66 160 70 70 Z" fill="#9ec8ff"/>
+  <path d="M70 70 L330 70 C334 160 342 258 350 338 Q329 352 307 340 Q285 352 263 340 Q241 352 219 340 Q197 352 175 340 Q153 352 131 340 Q109 352 87 340 Q66 352 50 338 C58 258 66 160 70 70 Z" fill="url(#hatch)" stroke="none"/>
+  <path d="M118 78 C114 170 110 260 108 334 M282 78 C286 170 290 260 292 334" fill="none" stroke-width="4" opacity=".7"/>
+  <circle cx="90" cy="60" r="9" fill="none" stroke-width="5"/>
+  <circle cx="150" cy="60" r="9" fill="none" stroke-width="5"/>
+  <circle cx="210" cy="60" r="9" fill="none" stroke-width="5"/>
+  <circle cx="270" cy="60" r="9" fill="none" stroke-width="5"/>
+  <circle cx="320" cy="60" r="9" fill="none" stroke-width="5"/>
+  <!-- 얼굴 -->
+  <circle cx="165" cy="160" r="10" fill="#1d1b19" stroke="none"/>
+  <circle cx="235" cy="160" r="10" fill="#1d1b19" stroke="none"/>
+  <circle cx="168" cy="156" r="3" fill="#ffffff" stroke="none"/>
+  <circle cx="238" cy="156" r="3" fill="#ffffff" stroke="none"/>
+  <ellipse cx="138" cy="192" rx="18" ry="11" fill="#ff9fb2" stroke="none"/>
+  <ellipse cx="262" cy="192" rx="18" ry="11" fill="#ff9fb2" stroke="none"/>
+  <path d="M182 190 Q200 210 218 190" fill="none" stroke-width="6"/>
+  <!-- 양팔: 같은 모양을 좌우 대칭으로 둔다 -->
+  <ellipse cx="62" cy="214" rx="16" ry="24" transform="rotate(30 62 214)" fill="#9ec8ff"/>
+  <ellipse cx="338" cy="214" rx="16" ry="24" transform="rotate(-30 338 214)" fill="#9ec8ff"/>
+  <!-- 반짝이 -->
+  <path d="M374 120 L379 133 L392 138 L379 143 L374 156 L369 143 L356 138 L369 133 Z" fill="#ffd966" stroke-width="4"/>
+  <path d="M28 290 L32 302 L44 306 L32 310 L28 322 L24 310 L12 306 L24 302 Z" fill="#ff9fb2" stroke-width="4"/>
+</g>
+</svg>

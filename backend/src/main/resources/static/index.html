@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Curtain · HTH 사내 AI 포털</title>
-<link rel="icon" type="image/svg+xml" href="img/shield.svg">
+<link rel="icon" type="image/svg+xml" href="img/curtain-icon.svg">
 <style>
 /* 위에서부터 히어로, AI 앱 연결 안내, 채팅 구간 순서이다. 채팅 구간의 동작은 아래 script가 맡고 나머지 구간은 검사 로직을 담지 않는다 */
 /* 글꼴(본문 Pretendard, 제목 Jua)은 저장소의 static/fonts에서 불러온다(외부 주소로 요청하지 않는다, AC-8.8). 글자와 버튼은 중립색과 포인트색 하나,
@@ -48,7 +48,7 @@ a { color: inherit }
 .art::before { content: ""; position: absolute; inset: 6% 4% 10%; border-radius: 50%; background: radial-gradient(circle, rgba(169, 195, 230, .22) 0%, rgba(169, 195, 230, 0) 70%) }
 .nav { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; padding-bottom: 12px }
 .brand { display: flex; align-items: center; gap: 10px; font: 400 22px var(--display) }
-.brand img { width: 28px; height: 31px }
+.brand img { width: 30px; height: 30px }
 /* 이름 Curtain 안의 ai만 색을 다르게 해서 AI가 숨어 있음을 보여 준다 */
 .brand .ai { color: var(--yellow) }
 .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; margin-top: 28px }
@@ -57,7 +57,6 @@ a { color: inherit }
 .hero .cta { display: flex; gap: 14px; flex-wrap: wrap }
 .art { position: relative; max-width: 300px; margin: 0 auto; width: 100% }
 .art .mascot { position: relative; display: block; width: 100%; animation: bob 4s ease-in-out infinite }
-.art .phone { position: absolute; right: -6%; bottom: 0; width: 38%; transform: rotate(8deg) }
 @keyframes bob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
 @media (prefers-reduced-motion: reduce) { .art .mascot { animation: none } }
 
@@ -140,7 +139,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
 <section class="hero">
   <div class="wrap">
     <nav class="nav" aria-label="상단">
-      <div class="brand"><img src="img/shield.svg" alt=""><span>Curt<span class="ai">ai</span>n</span></div>
+      <div class="brand"><img src="img/curtain-icon.svg" alt=""><span>Curt<span class="ai">ai</span>n</span></div>
       <a class="pill sm" href="#portal">포털 열기</a>
     </nav>
     <div class="hero-grid">
@@ -153,8 +152,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
         </div>
       </div>
       <div class="art">
-        <img class="mascot" src="img/mascot.svg" alt="방패 모양 캐릭터가 자물쇠를 안고 웃고 있는 그림" width="400" height="400">
-        <img class="phone" src="img/masked-phone.svg" alt="대괄호 안에 숨은 전화기 그림. 가려진 전화번호를 뜻한다" width="260" height="220">
+        <img class="mascot" src="img/curtain.svg" alt="얼굴이 있는 커튼 캐릭터가 웃고 있고, 커튼 자락 뒤에 전화기가 숨어 있는 그림. 번호를 가린다는 뜻이다" width="400" height="400">
       </div>
     </div>
   </div>
@@ -200,7 +198,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
         <div class="sub">외부 AI로 보내기 전에 개인정보, 자격증명, 회사 기밀을 검사합니다. 민감한 값은 가려서 보내고, 답에서는 원래 값으로 되돌립니다.</div>
       </div>
       <div class="chat-log" id="log"><div id="inner">
-        <div class="empty" id="empty"><img src="img/mascot.svg" alt="" width="96" height="96">아래 예시를 눌러 보거나 직접 입력하세요. 예시의 이름, 번호, 키는 모두 가짜입니다.</div>
+        <div class="empty" id="empty"><img src="img/curtain.svg" alt="" width="96" height="96">아래 예시를 눌러 보거나 직접 입력하세요. 예시의 이름, 번호, 키는 모두 가짜입니다.</div>
       </div></div>
       <div class="chat-foot">
         <div class="examples" id="examples"></div>
