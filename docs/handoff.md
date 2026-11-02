@@ -25,8 +25,8 @@
 | 코드 읽기 | 핵심 코드를 사용자가 읽고 설명할 수 있게 하기 | 1일차 진행 중. [docs/code-reading/](code-reading/)와 [progress.md](code-reading/progress.md) |
 | 7 | 여유분, 마무리 정리 | 대기 (`main` 병합은 2026-10-30 끝냄) |
 
-- **시험:** Java 109건과 Python 69건이 통과한다(2026-10-29 확인, 키 없이 통과). Java는 `cd backend`, `mvn -B test`. Python은 `cd backend/scripts`에서 `python -m unittest test_fake_values test_measure test_build_eval_set test_build_bypass_set test_z_measure`이다. 옛 HR용 `run_batch.py`와 `domain_candidates.py`는 시험과 함께 `backend/scripts/archive_hr/`로 옮겼다(보관, 실행하지 않는다).
-- **멈춘 지점:** Z 1차, 2차 보고서까지 끝났다. 작업 중인 파일은 없다. 코드 읽기는 사용자가 보류했고, 다음은 코드 읽기 또는 마무리 정리이다.
+- **시험:** Java 114건과 Python 79건이 통과한다(2026-11-02 확인, 키 없이 통과). Java는 `cd backend`, `mvn -B test`. Python은 `cd backend/scripts`에서 `python -m unittest test_fake_values test_measure test_build_eval_set test_build_bypass_set test_z_measure`이다. 옛 HR용 `run_batch.py`와 `domain_candidates.py`는 시험과 함께 `backend/scripts/archive_hr/`로 옮겼다(보관, 실행하지 않는다).
+- **멈춘 지점:** Z 1차, 2차 보고서까지 끝났다. 2026-11-02에 포털 화면에 소개 구간(히어로, 문제, 처리 네 가지, 측정 결과)을 추가했다(`static/index.html`, `static/img/*.svg` 임시 이미지, AC-8.4~8.6, DECISIONS 2026-11-02). 커밋 전이며, 이미지 교체와 문구 다듬기가 남았다. 코드 읽기는 사용자가 보류했다.
 
 ## 3. 다음 작업
 
