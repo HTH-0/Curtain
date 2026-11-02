@@ -79,14 +79,14 @@ class CompatControllerTest {
     }
 
     @Test
-    @DisplayName("AC-11.1 GET /v1/models는 OpenAI 목록 형식으로 모델 하나(deskguard)를 돌려준다")
+    @DisplayName("AC-11.1 GET /v1/models는 OpenAI 목록 형식으로 모델 하나(curtain)를 돌려준다")
     void models() throws Exception {
         MockHttpServletResponse r = mvc.perform(get("/v1/models")).andReturn().getResponse();
         String body = text(r);
 
         assertThat(r.getStatus()).isEqualTo(200);
         assertThat(json(body, "$.object").toString()).isEqualTo("list");
-        assertThat(json(body, "$.data[0].id").toString()).isEqualTo("deskguard");
+        assertThat(json(body, "$.data[0].id").toString()).isEqualTo("curtain");
         assertThat(json(body, "$.data[0].object").toString()).isEqualTo("model");
         assertThat((List<?>) json(body, "$.data")).hasSize(1);
     }
@@ -99,7 +99,7 @@ class CompatControllerTest {
 
         assertThat(r.getStatus()).isEqualTo(200);
         assertThat(json(body, "$.object").toString()).isEqualTo("chat.completion");
-        assertThat(json(body, "$.model").toString()).isEqualTo("deskguard");
+        assertThat(json(body, "$.model").toString()).isEqualTo("curtain");
         assertThat(json(body, "$.choices[0].index").toString()).isEqualTo("0");
         assertThat(json(body, "$.choices[0].message.role").toString()).isEqualTo("assistant");
         assertThat(json(body, "$.choices[0].message.content").toString()).isEqualTo("답: 회의록 요약해 줘");
@@ -115,7 +115,7 @@ class CompatControllerTest {
 
         assertThat(r.getStatus()).isEqualTo(200);
         assertThat(json(body, "$.choices[0].message.content").toString())
-                .isEqualTo("[Deskguard] 휴대전화 1건을 가려서 보냈습니다.\n\n답: 김민수 " + PHONE + " 에게 안내 메일 써 줘");
+                .isEqualTo("[Curtain] 휴대전화 1건을 가려서 보냈습니다.\n\n답: 김민수 " + PHONE + " 에게 안내 메일 써 줘");
         assertThat(answerer.allSentText()).contains("[전화1]").doesNotContain(PHONE);
     }
 
@@ -126,7 +126,7 @@ class CompatControllerTest {
         String body = text(r);
 
         assertThat(r.getStatus()).isEqualTo(403);
-        assertThat(json(body, "$.error.type").toString()).isEqualTo("deskguard_blocked");
+        assertThat(json(body, "$.error.type").toString()).isEqualTo("curtain_blocked");
         assertThat(json(body, "$.error.code").toString()).isEqualTo("blocked");
         assertThat(json(body, "$.error.message").toString()).contains("비밀번호 1건", "다시 보내세요");
         assertThat(body).doesNotContain("Qw7!zLp92x", "DB_PASSWORD");
@@ -187,10 +187,10 @@ class CompatControllerTest {
         assertThat(events).hasSize(2);
         String chunk = events.get(0).substring("data: ".length());
         assertThat(json(chunk, "$.object").toString()).isEqualTo("chat.completion.chunk");
-        assertThat(json(chunk, "$.model").toString()).isEqualTo("deskguard");
+        assertThat(json(chunk, "$.model").toString()).isEqualTo("curtain");
         assertThat(json(chunk, "$.choices[0].delta.role").toString()).isEqualTo("assistant");
         assertThat(json(chunk, "$.choices[0].delta.content").toString())
-                .isEqualTo("[Deskguard] 휴대전화 1건을 가려서 보냈습니다.\n\n답: 김민수 " + PHONE + " 정리해 줘");
+                .isEqualTo("[Curtain] 휴대전화 1건을 가려서 보냈습니다.\n\n답: 김민수 " + PHONE + " 정리해 줘");
         assertThat(json(chunk, "$.choices[0].finish_reason").toString()).isEqualTo("stop");
     }
 
@@ -201,7 +201,7 @@ class CompatControllerTest {
 
         assertThat(r.getStatus()).isEqualTo(403);
         assertThat(r.getContentType()).startsWith("application/json");
-        assertThat(json(text(r), "$.error.type").toString()).isEqualTo("deskguard_blocked");
+        assertThat(json(text(r), "$.error.type").toString()).isEqualTo("curtain_blocked");
     }
 
     @Test

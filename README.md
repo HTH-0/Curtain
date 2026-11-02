@@ -1,4 +1,6 @@
-# Deskguard
+# Curtain
+
+> 이전 이름은 Deskguard이다(2026-11-02 변경). 저장소 주소는 아직 `HTH-0/Deskguard`이다.
 
 회사 직원이 ChatGPT 같은 외부 생성형 AI에 보내는 프롬프트를 **나가기 전에** 검사하는 정보 유출 방지 게이트웨이와 사내 AI 포털이다. 개인정보, 자격증명, 회사 기밀을 코드로 탐지해서 허용, 가림, 경고, 차단 중 하나로 처리한다. 학습용 포트폴리오 프로젝트이며 실제 서비스가 아니다.
 
@@ -68,16 +70,16 @@ cd backend/scripts && python measure.py --input ../../docs/eval/set/eval_v1.json
 |---|---|
 | 주소(Base URL) | `http://localhost:8080/v1` (Chatbox는 API 호스트에 `http://localhost:8080`) |
 | API 키 | 아무 값이나 쓴다(검사하지 않는다) |
-| 모델 | `deskguard`(요청의 모델 이름은 무시한다) |
+| 모델 | `curtain`(요청의 모델 이름은 무시한다) |
 
 ```python
 from openai import OpenAI
 client = OpenAI(base_url="http://localhost:8080/v1", api_key="아무값")
-print(client.chat.completions.create(model="deskguard",
+print(client.chat.completions.create(model="curtain",
       messages=[{"role": "user", "content": "김민수 010-2345-6789 에게 안내 메일 써 줘"}]).choices[0].message.content)
 ```
 
-- 가림이면 답 맨 앞에 `[Deskguard] 휴대전화 1건을 가려서 보냈습니다.` 같은 한 줄이 붙고, 가명은 원래 값으로 되돌려진다. 차단이면 403 오류(`deskguard_blocked`)로 보내지 않았다고 알린다.
+- 가림이면 답 맨 앞에 `[Curtain] 휴대전화 1건을 가려서 보냈습니다.` 같은 한 줄이 붙고, 가명은 원래 값으로 되돌려진다. 차단이면 403 오류(`curtain_blocked`)로 보내지 않았다고 알린다.
 - 경고(개인정보 20개 이상)는 확인을 받을 방법이 없어 자동으로 가려서 보낸다. 원문은 보내지 않는다.
 - 대화는 서버에 저장하지 않는다. 클라이언트가 매 턴 대화 전체를 다시 보내므로 매번 처음부터 가린다.
 - 한계: 로컬 시연용이며 인증이 없다. 텍스트만 받는다(이미지와 도구 호출은 400 오류). Chatbox는 모델 설정에서 이미지와 `도구 사용`을 꺼 둔다. 모델이 가명을 답에 쓰지 않으면 복원할 것이 없다(예: "번호가 입력되지 않았다"고 답함). 대화 전체는 2만 자까지이다. 결과 기록은 [DECISIONS.md](./DECISIONS.md) 2026-11-02 항목에 있다.

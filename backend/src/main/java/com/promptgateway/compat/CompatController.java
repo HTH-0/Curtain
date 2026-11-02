@@ -31,7 +31,7 @@ import java.util.UUID;
 @RestController
 public class CompatController {
 
-    static final String MODEL = "deskguard";
+    static final String MODEL = "curtain";
     private static final JsonMapper JSON = JsonMapper.builder().build();
     private static final long STARTED = Instant.now().getEpochSecond();
 
@@ -43,7 +43,7 @@ public class CompatController {
 
     @GetMapping("/v1/models")
     public ModelList models() {
-        return new ModelList("list", List.of(new ModelList.Model(MODEL, "model", STARTED, "deskguard")));
+        return new ModelList("list", List.of(new ModelList.Model(MODEL, "model", STARTED, "curtain")));
     }
 
     @PostMapping("/v1/chat/completions")
@@ -52,7 +52,7 @@ public class CompatController {
 
         if (result.action() == Action.BLOCK) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(OpenAiError.of(blockMessage(result), "deskguard_blocked", "blocked"));
+                    .body(OpenAiError.of(blockMessage(result), "curtain_blocked", "blocked"));
         }
 
         String id = "chatcmpl-" + UUID.randomUUID();

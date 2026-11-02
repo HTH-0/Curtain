@@ -56,7 +56,7 @@ a { color: inherit }
 .brand { display: flex; align-items: center; gap: 10px; font: 400 24px var(--display) }
 .brand img { width: 32px; height: 32px }
 /* 이름 Curtain 안의 ai만 색을 다르게 해서 AI가 숨어 있음을 보여 준다 */
-.brand .ai { color: var(--yellow) }
+.brand .ai, .hero h1 .ai { color: var(--yellow) }
 .hero-grid { width: 100%; display: grid; grid-template-columns: 1.3fr .7fr; gap: 40px; align-items: center }
 .hero h1 { font-size: clamp(40px, 4.9vw, 84px); line-height: 1.15; margin: 0 0 24px }
 .hero .lead { color: var(--night-muted); font-size: clamp(16px, 1.5vw, 21px); max-width: 620px; margin: 0 0 36px }
@@ -174,7 +174,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   <div class="wrap main">
     <div class="hero-grid">
       <div class="copy">
-        <h1>외부 AI에<br>이 내용을<br>보내도 될까요?</h1>
+        <h1>외부 <span class="ai">AI</span>에<br>이 내용을<br>보내도 될까요?</h1>
         <p class="lead">직원이 ChatGPT 같은 외부 AI에 보내는 문장을 나가기 전에 검사합니다. 개인정보와 비밀번호, 회사 기밀은 가리거나 막고, 업무는 계속 이어지게 합니다.</p>
         <div class="cta">
           <a class="pill dark" href="#portal">포털 열어보기</a>
@@ -234,12 +234,12 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
       <table class="settings">
         <tr><th>서버 주소</th><td><code>http://localhost:8080/v1</code><br>Chatbox는 API 호스트에 <code>http://localhost:8080</code></td></tr>
         <tr><th>API 키</th><td>아무 값이나 넣습니다(검사하지 않습니다)</td></tr>
-        <tr><th>모델</th><td><code>deskguard</code></td></tr>
+        <tr><th>모델</th><td><code>curtain</code></td></tr>
       </table>
       <div class="sample">
         <div class="ex mask"><b>가림: 전화번호가 든 요청을 보내면</b>
           <code>김민수 010-2345-6789 에게 안내 메일 써 줘</code>
-          <p>답 맨 앞에 <code>[Deskguard] 휴대전화 1건을 가려서 보냈습니다.</code> 한 줄이 붙고, 번호는 외부 AI로 나가지 않습니다.</p></div>
+          <p>답 맨 앞에 <code>[Curtain] 휴대전화 1건을 가려서 보냈습니다.</code> 한 줄이 붙고, 번호는 외부 AI로 나가지 않습니다.</p></div>
         <div class="ex block"><b>차단: 비밀번호가 든 요청을 보내면</b>
           <code>DB_PASSWORD=Qw7!zLp92x 이 설정 왜 안 돼?</code>
           <p>보내지 않고 <code>보내지 않았습니다(비밀번호 1건)…</code> 오류로 알립니다.</p></div>

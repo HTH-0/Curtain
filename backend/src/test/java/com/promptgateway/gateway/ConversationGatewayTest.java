@@ -90,7 +90,7 @@ class ConversationGatewayTest {
 
         assertThat(r.action()).isEqualTo(Action.MASK);
         assertThat(r.answer()).isEqualTo(
-                "[Deskguard] 휴대전화 2건을 가려서 보냈습니다.\n\n답: 김민수 010-2345-6789, 010-9876-5432 로 안내 메일 써 줘");
+                "[Curtain] 휴대전화 2건을 가려서 보냈습니다.\n\n답: 김민수 010-2345-6789, 010-9876-5432 로 안내 메일 써 줘");
         assertThat(r.restored()).isEqualTo(2);
         assertThat(r.counts()).extracting(FindingCount::item, FindingCount::count).containsExactly(
                 org.assertj.core.groups.Tuple.tuple(Item.PHONE, 2));
@@ -101,13 +101,13 @@ class ConversationGatewayTest {
     void countsEachDistinctValueOnce() {
         ConversationResult r = gateway.handle(List.of(
                 user("김민수 010-2345-6789 에게 메일 써 줘"),
-                assistant("[Deskguard] 휴대전화 1건을 가려서 보냈습니다.\n\n답: 김민수 010-2345-6789 에게 보낼 메일입니다"),
+                assistant("[Curtain] 휴대전화 1건을 가려서 보냈습니다.\n\n답: 김민수 010-2345-6789 에게 보낼 메일입니다"),
                 user("010-2345-6789 말고 010-9876-5432 로도 보내 줘")));
 
         assertThat(r.action()).isEqualTo(Action.MASK);
         assertThat(r.counts()).extracting(FindingCount::item, FindingCount::count).containsExactly(
                 org.assertj.core.groups.Tuple.tuple(Item.PHONE, 2));
-        assertThat(r.answer()).startsWith("[Deskguard] 휴대전화 2건을 가려서 보냈습니다.\n\n");
+        assertThat(r.answer()).startsWith("[Curtain] 휴대전화 2건을 가려서 보냈습니다.\n\n");
         assertThat(logLines.getFirst()).contains("findings=D1.PHONE:2");
     }
 
@@ -119,7 +119,7 @@ class ConversationGatewayTest {
         assertThat(r.action()).isEqualTo(Action.MASK);
         assertThat(answerer.calls()).hasSize(1);
         assertThat(answerer.allSentText()).doesNotContain("010-2000-3000", "010-2021-3021");
-        assertThat(r.answer()).startsWith("[Deskguard] 휴대전화 22건을 가려서 보냈습니다.");
+        assertThat(r.answer()).startsWith("[Curtain] 휴대전화 22건을 가려서 보냈습니다.");
         assertThat(logLines).hasSize(1);
         assertThat(logLines.getFirst()).contains("action=MASK", "confirmed=true");
     }
@@ -159,7 +159,7 @@ class ConversationGatewayTest {
     @DisplayName("AC-11.14 이전 답의 맨 앞에 우리가 붙인 안내 줄은 외부 AI로 보내지 않는다(모델이 흉내 내 안내가 두 번 나오는 것을 막는다). 사용자 메시지는 그대로 둔다")
     void stripsOwnNoticeFromEarlierAnswersOnly() {
         ConversationResult first = gateway.handle(List.of(user("김민수 010-2345-6789 정리해 줘")));
-        String notice = "[Deskguard] 휴대전화 1건을 가려서 보냈습니다.\n\n";
+        String notice = "[Curtain] 휴대전화 1건을 가려서 보냈습니다.\n\n";
         assertThat(first.answer()).startsWith(notice);
 
         gateway.handle(List.of(
@@ -170,6 +170,17 @@ class ConversationGatewayTest {
         List<ChatTurn> sent = answerer.calls().get(1);
         assertThat(sent.get(1).text()).isEqualTo("답: 김민수 [전화1] 정리해 줘");
         assertThat(sent.get(2).text()).isEqualTo(notice + "이 문장은 사용자가 직접 쓴 것이다");
+    }
+
+    @Test
+    @DisplayName("AC-11.14 이름을 바꾸기 전의 안내 줄([Deskguard])이 든 이전 답도 떼고 보낸다")
+    void stripsLegacyNotice() {
+        gateway.handle(List.of(
+                user("김민수 010-2345-6789 정리해 줘"),
+                assistant("[Deskguard] 휴대전화 1건을 가려서 보냈습니다.\n\n답: 김민수 010-2345-6789 정리해 줘"),
+                user("다시 정리해 줘")));
+
+        assertThat(answerer.calls().get(0).get(1).text()).isEqualTo("답: 김민수 [전화1] 정리해 줘");
     }
 
     @Test

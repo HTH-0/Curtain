@@ -51,12 +51,12 @@ class CompatApplicationTest {
     @DisplayName("AC-11.2, 11.6 실제 연결에서 가림과 복원이 동작한다(시연용 응답 모델)")
     void maskAndRestoreEndToEnd() throws Exception {
         MockHttpServletResponse r = send("/v1/chat/completions",
-                "{\"model\":\"deskguard\",\"messages\":[{\"role\":\"user\",\"content\":\"김민수 010-2345-6789 에게 메일 써 줘\"}]}");
+                "{\"model\":\"curtain\",\"messages\":[{\"role\":\"user\",\"content\":\"김민수 010-2345-6789 에게 메일 써 줘\"}]}");
         String body = r.getContentAsString(StandardCharsets.UTF_8);
 
         assertThat(r.getStatus()).isEqualTo(200);
         String content = JsonPath.read(body, "$.choices[0].message.content");
-        assertThat(content).startsWith("[Deskguard] 휴대전화 1건을 가려서 보냈습니다.").contains("시연용 답변", "010-2345-6789");
+        assertThat(content).startsWith("[Curtain] 휴대전화 1건을 가려서 보냈습니다.").contains("시연용 답변", "010-2345-6789");
     }
 
     @Test
@@ -92,6 +92,6 @@ class CompatApplicationTest {
         MockHttpServletResponse r = mvc.perform(get("/v1/models")).andReturn().getResponse();
 
         assertThat(r.getStatus()).isEqualTo(200);
-        assertThat(JsonPath.<String>read(r.getContentAsString(StandardCharsets.UTF_8), "$.data[0].id")).isEqualTo("deskguard");
+        assertThat(JsonPath.<String>read(r.getContentAsString(StandardCharsets.UTF_8), "$.data[0].id")).isEqualTo("curtain");
     }
 }

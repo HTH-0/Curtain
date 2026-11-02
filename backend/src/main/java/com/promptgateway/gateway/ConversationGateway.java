@@ -38,8 +38,8 @@ import java.util.stream.IntStream;
 public class ConversationGateway {
 
     private static final Set<String> ROLES = Set.of("system", "user", "assistant");
-    /** notice()가 만드는 줄과 뒤의 빈 줄. 이전 답에서 떼어 낼 때 쓴다. */
-    private static final Pattern OWN_NOTICE = Pattern.compile("^\\[Deskguard\\] [^\\n]*을 가려서 보냈습니다\\.\\n\\n");
+    /** notice()가 만드는 줄과 뒤의 빈 줄. 이전 답에서 떼어 낼 때 쓴다. 이름을 바꾸기 전(Deskguard)의 대화 기록도 뗀다. */
+    private static final Pattern OWN_NOTICE = Pattern.compile("^\\[(?:Curtain|Deskguard)\\] [^\\n]*을 가려서 보냈습니다\\.\\n\\n");
 
     private final DetectionEngine engine;
     private final ActionDecider decider;
@@ -132,7 +132,7 @@ public class ConversationGateway {
 
     /** 가린 범주와 개수를 알리는 한 줄(AC-11.6). 값은 담지 않는다. */
     private static String notice(List<FindingCount> counts) {
-        return "[Deskguard] " + ItemNames.summary(counts) + "을 가려서 보냈습니다.";
+        return "[Curtain] " + ItemNames.summary(counts) + "을 가려서 보냈습니다.";
     }
 
     private void validate(List<ChatTurn> conversation) {
