@@ -107,3 +107,63 @@ gateway:
 | 조립 | `ChatGateway` | 가짜 외부 AI로 처리별 흐름, 외부 호출 횟수, 복원 결과 |
 | 웹 | `ChatController` | 상태 코드, 본문 형식, 측정 모드, 값이 응답과 로그에 없음 |
 | 측정 도구 | Python | 가짜 서버, 가짜 값 생성기의 검증 규칙 통과 여부 |
+| 대화 입구 | `Masker` 대화 가림, `ConversationGateway`, `CompatController` | 가짜 응답 모델로 대화 흐름과 외부 호출 횟수, 같은 대화를 한 턴씩 늘려 보냈을 때 가명이 같은지, OpenAI 응답과 오류 형식, SSE, 원래 값이 밖으로 나가지 않는지 |
+
+## 9. OpenAI 호환 입구 (FR-11, 2026-11-02)
+
+[명세](spec.md) FR-11을 어떻게 만들지 정한다. 기존 `/api/chat` 경로의 코드와 동작은 바꾸지 않는다. 탐지 규칙, 회사 사전, `application.yml`도 고치지 않는다(`freeze.json`의 해시, DECISIONS O6).
+
+### 9.1 구성요소
+
+| 구분 | 구성요소 | 책임 |
+|---|---|---|
+| 신규 | `compat.CompatController` | `GET /v1/models`, `POST /v1/chat/completions`. 요청을 `ConversationGateway`에 맡기고 OpenAI 형식(일반 JSON 또는 SSE)으로 바꾼다 |
+| 신규 | `compat` 패키지의 요청, 응답, 오류 값 클래스 | OpenAI 형식(`ChatCompletionRequest`, `ChatCompletionResponse`, `ModelList`, `OpenAiError`). 값과 위치는 싣지 않는다 |
+| 신규 | `compat.CompatExceptionHandler` | `CompatController`에만 적용하는 오류 처리(`@RestControllerAdvice(assignableTypes)`). 기존 `GlobalExceptionHandler`의 `ApiErrorResponse` 형식을 건드리지 않고 OpenAI 오류 형식으로 바꾼다. 외부 AI 오류는 상태 코드 규칙을 기존과 같게 둔다(AC-11.10) |
+| 신규 | `gateway.ConversationGateway` | 대화 검증, 모든 메시지 탐지, 가장 강한 처리 결정, 대화 가림, 외부 AI 호출, 복원, 로그 한 줄. 단계 순서만 정하고 판단은 기존 부품이 한다 |
+| 확장 | `mask.Masker` | 메시지 여러 개를 한 대응표로 가리는 메서드 추가. **기존 `mask`, `restore`는 바꾸지 않는다** |
+| 확장 | `service.AnswerGenerator` | 대화를 받는 메서드 추가. 기본 구현은 대화를 한 문자열로 이어 붙여 기존 메서드를 부르고(가짜 응답 모델용), `GeminiService`는 Gemini의 여러 턴 형식으로 재정의한다. 시연용은 마지막 사용자 메시지를 되돌린다 |
+| 확장 | `config.GatewayProperties` | `maxConversationLength`(코드 기본값 20000). `application.yml`은 고치지 않는다 |
+| 재사용 | `DetectionEngine`, `ActionDecider`, `GatewayLogger` | 그대로 |
+
+### 9.2 처리 순서
+
+```
+POST /v1/chat/completions {model, messages[], stream?}
+  1. 검증        messages 비어 있음, 허용 밖 역할, 문자열 아닌 content, 공백뿐, 합계 20,000자 초과 → 400
+  2. 탐지        메시지마다 DetectionEngine (역할 무관)
+  3. 결정        메시지별 처리 중 가장 강한 것. 차단 > 경고 > 가림 > 허용. 경고는 확인 없이 가림으로 보낸다
+  4. 차단        → 외부 AI 호출 없음, 403 OpenAI 오류 (범주별 개수와 안내만)
+     허용        → 대화 그대로 외부 AI 호출
+     가림/경고    → 모든 메시지를 한 대응표로 가림 → 외부 AI 호출
+  5. 복원        답의 가명을 원래 값으로. 가림/경고이면 맨 앞에 안내 한 줄
+  6. 응답        stream=false: 일반 JSON, stream=true: 완성된 답을 SSE 한 건 + [DONE]
+  7. 로그        한 줄. 길이와 해시는 메시지를 이어 붙인 전체 기준
+```
+
+### 9.3 대화 가림 (`Masker`)
+
+- 입력은 메시지별 텍스트와 탐지 결과이다. 메시지 순서, 메시지 안에서는 위치 순서로 처음 보는 값에 번호를 준다. 같은 값(공백, 하이픈, 점, 대소문자 무시)은 같은 가명이다.
+- 클라이언트는 매 턴 앞부분 메시지를 그대로 다시 보내므로(이전 답에는 복원된 원래 값이 있다), 앞부분의 번호는 턴이 늘어도 바뀌지 않는다(AC-11.5).
+- 원문의 어느 메시지에든 `[전화1]` 같은 글자가 이미 있으면 그 번호를 건너뛴다(AC-4.5를 대화 전체로 확장).
+- 대응표는 요청 하나 안에서만 쓰고 버린다.
+
+### 9.4 오류 형식
+
+| 상황 | 상태 | `error.type` | `error.code` |
+|---|---|---|---|
+| 입력 오류, 읽을 수 없는 본문 | 400 | `invalid_request_error` | `invalid_request` |
+| 차단 | 403 | `deskguard_blocked` | `blocked` |
+| 외부 AI 인증 실패 | 401 | `upstream_error` | `upstream_unauthorized` |
+| 외부 AI 한도 초과 | 429 | `upstream_error` | `upstream_rate_limited` |
+| 외부 AI 시간 초과 | 504 | `upstream_error` | `upstream_timeout` |
+| 그 밖의 오류 | 500 | `upstream_error` | `internal_error` |
+
+`error.message`는 고정 문구이다. 내부 주소, 키, 외부 응답 본문은 싣지 않는다.
+
+### 9.5 한계
+
+- 진짜 스트리밍이 아니다. 답이 모두 만들어진 뒤에 한 번에 도착한다.
+- 인증이 없다. 로컬 시연 전용이다.
+- 매 턴 대화 전체를 다시 검사하고 가리므로 대화가 길수록 비용이 늘어난다(합계 20,000자 상한).
+- 파일, 이미지, 함수 호출(tools)은 지원하지 않는다.
