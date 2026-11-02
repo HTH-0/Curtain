@@ -48,6 +48,8 @@ class UserKeyTest {
 
     /** Gemini 키 형식(AIza로 시작하는 39자)의 가짜 키. 비밀 값 찾기에 걸리지 않게 코드로 만든다. */
     static final String USER_KEY = "AIza" + "Fake".repeat(8) + "Key";
+    /** AQ.로 시작하는 새 형식의 가짜 키. */
+    static final String NEW_KEY = "AQ." + "Fake_Key-".repeat(5) + "x.y";
     static final String GEMINI_URL = "https://gemini.test/v1beta/models/test-model:generateContent";
     static final String OK_BODY = "{\"candidates\":[{\"content\":{\"parts\":[{\"text\":\"안녕하세요\"}]}}]}";
 
@@ -194,13 +196,31 @@ class UserKeyTest {
     }
 
     @Test
-    @DisplayName("FR-12 키 형식 판단: AIza로 시작하는 39자만 키로 본다")
+    @DisplayName("AC-12.1 키 형식 판단: Google 키(AIza 39자, AQ. 형식)만 키로 보고, 다른 서비스의 키나 짧은 값은 키로 보지 않는다")
     void keyShape() {
         assertThat(UserKeyAnswerers.isGeminiKey(USER_KEY)).isTrue();
         assertThat(UserKeyAnswerers.isGeminiKey(" " + USER_KEY + " ")).isTrue();
+        assertThat(UserKeyAnswerers.isGeminiKey(NEW_KEY)).isTrue();
         assertThat(UserKeyAnswerers.isGeminiKey(null)).isFalse();
         assertThat(UserKeyAnswerers.isGeminiKey("x")).isFalse();
         assertThat(UserKeyAnswerers.isGeminiKey(USER_KEY + "A")).isFalse();
+        assertThat(UserKeyAnswerers.isGeminiKey("AQ.short")).isFalse();
+        assertThat(UserKeyAnswerers.isGeminiKey("AQ." + "a".repeat(30) + " b")).isFalse();
         assertThat(UserKeyAnswerers.isGeminiKey("sk-" + "a".repeat(40))).isFalse();
+        assertThat(UserKeyAnswerers.isGeminiKey("sk-proj-" + "a".repeat(40))).isFalse();
+    }
+
+    @Test
+    @DisplayName("AC-12.1, 12.2 AQ.로 시작하는 새 형식의 키도 그 요청에만 x-goog-api-key 헤더로 Gemini에 보낸다")
+    void newKeyFormatIsUsed() throws Exception {
+        server.expect(requestTo(GEMINI_URL)).andExpect(header("x-goog-api-key", NEW_KEY))
+                .andRespond(withSuccess(OK_BODY, MediaType.APPLICATION_JSON));
+        server.expect(requestTo(GEMINI_URL)).andExpect(header("x-goog-api-key", NEW_KEY))
+                .andRespond(withSuccess(OK_BODY, MediaType.APPLICATION_JSON));
+
+        assertThat(body(send(portal("안녕").header("X-Gemini-Key", NEW_KEY)))).contains("안녕하세요");
+        assertThat(body(send(v1("안녕").header("Authorization", "Bearer " + NEW_KEY)))).contains("안녕하세요");
+        assertThat(defaultCalls).isEmpty();
+        server.verify();
     }
 }

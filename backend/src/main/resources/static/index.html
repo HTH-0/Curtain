@@ -316,7 +316,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
       <form id="keyForm" class="keyform">
         <label for="keyInput">Gemini API 키</label>
         <div class="keyrow">
-          <input id="keyInput" type="password" autocomplete="off" spellcheck="false" placeholder="AIza로 시작하는 키">
+          <input id="keyInput" type="password" autocomplete="off" spellcheck="false" placeholder="AIza… 또는 AQ.…로 시작하는 키">
           <button class="primary" type="submit">저장</button>
           <button type="button" id="keyClear">지우기</button>
         </div>
@@ -382,7 +382,8 @@ const $ = (id) => document.getElementById(id);
 
 /* 방문자의 Gemini 키(FR-12). 이 탭(sessionStorage)에만 두고 서버로는 요청마다 헤더로 보낸다. 저장소를 못 쓰는 환경이면 키 없이 동작한다 */
 const KEY_STORE = "curtain.geminiKey";
-const KEY_SHAPE = /^AIza[0-9A-Za-z_-]{35}$/;
+/* Google 키 형식만 받는다(AIza 39자, 또는 AQ.로 시작하는 새 형식). 다른 서비스의 키를 Google로 보내지 않기 위해서이다(AC-12.1) */
+const KEY_SHAPE = /^(AIza[0-9A-Za-z_-]{35}|AQ\.[A-Za-z0-9._-]{20,200})$/;
 let defaultMode = "demo";
 function getKey() { try { return sessionStorage.getItem(KEY_STORE) || ""; } catch (e) { return ""; } }
 function setKey(v) { try { v ? sessionStorage.setItem(KEY_STORE, v) : sessionStorage.removeItem(KEY_STORE); return true; } catch (e) { return false; } }
@@ -457,7 +458,7 @@ $("prompt").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.ctr
 $("keyForm").addEventListener("submit", (e) => {
   e.preventDefault();
   const v = $("keyInput").value.trim();
-  if (!KEY_SHAPE.test(v)) { keyMsg("Gemini 키 형식이 아닙니다. AIza로 시작하는 39자를 넣어 주세요.", false); return; }
+  if (!KEY_SHAPE.test(v)) { keyMsg("Google AI Studio의 Gemini 키 형식이 아닙니다. AIza나 AQ.로 시작하는 키를 그대로 붙여 넣어 주세요.", false); return; }
   if (!setKey(v)) { keyMsg("이 브라우저에서는 키를 보관할 수 없습니다(저장소 차단).", false); return; }
   $("keyInput").value = "";
   keyMsg("저장했습니다. 이제 포털의 답은 실제 Gemini에서 옵니다.", true);

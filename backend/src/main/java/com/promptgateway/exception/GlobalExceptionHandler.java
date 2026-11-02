@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * "이 프로젝트 전체에서 이런 종류의 예외가 발생하면 이렇게 응답해라"를 한 곳에 모아둔 클래스.
@@ -38,6 +39,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleUnreadableBody(HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ApiErrorResponse("INVALID_REQUEST", "요청 본문을 읽을 수 없습니다. JSON 형식을 확인하세요."));
+    }
+
+    // 없는 주소(없는 파일 포함)는 404이다(AC-12.9). 아래의 나머지 처리기가 잡으면 500이 되므로 따로 둔다.
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleNotFound(NoResourceFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiErrorResponse("NOT_FOUND", "없는 주소입니다."));
     }
 
     // 방문자가 넣은 Gemini 키를 Gemini가 거부한 경우(AC-12.4). 키와 외부 응답 본문은 싣지 않는다.

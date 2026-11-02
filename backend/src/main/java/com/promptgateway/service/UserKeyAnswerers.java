@@ -16,8 +16,11 @@ import java.util.regex.Pattern;
 @Component
 public class UserKeyAnswerers {
 
-    /** Gemini 키 형식. 이 형식이 아니면(예: Chatbox에 넣던 "아무 값") 키로 보지 않고 서버 기본 응답을 쓴다(AC-12.1). */
-    private static final Pattern GEMINI_KEY = Pattern.compile("AIza[0-9A-Za-z_-]{35}");
+    /**
+     * Google 키 형식: AIza로 시작하는 39자, 또는 AQ.로 시작하는 새 형식. 이 형식이 아니면(예: Chatbox에 넣던 "아무 값") 키로 보지 않고
+     * 서버 기본 응답을 쓴다(AC-12.1). 긴 값을 모두 받지 않는 것은 다른 서비스의 키(sk- 등)를 Google로 보내지 않기 위해서이다.
+     */
+    private static final Pattern GEMINI_KEY = Pattern.compile("AIza[0-9A-Za-z_-]{35}|AQ\\.[A-Za-z0-9._-]{20,200}");
 
     private final RestTemplate restTemplate;
     private final String model;
@@ -29,7 +32,7 @@ public class UserKeyAnswerers {
         this.baseUrl = baseUrl;
     }
 
-    /** Gemini 키 형식인가(AIza로 시작하는 39자, 앞뒤 공백은 무시한다). */
+    /** Google 키 형식인가(앞뒤 공백은 무시한다). */
     public static boolean isGeminiKey(String value) {
         return value != null && GEMINI_KEY.matcher(value.strip()).matches();
     }
