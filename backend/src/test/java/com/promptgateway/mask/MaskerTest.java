@@ -77,6 +77,42 @@ class MaskerTest {
     }
 
     @Test
+    @DisplayName("AC-4.7 외부 AI가 대괄호를 떼고 전화1로 써도 되돌린다. 조사가 붙어도 되돌린다")
+    void restoresBareForm() {
+        MaskResult r = mask("010-2345-6789 연락");
+
+        assertThat(masker.restore("전화1", r).text()).isEqualTo("010-2345-6789");
+        RestoreResult out = masker.restore("오늘 전화(전화1)로 통화, 전화1은 고객 번호, [전화1] 도 같다", r);
+
+        assertThat(out.text()).isEqualTo("오늘 전화(010-2345-6789)로 통화, 010-2345-6789은 고객 번호, 010-2345-6789 도 같다");
+        assertThat(out.restored()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("AC-4.7 앞이 글자나 숫자이거나 뒤에 숫자가 이어지거나 대응표에 없는 전화9는 되돌리지 않는다")
+    void bareFormKeepsOthers() {
+        MaskResult r = mask("010-2345-6789 연락");
+
+        String answer = "휴대전화1 / 전화12 / 전화9 / 7전화1";
+        RestoreResult out = masker.restore(answer, r);
+
+        assertThat(out.text()).isEqualTo(answer);
+        assertThat(out.restored()).isZero();
+    }
+
+    @Test
+    @DisplayName("AC-4.7 대화 가림에서도 같다: 가명 두 개를 구분해 되돌린다")
+    void restoresBareFormInConversation() {
+        List<String> texts = List.of("010-2345-6789 와 010-9876-5432");
+        ConversationMask cm = masker.maskAll(texts, List.of(engine.detect(texts.get(0))));
+
+        RestoreResult out = masker.restore("전화1 그리고 전화2", cm);
+
+        assertThat(out.text()).isEqualTo("010-2345-6789 그리고 010-9876-5432");
+        assertThat(out.restored()).isEqualTo(2);
+    }
+
+    @Test
     @DisplayName("탐지가 없으면 문장을 그대로 두고 대응표가 비어 있다")
     void nothingToMask() {
         MaskResult r = mask("회의록 요약해 줘");

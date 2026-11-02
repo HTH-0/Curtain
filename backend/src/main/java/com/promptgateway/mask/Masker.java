@@ -4,6 +4,8 @@ import com.promptgateway.detect.Finding;
 import com.promptgateway.detect.Item;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * 탐지한 값을 가명으로 바꾸고, 외부 AI의 응답에서 가명을 원래 값으로 되돌린다(docs/design.md 4장, AC-4.1~4.5).
@@ -18,7 +21,7 @@ import java.util.regex.Pattern;
  *   가명 형식      [항목한글명+순번], 예: [전화1]. 외부 AI가 무엇이었는지 짐작해 답할 수 있게 항목을 드러낸다
  *   같은 값        공백, 하이픈, 점, 대소문자를 무시하고 같으면 같은 가명이다
  *   이미 있는 글자  원문에 [전화1] 같은 글자가 있으면 그 순번을 건너뛴다
- *   복원          외부 AI가 가명을 조금 바꿔 써도([전화 1], ［전화1］) 찾는다. 대응표에 없는 가명 모양은 그대로 둔다
+ *   복원          외부 AI가 가명을 조금 바꿔 써도([전화 1], ［전화1］, 대괄호를 뗀 전화1) 찾는다. 대응표에 없는 가명 모양은 그대로 둔다
  *
  * 대응표는 MaskResult에만 있고 요청이 끝나면 버린다. 이 클래스는 상태를 갖지 않는다.
  */
@@ -72,11 +75,12 @@ public class Masker {
                 byKey.put(m.group(1) + m.group(2), value);
             }
         });
-        Matcher m = PSEUDONYM.matcher(answer);
+        Matcher m = withBareForms(byKey.keySet()).matcher(answer);
         StringBuilder out = new StringBuilder();
         int restored = 0;
         while (m.find()) {
-            String value = byKey.get(m.group(1) + m.group(2));
+            String key = m.group(1) != null ? m.group(1) + m.group(2) : m.group(3);
+            String value = byKey.get(key);
             if (value != null) {
                 m.appendReplacement(out, Matcher.quoteReplacement(value));
                 restored++;
@@ -86,6 +90,19 @@ public class Masker {
         }
         m.appendTail(out);
         return new RestoreResult(out.toString(), restored);
+    }
+
+    /**
+     * 대괄호 가명(1, 2번 그룹)에, 대괄호를 뗀 `전화1` 모양(3번 그룹)을 더한 찾기 식(AC-4.7). 뗀 모양은 이 요청에서 쓴 가명만 찾고,
+     * 앞이 글자나 숫자이거나 뒤에 숫자가 이어지면 찾지 않는다. 대괄호 모양이 먼저 맞도록 앞에 둔다.
+     */
+    private static Pattern withBareForms(Collection<String> issuedKeys) {
+        if (issuedKeys.isEmpty()) {
+            return PSEUDONYM;
+        }
+        String bare = issuedKeys.stream().sorted(Comparator.comparingInt(String::length).reversed())
+                .map(Pattern::quote).collect(Collectors.joining("|"));
+        return Pattern.compile(PSEUDONYM.pattern() + "|(?<![가-힣A-Za-z0-9])(" + bare + ")(?!\\d)");
     }
 
     /**
