@@ -2,7 +2,7 @@
 
 다른 컴퓨터나 새 세션에서 이어서 작업할 때 가장 먼저 읽는 문서이다. 세션을 마칠 때마다 갱신한다. 그동안 무엇을 왜 했는지, 지금 코드가 어떻게 생겼는지, 이어서 할 때 조심할 점은 [worklog.md](worklog.md)에 있다. 주제 재정의 이전(HR 헬프데스크 챗봇)의 인수인계 문서는 [archive/handoff-v1-hr.md](archive/handoff-v1-hr.md)에 보관했다.
 
-기준일: 2026-11-02 (Z 1차와 2차(가명 안내문) 측정과 보고서 완료. 2차의 사람 판정은 하지 않기로 함. 코드 읽기는 보류 중).
+기준일: 2026-11-02 (Z 1차와 2차(가명 안내문) 측정과 보고서 완료. OpenAI 호환 입구(FR-11)와 Chatbox 연결 시연 완료, 마감 11-06. 코드 읽기는 보류 중).
 
 ## 1. 한눈에 보기
 
@@ -25,8 +25,9 @@
 | 코드 읽기 | 핵심 코드를 사용자가 읽고 설명할 수 있게 하기 | 1일차 진행 중. [docs/code-reading/](code-reading/)와 [progress.md](code-reading/progress.md) |
 | 7 | 여유분, 마무리 정리 | 대기 (`main` 병합은 2026-10-30 끝냄) |
 
-- **시험:** Java 114건과 Python 79건이 통과한다(2026-11-02 확인, 키 없이 통과). Java는 `cd backend`, `mvn -B test`. Python은 `cd backend/scripts`에서 `python -m unittest test_fake_values test_measure test_build_eval_set test_build_bypass_set test_z_measure`이다. 옛 HR용 `run_batch.py`와 `domain_candidates.py`는 시험과 함께 `backend/scripts/archive_hr/`로 옮겼다(보관, 실행하지 않는다).
-- **멈춘 지점:** Z 1차, 2차 보고서까지 끝났다. 2026-11-02에 포털 화면에 소개 구간(히어로, 문제, 처리 네 가지, 측정 결과)을 추가했다(`static/index.html`, `static/img/*.svg` 임시 이미지, AC-8.4~8.6, DECISIONS 2026-11-02). 커밋 전이며, 이미지 교체와 문구 다듬기가 남았다. 코드 읽기는 사용자가 보류했다.
+- **시험:** Java 166건과 Python 79건이 통과한다(2026-11-02 확인, 키 없이 통과). Java는 `cd backend`, `mvn -B test`. Python은 `cd backend/scripts`에서 `python -m unittest test_fake_values test_measure test_build_eval_set test_build_bypass_set test_z_measure`이다. 옛 HR용 `run_batch.py`와 `domain_candidates.py`는 시험과 함께 `backend/scripts/archive_hr/`로 옮겼다(보관, 실행하지 않는다).
+- **멈춘 지점:** Z 1차, 2차 보고서까지 끝났다. 2026-11-02에 (1) 포털 화면에 소개 구간을 추가했고(`static/index.html`, `static/img/*.svg` 임시 이미지, AC-8.4~8.6), (2) **OpenAI 호환 입구**(`compat/`, FR-11, AC-11.1~11.14, 설계 9절)를 만들고 공식 SDK, 가짜 Gemini, 실제 Gemini, 설치형 Chatbox로 확인했으며, (3) 복원이 대괄호 없는 가명(`전화1`)도 되돌리도록 고쳤다(AC-4.7). 결정과 결과는 DECISIONS 2026-11-02의 여러 항목에 있다. 사이트 소개 구간에 "AI 도구 연결" 안내를 넣는 일, 이미지 교체, 문구 다듬기가 남았다. 코드 읽기는 사용자가 보류했다.
+- **후보(아직 하지 않음):** 가린 대화에 "`[전화1]`은 가려진 값이니 그대로 쓰라"는 안내문을 넣어 모델이 가명을 쓰는 비율을 높이는 개선(명세와 시험부터), 시연 스크립트, 입력 정규화(우회 탐지 26%).
 
 ## 3. 다음 작업
 
@@ -134,7 +135,9 @@ python -m unittest test_fake_values test_measure test_build_eval_set test_build_
 mvn spring-boot:run "-Dspring-boot.run.arguments=--gateway.demo-answer=true"
 ```
 
-**실제 외부 AI로 실행:** 환경변수 `GEMINI_API_KEY`를 설정하고 `mvn spring-boot:run`. 키는 aistudio.google.com에서 발급하고 파일이나 대화에 붙여넣지 않는다. Jev 키(`TYPESAFE_API_KEY`)는 Z 측정 때만 필요하다.
+**실제 외부 AI로 실행:** 환경변수 `GEMINI_API_KEY`를 설정하고 `mvn spring-boot:run`. 키는 aistudio.google.com에서 발급하고 파일이나 대화에 붙여넣지 않는다. Jev 키(`TYPESAFE_API_KEY`)는 Z 측정 때만 필요하다. 키를 등록하기 전에 연 터미널에서는 `$env:GEMINI_API_KEY = [Environment]::GetEnvironmentVariable("GEMINI_API_KEY","User")`로 먼저 불러온다. 모델을 바꾸려면 `mvn spring-boot:run "-Dspring-boot.run.arguments=--gemini.model=gemini-3.5-flash-lite"`처럼 인자로 덮어쓴다(`application.yml`은 동결 해시 때문에 고치지 않는다).
+
+**AI 도구 연결(OpenAI 호환 입구):** 서버를 위처럼 실제 키로 띄우고 Chatbox 등의 주소를 `http://localhost:8080/v1`(Chatbox는 API 호스트 `http://localhost:8080`), 모델을 `deskguard`로 설정한다. API 키는 아무 값이나 쓴다. Chatbox는 모델 설정에서 Vision과 도구 사용을 꺼 둔다. 자세한 방법은 [README](../README.md)의 "기존 AI 도구를 게이트웨이에 연결하기"에 있다.
 
 **측정 모드:** `--gateway.measurement-mode=true`. 외부 AI를 부르지 않고 탐지 결과, 위치, 가린 문장, 지연을 돌려준다. 같은 컴퓨터에서 보낸 요청에만 적용된다.
 

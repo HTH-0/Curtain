@@ -60,6 +60,28 @@ cd backend/scripts && python measure.py --input ../../docs/eval/set/eval_v1.json
 
 실제 외부 AI(Gemini)를 쓰려면 환경변수 `GEMINI_API_KEY`를 설정하고 `--gateway.demo-answer=true` 없이 실행한다. 키는 파일이나 대화에 쓰지 않는다. Z 측정(가림 후 답의 쓸모)은 Gemini와 Jev 키가 필요하며 절차는 [handoff.md](./docs/handoff.md) 3절에 있다.
 
+## 기존 AI 도구를 게이트웨이에 연결하기
+
+게이트웨이는 OpenAI 호환 입구(`POST /v1/chat/completions`, `GET /v1/models`)를 연다. OpenAI 방식으로 말하는 AI 도구(Chatbox, 공식 OpenAI SDK 등)는 **서버 주소만 바꾸면** 모든 대화가 게이트웨이의 검사를 거친 뒤 Gemini로 나간다.
+
+| 설정 | 값 |
+|---|---|
+| 주소(Base URL) | `http://localhost:8080/v1` (Chatbox는 API 호스트에 `http://localhost:8080`) |
+| API 키 | 아무 값이나 쓴다(검사하지 않는다) |
+| 모델 | `deskguard`(요청의 모델 이름은 무시한다) |
+
+```python
+from openai import OpenAI
+client = OpenAI(base_url="http://localhost:8080/v1", api_key="아무값")
+print(client.chat.completions.create(model="deskguard",
+      messages=[{"role": "user", "content": "김민수 010-2345-6789 에게 안내 메일 써 줘"}]).choices[0].message.content)
+```
+
+- 가림이면 답 맨 앞에 `[Deskguard] 휴대전화 1건을 가려서 보냈습니다.` 같은 한 줄이 붙고, 가명은 원래 값으로 되돌려진다. 차단이면 403 오류(`deskguard_blocked`)로 보내지 않았다고 알린다.
+- 경고(개인정보 20개 이상)는 확인을 받을 방법이 없어 자동으로 가려서 보낸다. 원문은 보내지 않는다.
+- 대화는 서버에 저장하지 않는다. 클라이언트가 매 턴 대화 전체를 다시 보내므로 매번 처음부터 가린다.
+- 한계: 로컬 시연용이며 인증이 없다. 텍스트만 받는다(이미지와 도구 호출은 400 오류). Chatbox는 모델 설정에서 이미지와 `도구 사용`을 꺼 둔다. 모델이 가명을 답에 쓰지 않으면 복원할 것이 없다(예: "번호가 입력되지 않았다"고 답함). 대화 전체는 2만 자까지이다. 결과 기록은 [DECISIONS.md](./DECISIONS.md) 2026-11-02 항목에 있다.
+
 ## 개발 방식
 
 SDD와 TDD를 병행한다. 기획은 문제 정의, 정책, 명세([`spec.md`](./docs/spec.md)), 설계([`design.md`](./docs/design.md)), 작업 목록([`tasks.md`](./docs/tasks.md)) 순서로 확정한다. 구현은 수용 기준(AC)에서 실패하는 시험을 먼저 쓰고 최소 코드로 통과시킨다. 구현 중에 명세의 빈칸이 드러나면 코드보다 명세를 먼저 고친다. 탐지율처럼 확률적인 품질은 시험이 아니라 위의 측정으로 검증한다. 결정의 근거는 [`DECISIONS.md`](./DECISIONS.md), 남은 위험은 [`open-risks.md`](./docs/open-risks.md)에 있다. 이어서 작업하려면 [`handoff.md`](./docs/handoff.md)를 먼저 읽는다.
