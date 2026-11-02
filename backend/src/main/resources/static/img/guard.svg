@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 720" width="600" height="720">
+<!-- 방패를 든 경비 대원. 직접 그린 그림(흑백 명암, 거친 질감). 무기는 그리지 않는다(AC-8.9) -->
+<defs>
+<linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#4a4a4a"/><stop offset=".45" stop-color="#232323"/><stop offset="1" stop-color="#0c0c0c"/>
+</linearGradient>
+<linearGradient id="helmet" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#5c5c5c"/><stop offset=".5" stop-color="#262626"/><stop offset="1" stop-color="#0e0e0e"/>
+</linearGradient>
+<linearGradient id="shield" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#4b4b4b"/><stop offset=".4" stop-color="#262626"/><stop offset="1" stop-color="#101010"/>
+</linearGradient>
+<linearGradient id="glass" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0" stop-color="#1a1a1a"/><stop offset=".35" stop-color="#3a3a3a"/><stop offset=".5" stop-color="#121212"/><stop offset="1" stop-color="#060606"/>
+</linearGradient>
+<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#0b0b0b" stop-opacity="0"/><stop offset="1" stop-color="#0b0b0b" stop-opacity="1"/>
+</linearGradient>
+<radialGradient id="glow" cx=".35" cy=".25" r=".7">
+<stop offset="0" stop-color="#ffffff" stop-opacity=".18"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+<filter id="grain" x="0" y="0" width="100%" height="100%">
+<feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch" result="t"/>
+<feColorMatrix in="t" type="saturate" values="0" result="g"/>
+<feComponentTransfer in="g" result="ga"><feFuncA type="table" tableValues="0 .22"/></feComponentTransfer>
+<feComposite in="ga" in2="SourceGraphic" operator="in" result="gi"/>
+<feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="gi"/></feMerge>
+</filter>
+</defs>
+<g filter="url(#grain)">
+  <!-- 몸통과 어깨 -->
+  <path d="M190 262 Q300 240 410 262 L482 312 Q506 360 500 470 L500 720 L100 720 L100 470 Q94 360 118 312 Z" fill="url(#body)"/>
+  <ellipse cx="140" cy="330" rx="52" ry="40" fill="#2c2c2c"/>
+  <ellipse cx="460" cy="330" rx="52" ry="40" fill="#1a1a1a"/>
+  <path d="M232 268 L368 268 L380 330 L220 330 Z" fill="#161616"/>
+  <!-- 목과 얼굴 가리개 -->
+  <path d="M236 186 L364 186 L356 246 Q300 272 244 246 Z" fill="#1b1b1b"/>
+  <!-- 헬멧 -->
+  <path d="M214 160 C214 76 386 76 386 160 L390 190 L210 190 Z" fill="url(#helmet)"/>
+  <path d="M226 118 C246 92 284 82 312 84" fill="none" stroke="#8a8a8a" stroke-width="4" stroke-linecap="round" opacity=".55"/>
+  <rect x="282" y="74" width="36" height="20" rx="4" fill="#1c1c1c"/>
+  <!-- 고글 -->
+  <rect x="222" y="148" width="156" height="40" rx="14" fill="url(#glass)"/>
+  <path d="M236 160 L282 160" stroke="#9a9a9a" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+  <!-- 방패 -->
+  <rect x="146" y="336" width="308" height="384" rx="28" fill="url(#shield)" stroke="#5b5b5b" stroke-width="3"/>
+  <rect x="160" y="350" width="280" height="356" rx="20" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="2"/>
+  <rect x="190" y="368" width="220" height="56" rx="10" fill="url(#glass)" stroke="#000" stroke-width="2"/>
+  <path d="M204 380 L250 380" stroke="#9a9a9a" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+  <!-- 방패의 표지: 초록 방패와 자물쇠 -->
+  <path d="M300 456 C320 466 344 470 362 468 C364 520 352 566 300 598 C248 566 236 520 238 468 C256 470 280 466 300 456 Z" fill="#3d5a2c" stroke="#0b0b0b" stroke-width="4"/>
+  <path d="M284 524 V512 a16 16 0 0 1 32 0 V524" fill="none" stroke="#e9e9e9" stroke-width="7"/>
+  <rect x="274" y="522" width="52" height="40" rx="6" fill="#e9e9e9"/>
+  <circle cx="300" cy="538" r="5" fill="#3d5a2c"/>
+  <rect x="190" y="628" width="220" height="30" rx="4" fill="#0e0e0e" opacity=".85"/>
+  <text x="300" y="650" text-anchor="middle" font-family="Impact, 'Arial Black', sans-serif" font-size="22" letter-spacing="6" fill="#d8d8d8">DESKGUARD</text>
+  <!-- 방패를 잡은 손 -->
+  <rect x="118" y="468" width="46" height="62" rx="18" fill="#1e1e1e" stroke="#0b0b0b" stroke-width="3"/>
+  <rect x="436" y="468" width="46" height="62" rx="18" fill="#141414" stroke="#0b0b0b" stroke-width="3"/>
+  <!-- 왼쪽 위 빛: 헬멧과 어깨에만 -->
+  <path d="M214 160 C214 76 386 76 386 160 L390 190 L210 190 Z" fill="url(#glow)"/>
+  <ellipse cx="140" cy="330" rx="52" ry="40" fill="url(#glow)"/>
+</g>
+<rect x="0" y="560" width="600" height="160" fill="url(#fade)"/>
+</svg>

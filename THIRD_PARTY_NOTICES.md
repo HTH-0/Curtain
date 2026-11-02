@@ -68,15 +68,17 @@ SOFTWARE.
 - 가공: 없음. 파일을 고치지 않고 `static/fonts/`에 두어 포털 화면(`static/index.html`)이 같은 주소에서 불러온다. 외부 CDN을 쓰지 않으므로 화면을 열 때 외부로 요청이 나가지 않는다.
 - 디자인 참고: 글꼴 선택, 색을 줄이는 방식, 구간 구성의 원칙은 plan-et.co.kr을 참고했으나 그 사이트의 글, 이미지, 로고는 쓰지 않았다(spec AC-8.6).
 
-## 5-0-1. 웹 화면의 제목 글꼴 (Jua)
+## 5-0-1. 웹 화면의 영문 제목 글꼴 (Bebas Neue)
 
-- 출처: The Jua Project Authors, 「Jua」(주아체, 배달의민족 폰트를 바탕으로 한 Google Fonts 글꼴). <https://github.com/google/fonts/tree/main/ofl/jua>
-- 라이선스: SIL Open Font License 1.1. 전문은 `backend/src/main/resources/static/fonts/Jua-OFL.txt`에 있다(2026-11-02 원본 저장소에서 받음).
-- 가공: 화면에 쓰는 글자 357자만 남기도록 부분 집합으로 줄였다(`Jua-subset.woff2`, 약 75KB, `pyftsubset`). 화면의 글자를 바꿔 새 글자가 생기면 글꼴을 다시 만들어야 하며, 없는 글자는 Pretendard로 대신 보인다. 라이선스 원문의 저작권 줄(`Copyright 2018 The Jua Project Authors`)에는 예약 글꼴 이름(Reserved Font Name) 지정이 없다(2026-11-02 원문 확인). 그래서 부분 집합 파일에도 같은 라이선스 전문을 함께 둔다.
+- 출처: Dharma Type, 「Bebas Neue」(Google Fonts). <https://github.com/google/fonts/tree/main/ofl/bebasneue>
+- 라이선스: SIL Open Font License 1.1. 전문은 `backend/src/main/resources/static/fonts/BebasNeue-OFL.txt`에 있다(2026-11-02 원본 저장소에서 받음). 저작권 줄(`Copyright © 2010 by Dharma Type.`)에 예약 글꼴 이름 지정은 없다.
+- 가공: 기본 라틴 문자와 기호 몇 개만 남기도록 부분 집합으로 줄였다(`BebasNeue-subset.woff2`, 약 9.5KB, `pyftsubset`). 한글은 들어 있지 않아 Pretendard로 보인다.
+- 이전에 쓰던 제목 글꼴 Jua(SIL OFL)는 2026-11-02 디자인을 바꾸면서 저장소에서 지웠다.
 
 ## 5-0-2. 웹 화면의 그림
 
-- `static/img/`의 `mascot.svg`, `masked-phone.svg`, `step-1~3.svg`, `shield.svg`는 이 프로젝트를 위해 Claude Code가 직접 그린 SVG이다. 굵은 윤곽선과 크레용 질감의 손그림 화풍만 사용자가 준 참고 이미지(`귀여운.jpg`, 저장소에 올리지 않음)에서 가져왔다. 그 이미지 속 실존 캐릭터는 그리지 않았고 쓰지 않았다(spec AC-8.9).
+- `static/img/`의 `guard.svg`(방패를 든 경비 대원), `route-map.svg`(요청 경로 지도), `shield-mark.svg`(방패 표지)는 이 프로젝트를 위해 Claude Code가 직접 그린 SVG이다. 어두운 배경, 올리브 초록 한 색, 흑백 명암과 거친 질감이라는 화풍만 사용자가 준 참고 이미지(`실사.jpg`, 저장소에 올리지 않음)에서 가져왔다. 그 이미지의 사진, 인물, 문구는 쓰지 않았고, 총기는 방패로 바꿨다(spec AC-8.9). 지도의 대륙은 점으로 대강 그린 장식이며 실제 지도 자료를 쓰지 않았다.
+- 이전의 손그림 그림 6개(`귀여운.jpg` 화풍 참고)는 같은 날 지웠다.
 
 ## 5-1. 사용하지 않은 자료
 
