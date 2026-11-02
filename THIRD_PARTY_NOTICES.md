@@ -61,6 +61,13 @@ SOFTWARE.
 
 - 응답 모델: Google Gemini API(무료 티어). 판정 채점: TypeSafe의 Jev(`jev-1.14.0`, Z 측정에서만). 각 서비스의 약관을 따른다. 입력은 가짜 데이터뿐이다(`docs/open-risks.md` R8, R11).
 
+## 5-0. 웹 화면의 글꼴 (Pretendard)
+
+- 출처: Kil Hyung-jin, 「Pretendard」 v1.3.9(npm 패키지 `pretendard`의 `PretendardVariable.woff2`). <https://github.com/orioncactus/pretendard>
+- 라이선스: SIL Open Font License 1.1. 전문은 `backend/src/main/resources/static/fonts/Pretendard-LICENSE.txt`에 있다(2026-11-02 원본 저장소에서 받음).
+- 가공: 없음. 파일을 고치지 않고 `static/fonts/`에 두어 포털 화면(`static/index.html`)이 같은 주소에서 불러온다. 외부 CDN을 쓰지 않으므로 화면을 열 때 외부로 요청이 나가지 않는다.
+- 디자인 참고: 글꼴 선택, 색을 줄이는 방식, 구간 구성의 원칙은 plan-et.co.kr을 참고했으나 그 사이트의 글, 이미지, 로고는 쓰지 않았다(spec AC-8.6).
+
 ## 5-1. 사용하지 않은 자료
 
 - KorSET(`datumo/KorSET`), CAGE, RICoTA는 접근 승인과 비상업 조건이 있어 사용하지 않았고 저장소에도 없다(`docs/research/domain-sources.md`).

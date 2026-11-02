@@ -5,7 +5,7 @@
     <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffffff" stop-opacity=".12"/>
   </linearGradient>
   <linearGradient id="shield" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#2dd4a7"/><stop offset="1" stop-color="#1b8f74"/>
+    <stop offset="0" stop-color="#7c9bff"/><stop offset="1" stop-color="#1b8f74"/>
   </linearGradient>
   <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#39434f"/><stop offset="1" stop-color="#1c232b"/>
@@ -19,8 +19,8 @@
   <line x1="98" y1="66" x2="702" y2="66" stroke="#1f2a35"/>
 
   <rect x="372" y="82" width="312" height="48" rx="12" fill="#1e3a33"/>
-  <text x="388" y="103" font-size="13" fill="#d9f2e9">고객 010-2345-6789 에게</text>
-  <text x="388" y="121" font-size="13" fill="#d9f2e9">안내 메일 초안을 써 줘</text>
+  <text x="388" y="103" font-size="13" fill="#eff3ff">고객 010-2345-6789 에게</text>
+  <text x="388" y="121" font-size="13" fill="#eff3ff">안내 메일 초안을 써 줘</text>
 
   <rect x="118" y="146" width="402" height="44" rx="8" fill="#12263a"/>
   <rect x="118" y="146" width="3" height="44" fill="#6aa8e6"/>
@@ -36,7 +36,7 @@
     <path d="M60 10 L102 24 V62 C102 92 84 114 60 127 C36 114 18 92 18 62 V24 Z" fill="none" stroke="#0d1319" stroke-opacity=".35" stroke-width="2"/>
     <rect x="42" y="58" width="36" height="28" rx="5" fill="#0d1319"/>
     <path d="M49 58 V50 a11 11 0 0 1 22 0 V58" fill="none" stroke="#0d1319" stroke-width="5"/>
-    <circle cx="60" cy="71" r="4" fill="#2dd4a7"/>
+    <circle cx="60" cy="71" r="4" fill="#7c9bff"/>
   </g>
 
   <text x="400" y="368" text-anchor="middle" font-size="92" font-weight="800" letter-spacing="2" fill="url(#title)" textLength="560" lengthAdjust="spacingAndGlyphs">DESKGUARD</text>

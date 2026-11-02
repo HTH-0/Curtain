@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 72" role="img" aria-label="방패와 자물쇠">
 <!-- 임시 로고(직접 제작). 파비콘과 상단 로고에 쓴다 -->
-<path d="M32 2 L58 11 V35 C58 52 46 65 32 70 C18 65 6 52 6 35 V11 Z" fill="#2dd4a7"/>
+<path d="M32 2 L58 11 V35 C58 52 46 65 32 70 C18 65 6 52 6 35 V11 Z" fill="#7c9bff"/>
 <rect x="22" y="30" width="20" height="16" rx="3" fill="#0b0f14"/>
 <path d="M26 30 V26 a6 6 0 0 1 12 0 V30" fill="none" stroke="#0b0f14" stroke-width="3.5"/>
 </svg>
