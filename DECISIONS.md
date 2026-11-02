@@ -748,3 +748,14 @@
 - 발견: 이전 답(`model`)에 우리가 붙인 안내 줄(`[Deskguard] … 가려서 보냈습니다.`)이 그대로 Gemini에 들어갔다. 진짜 모델은 이를 흉내 내 같은 줄로 답을 시작할 수 있고, 그러면 안내가 두 번 나온다. 자동 시험은 이를 놓쳤고 전송 본문을 직접 보다가 찾았다.
 - 수정(시험 먼저, AC-11.14): 이전 답(`assistant`)의 맨 앞 안내 줄은 외부 AI로 보내기 전에 뗀다. 사용자와 `system` 메시지는 건드리지 않는다. Java 시험 163건 통과.
 - 한계: 실제 Gemini의 다중 턴 호출은 아직 확인하지 못했다. 이 컴퓨터에는 `GEMINI_API_KEY`가 어디에도 없다(환경변수 사용자, 컴퓨터, 프로세스 수준 모두 없음, 프로젝트와 프로필 파일에도 없음). 가짜 Gemini는 요청 구조와 원래 값 부재를 증명하지만 Gemini가 `systemInstruction`과 `model` 역할을 받아들이는지는 증명하지 못한다. 기성 채팅 화면(Open WebUI 등)도 아직 연결하지 않았다(Docker가 없고 Python이 3.14).
+
+## 2026-11-02 실제 Gemini로 OpenAI 호환 입구 확인 (스텝 5 일부, 사용자 컴퓨터의 서버, 공식 SDK로 호출)
+- 방식: 사용자가 자기 터미널에서 서버를 띄웠고(`--gemini.model=gemini-3.5-flash-lite`로 `application.yml`을 고치지 않고 덮어씀), 제가 그 서버를 공식 OpenAI Python SDK로 호출했다. 키는 사용자의 서버만 가지고 있고 이 세션은 키 값을 읽지 않았다(자격증명을 꺼내려는 명령은 보안 규칙에 막혔고 우회하지 않았다). 입력은 가짜 값뿐이다.
+- 결과(실제 Gemini):
+  - 다중 턴(`user`, `model`, `user`)과 `systemInstruction`을 Gemini가 받아들였다(모두 200).
+  - `system` 지시("어떤 질문에도 OK 한 단어로만")가 실제로 효과가 있었다(답: `OK`). `systemInstruction`이 모델에 도달한다는 증거이다.
+  - **가림과 복원의 끝까지 확인:** 모델이 번호를 가명(`[전화1]`)으로만 본 상태에서 "방금 말한 전화번호를 다시 써 줘"에 가명으로 답했고, 게이트웨이가 이를 원래 번호로 복원해 직원에게 보여 주었다. 이전 답(복원된 원래 번호와 안내 줄 포함)을 되보내는 2턴째에서도 같다.
+  - 안내 줄은 한 번만 나온다(AC-11.14의 이전 답 안내 줄 제거가 실제 모델에서도 동작).
+  - 차단은 SDK의 `PermissionDeniedError`(403), 빈 messages는 `BadRequestError`(400)로 처리된다.
+- 서버 시작 문제(참고): 키를 등록하기 전에 연 터미널과 VS Code의 새 터미널 탭은 이전 환경을 물려받아 `Could not resolve placeholder 'GEMINI_API_KEY'`로 시작에 실패한다. 현재 창에서 `$env:GEMINI_API_KEY = [Environment]::GetEnvironmentVariable("GEMINI_API_KEY","User")`로 불러오면 된다(값은 화면에 나오지 않는다).
+- 한계: 모델 하나(`gemini-3.5-flash-lite`), 시나리오 몇 개이다. 기성 채팅 화면(Chatbox)은 아직 연결하지 않았다.
