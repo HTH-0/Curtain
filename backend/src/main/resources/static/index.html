@@ -13,9 +13,10 @@
 @font-face { font-family: "Jua"; src: url("fonts/Jua-subset.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap }
 :root {
   color-scheme: light;
-  --ink: #1d1b19; --bg: #fbf7ee; --paper2: #f6efdc; --surface: #fffdf8; --fg: #1d1b19; --muted: #665f55;
-  --accent: #2b5fff; --accent-fg: #ffffff; --user: #fff0b8;
-  --sky: #cfe4ff; --pink: #ffc4d1; --yellow: #ffe9a0; --red-soft: #ffc9c9;
+  --ink: #1d1b19; --bg: #e6e9ef; --paper2: #d9dee8; --surface: #f3f5f8; --fg: #1d1b19; --muted: #4f5662;
+  --accent: #2f4bc4; --accent-fg: #ffffff; --user: #e8da9c;
+  --sky: #a9c3e6; --pink: #dfa9b6; --yellow: #e3cf86; --red-soft: #e3a9a6;
+  --night: #1f2a44; --night-ink: #0d1322; --night-fg: #f3f5f8; --night-muted: #c3cad8;
   --mask-soft: var(--sky); --warn-soft: var(--yellow); --block-soft: var(--red-soft);
   --font: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
   --display: "Jua", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
@@ -40,16 +41,20 @@ a { color: inherit }
 .pill:focus-visible, button:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px }
 
 /* 히어로 */
-.hero { padding-bottom: 64px }
+.hero { padding-bottom: 64px; background: var(--night); color: var(--night-fg); border-bottom: 2.5px solid var(--ink) }
+.hero .pill { border-color: var(--night-fg); background: transparent; color: var(--night-fg); box-shadow: 3px 4px 0 var(--night-ink) }
+.hero .pill.dark { background: var(--night-fg); color: var(--ink); border-color: var(--night-fg) }
+.hero .pill:focus-visible { outline-color: var(--yellow) }
+.art::before { content: ""; position: absolute; inset: 6% 4% 10%; border-radius: 50%; background: radial-gradient(circle, rgba(169, 195, 230, .22) 0%, rgba(169, 195, 230, 0) 70%) }
 .nav { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; padding-bottom: 12px }
 .brand { display: flex; align-items: center; gap: 10px; font: 400 22px var(--display) }
 .brand img { width: 28px; height: 31px }
 .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; margin-top: 28px }
 .hero h1 { font-size: clamp(36px, 6vw, 64px); line-height: 1.2; margin: 0 0 18px }
-.hero .lead { color: var(--muted); font-size: clamp(15px, 2vw, 18px); max-width: 520px; margin: 0 0 30px }
+.hero .lead { color: var(--night-muted); font-size: clamp(15px, 2vw, 18px); max-width: 520px; margin: 0 0 30px }
 .hero .cta { display: flex; gap: 14px; flex-wrap: wrap }
 .art { position: relative; max-width: 420px; margin: 0 auto; width: 100% }
-.art .mascot { display: block; width: 100%; animation: bob 4s ease-in-out infinite }
+.art .mascot { position: relative; display: block; width: 100%; animation: bob 4s ease-in-out infinite }
 .art .phone { position: absolute; right: -6%; bottom: 0; width: 38%; transform: rotate(8deg) }
 @keyframes bob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
 @media (prefers-reduced-motion: reduce) { .art .mascot { animation: none } }
