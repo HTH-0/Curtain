@@ -3,6 +3,7 @@ package com.promptgateway.mask;
 import com.promptgateway.detect.Finding;
 import com.promptgateway.detect.Item;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -57,11 +58,15 @@ public class Masker {
     }
 
     public RestoreResult restore(String answer, MaskResult mask) {
-        if (answer == null || mask.pseudonymToValue().isEmpty()) {
+        return restoreFrom(answer, mask.pseudonymToValue());
+    }
+
+    private RestoreResult restoreFrom(String answer, Map<String, String> pseudonymToValue) {
+        if (answer == null || pseudonymToValue.isEmpty()) {
             return new RestoreResult(answer, 0);
         }
         Map<String, String> byKey = new HashMap<>();
-        mask.pseudonymToValue().forEach((pseudonym, value) -> {
+        pseudonymToValue.forEach((pseudonym, value) -> {
             Matcher m = PSEUDONYM.matcher(pseudonym);
             if (m.matches()) {
                 byKey.put(m.group(1) + m.group(2), value);
@@ -83,6 +88,49 @@ public class Masker {
         return new RestoreResult(out.toString(), restored);
     }
 
+    /**
+     * 대화의 메시지 여러 개를 한 대응표로 가린다(AC-11.4, 11.5). texts와 findingsPerText는 같은 순서이다.
+     * 번호는 메시지 순서, 메시지 안에서는 위치 순서로 처음 보는 값에 준다. 어느 메시지에든 이미 있는 [전화1] 같은 글자의 번호는 건너뛴다.
+     */
+    public ConversationMask maskAll(List<String> texts, List<List<Finding>> findingsPerText) {
+        Map<String, String> pseudonymToValue = new LinkedHashMap<>();
+        Map<String, String> existing = new HashMap<>();
+        texts.forEach(t -> existing.putAll(existingPseudonyms(t)));
+        Map<String, String> valueKeyToPseudonym = new HashMap<>();
+        Map<Item, Integer> nextNumber = new HashMap<>();
+
+        List<String> masked = new ArrayList<>();
+        for (int i = 0; i < texts.size(); i++) {
+            String text = texts.get(i);
+            StringBuilder out = new StringBuilder();
+            int cursor = 0;
+            for (Finding f : findingsPerText.get(i).stream().sorted((a, b) -> Integer.compare(a.start(), b.start())).toList()) {
+                String valueKey = valueKey(f.item(), f.value());
+                String pseudonym = valueKeyToPseudonym.get(valueKey);
+                if (pseudonym == null) {
+                    int n = nextNumber.getOrDefault(f.item(), 1);
+                    while (existing.containsKey(f.item().label() + n)) {
+                        n++;
+                    }
+                    pseudonym = "[" + f.item().label() + n + "]";
+                    nextNumber.put(f.item(), n + 1);
+                    valueKeyToPseudonym.put(valueKey, pseudonym);
+                    pseudonymToValue.put(pseudonym, f.value());
+                }
+                out.append(text, cursor, f.start()).append(pseudonym);
+                cursor = f.end();
+            }
+            out.append(text.substring(cursor));
+            masked.add(out.toString());
+        }
+        return new ConversationMask(masked, pseudonymToValue);
+    }
+
+    /** 대화 가림의 대응표로 답의 가명을 되돌린다. */
+    public RestoreResult restore(String answer, ConversationMask mask) {
+        return restoreFrom(answer, mask.pseudonymToValue());
+    }
+
     private static Map<String, String> existingPseudonyms(String text) {
         Map<String, String> found = new HashMap<>();
         Matcher m = PSEUDONYM.matcher(text);
@@ -90,6 +138,11 @@ public class Masker {
             found.put(m.group(1) + m.group(2), m.group());
         }
         return found;
+    }
+
+    /** 같은 값인지 비교하는 열쇠(항목 + 공백, 하이픈, 점, 대소문자를 지운 값). 가명을 주거나 값을 한 번만 셀 때 같은 기준으로 쓴다. */
+    public static String valueKey(Item item, String value) {
+        return item.name() + ":" + normalize(value);
     }
 
     private static String normalize(String value) {

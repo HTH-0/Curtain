@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * "실제 LLM(Gemini)을 호출하는 방법을 아는" 유일한 클래스.
@@ -40,9 +41,17 @@ public class GeminiService implements AnswerGenerator {
 
     @Override
     public String generateAnswer(String prompt) {
-        String url = baseUrl + "/" + model + ":generateContent?key=" + apiKey;
+        return call(GeminiRequest.of(prompt));
+    }
 
-        GeminiRequest requestBody = GeminiRequest.of(prompt);
+    /** 대화 전체를 Gemini의 여러 턴 형식으로 보낸다(FR-11). */
+    @Override
+    public String generateAnswer(List<ChatTurn> conversation) {
+        return call(GeminiRequest.of(conversation));
+    }
+
+    private String call(GeminiRequest requestBody) {
+        String url = baseUrl + "/" + model + ":generateContent?key=" + apiKey;
 
         // Content-Type에 charset=UTF-8을 명시한다.
         // (1단계 PowerShell에서 한글이 깨졌던 원인이 "전송 시 인코딩"이었다 - 자바의 Jackson은

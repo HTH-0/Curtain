@@ -143,12 +143,12 @@ POST /api/chat {prompt, confirmed?}
 |---|---|
 | AC-11.1 | Given `GET /v1/models`, When 요청한다, Then OpenAI 목록 형식(`object: list`, `data[]`)으로 모델 하나(`id: deskguard`)를 돌려준다. |
 | AC-11.2 | Given `POST /v1/chat/completions`에 `messages`(역할 `system`, `user`, `assistant`, 내용은 문자열)가 있고 탐지된 값이 없다, When 요청한다, Then 외부 AI에 대화를 그대로 보내고 OpenAI 응답 형식(`object: chat.completion`, `choices[0].message`의 `role: assistant`와 `content`, `finish_reason: stop`)으로 돌려준다. 요청의 `model` 값은 무시하고 설정된 응답 모델을 쓴다. |
-| AC-11.3 | Given 여러 메시지, When 탐지한다, Then 역할과 관계없이 모든 메시지를 검사하고, 처리는 대화 전체에서 가장 강한 것을 따른다(차단 > 경고 > 가림 > 허용). 같은 문장의 탐지 결과는 `/api/chat`과 같다. |
+| AC-11.3 | Given 여러 메시지, When 탐지한다, Then 역할과 관계없이 모든 메시지를 검사하고, 처리는 대화 전체에서 가장 강한 것을 따른다(차단 > 경고 > 가림 > 허용). 같은 문장의 탐지 결과는 `/api/chat`과 같다. 다만 개수는 같은 값을 한 번만 센다(클라이언트가 이전 대화와 이전 답을 매번 되보내므로, 그대로 세면 턴이 늘수록 개수가 부푼다. 한 문장 안에서 같은 값이 반복되지 않으면 `/api/chat`과 같다). |
 | AC-11.4 | Given 가림 또는 경고, When 외부 AI로 보낸다, Then 모든 메시지의 탐지된 값이 가명으로 바뀌고 원래 값은 하나도 남지 않는다. 대화 전체에서 같은 값은 같은 가명, 다른 값은 다른 가명이다. 대응표는 이 요청 안에서만 쓰고 저장하지 않는다(AC-4.4). |
 | AC-11.5 | Given 클라이언트가 이전 답(복원된 원래 값이 든 `assistant` 메시지)과 함께 대화를 한 턴씩 늘려 다시 보낸다, When 가린다, Then 앞부분 메시지의 가명은 이전 턴과 같다. |
-| AC-11.6 | Given 가림 또는 경고의 답, When 돌려준다, Then 답의 가명을 원래 값으로 되돌리고(AC-4.3), 답 맨 앞에 가린 범주와 개수를 알리는 한 줄을 붙인다(예: `[Deskguard] 휴대전화 2건을 가려서 보냈습니다.`). 경고는 확인할 방법이 없으므로 확인 없이 가림으로 처리한다(원문은 보내지 않는다, policy.md P3의 "확인 뒤 가림"에서 확인 단계만 빠진다). |
+| AC-11.6 | Given 가림 또는 경고의 답, When 돌려준다, Then 답의 가명을 원래 값으로 되돌리고(AC-4.3), 답 맨 앞에 가린 범주와 개수(같은 값은 한 번만 센다, AC-11.3)를 알리는 한 줄을 붙인다(예: `[Deskguard] 휴대전화 2건을 가려서 보냈습니다.`). 경고는 확인할 방법이 없으므로 확인 없이 가림으로 처리한다(원문은 보내지 않는다, policy.md P3의 "확인 뒤 가림"에서 확인 단계만 빠진다). |
 | AC-11.7 | Given 차단, When 응답한다, Then 외부 AI를 호출하지 않고 403과 OpenAI 오류 형식(`error.message`, `error.type: deskguard_blocked`, `error.code: blocked`)을 돌려준다. `message`에는 범주별 개수와 "값을 지우고 다시 보내라"는 안내만 있고 탐지한 값과 규칙은 없다(AC-6.3). |
-| AC-11.8 | Given `messages`가 없거나 비어 있다, 역할이 허용 밖이다, `content`가 문자열이 아니다, 모든 내용이 공백이다, 대화 전체 길이가 20,000자를 넘는다, 본문이 JSON이 아니다, When 요청한다, Then 400과 OpenAI 오류 형식(`error.type: invalid_request_error`)을 돌려주고 외부 AI를 호출하지 않는다. 길이 기준은 `gateway.max-conversation-length`(코드 기본값 20000)이다. |
+| AC-11.8 | Given `messages`가 없거나 비어 있다, 역할이 허용 밖이다, `content`가 문자열이 아니다, 모든 내용이 공백이다, 대화 전체 길이가 20,000자를 넘는다, 본문이 JSON이 아니다, When 요청한다, Then 400과 OpenAI 오류 형식(`error.type: invalid_request_error`)을 돌려주고 외부 AI를 호출하지 않는다. `Content-Type`이 JSON이 아니면 같은 형식에 상태 코드만 415이다. 길이 기준은 `gateway.max-conversation-length`(코드 기본값 20000)이다. |
 | AC-11.9 | Given `stream: true`, When 허용이나 가림으로 처리한다, Then 내부에서는 한 번에 처리한 뒤 완성된 복원 답을 `text/event-stream`으로 보낸다(`chat.completion.chunk` 한 건과 `data: [DONE]`). 차단과 입력 오류는 스트림이 아니라 AC-11.7, 11.8의 일반 오류 응답이다. |
 | AC-11.10 | Given 외부 AI의 오류, When 응답한다, Then OpenAI 오류 형식(`error.type: upstream_error`)으로 알리고 상태 코드는 기존 처리와 같게 둔다(401, 429, 504, 그 밖은 500). 주소, 키, 외부 응답 본문은 싣지 않는다(AC-5.2). |
 | AC-11.11 | Given 이 입구의 요청, When 요청이 끝난다, Then 로그는 요청당 한 줄이고 원문, 탐지한 값, 가명 대응표, API 키가 없다. 길이와 해시는 메시지를 이어 붙인 전체 기준이다(AC-7.1, 7.2). |

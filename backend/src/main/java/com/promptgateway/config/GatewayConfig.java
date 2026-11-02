@@ -6,6 +6,7 @@ import com.promptgateway.detect.DictionaryDetector;
 import com.promptgateway.detect.PersonalDataDetector;
 import com.promptgateway.detect.SecretDetector;
 import com.promptgateway.gateway.ChatGateway;
+import com.promptgateway.gateway.ConversationGateway;
 import com.promptgateway.gateway.InputValidator;
 import com.promptgateway.log.GatewayLogger;
 import com.promptgateway.mask.Masker;
@@ -55,6 +56,13 @@ public class GatewayConfig {
     @Bean
     public GatewayLogger gatewayLogger() {
         return new GatewayLogger();
+    }
+
+    @Bean
+    public ConversationGateway conversationGateway(DetectionEngine engine, ActionDecider decider, Masker masker,
+                                                   AnswerGenerator answerGenerator, GatewayLogger gatewayLogger,
+                                                   GatewayProperties gateway) {
+        return new ConversationGateway(engine, decider, masker, answerGenerator, gatewayLogger, gateway.maxConversationLength());
     }
 
     @Bean

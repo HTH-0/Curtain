@@ -132,7 +132,8 @@ gateway:
 POST /v1/chat/completions {model, messages[], stream?}
   1. 검증        messages 비어 있음, 허용 밖 역할, 문자열 아닌 content, 공백뿐, 합계 20,000자 초과 → 400
   2. 탐지        메시지마다 DetectionEngine (역할 무관)
-  3. 결정        메시지별 처리 중 가장 강한 것. 차단 > 경고 > 가림 > 허용. 경고는 확인 없이 가림으로 보낸다
+  3. 결정        대화 전체의 탐지 결과로 정한다. 차단 > 경고 > 가림 > 허용. 경고는 확인 없이 가림으로 보낸다
+                 (경고는 어차피 가림이므로 대량 기준을 대화 전체로 세어도 보내는 내용은 같다). 개수는 같은 값을 한 번만 센다
   4. 차단        → 외부 AI 호출 없음, 403 OpenAI 오류 (범주별 개수와 안내만)
      허용        → 대화 그대로 외부 AI 호출
      가림/경고    → 모든 메시지를 한 대응표로 가림 → 외부 AI 호출
@@ -153,6 +154,7 @@ POST /v1/chat/completions {model, messages[], stream?}
 | 상황 | 상태 | `error.type` | `error.code` |
 |---|---|---|---|
 | 입력 오류, 읽을 수 없는 본문 | 400 | `invalid_request_error` | `invalid_request` |
+| Content-Type이 JSON이 아님 | 415 | `invalid_request_error` | `invalid_request` |
 | 차단 | 403 | `deskguard_blocked` | `blocked` |
 | 외부 AI 인증 실패 | 401 | `upstream_error` | `upstream_unauthorized` |
 | 외부 AI 한도 초과 | 429 | `upstream_error` | `upstream_rate_limited` |
@@ -167,3 +169,6 @@ POST /v1/chat/completions {model, messages[], stream?}
 - 인증이 없다. 로컬 시연 전용이다.
 - 매 턴 대화 전체를 다시 검사하고 가리므로 대화가 길수록 비용이 늘어난다(합계 20,000자 상한).
 - 파일, 이미지, 함수 호출(tools)은 지원하지 않는다.
+- 깨진 JSON이나 Content-Type 오류처럼 게이트웨이에 닿기 전에 거부된 요청은 로그 줄이 남지 않는다(`/api/chat`과 같다).
+- 가림 안내 줄은 클라이언트가 이전 답으로 되보내므로 대화에 남는다. 내용은 개수뿐이라 해롭지 않고 같은 값은 한 번만 세므로 개수가 부풀지 않는다.
+- 응답 모델 없이 시연할 때(`gateway.demo-answer=true`)는 가린 문장이 답에 되돌려져 복원된 것만 보이므로, 실제 가림은 서버 로그의 `action=MASK`와 안내 줄로 확인한다.
