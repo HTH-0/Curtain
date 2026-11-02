@@ -158,6 +158,17 @@ h2 { font-size: clamp(26px, 4vw, 38px); line-height: 1.25; margin: 0 0 14px }
 .notice.block { background: var(--block-soft) }
 .notice b { font-weight: 700 }
 details.sent { font-size: 13px; color: var(--muted) }
+/* 커튼 기록(AC-8.11): 가려진 값은 빨강, 가명은 노랑, 답에서 되돌린 값은 노란 밑줄 */
+.record { margin-top: 8px; display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; font-size: 13px; background: var(--surface);
+  border: 1.5px solid var(--ink); border-radius: 10px; padding: 10px 12px }
+.record dt { font-weight: 800; white-space: nowrap }
+.record dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere }
+.record .result { grid-column: 1 / -1; border-top: 1.5px dashed rgba(29, 27, 25, .35); padding-top: 6px; font-weight: 700 }
+mark.val { background: var(--red-soft); color: inherit; border-radius: 4px; padding: 0 2px; text-decoration: line-through; text-decoration-thickness: 1.5px }
+mark.ps { background: var(--yellow); color: inherit; border-radius: 4px; padding: 0 2px; font-weight: 700 }
+mark.restored { background: transparent; color: inherit; text-decoration: underline; text-decoration-color: #c9a227; text-decoration-thickness: 3px; text-underline-offset: 3px; cursor: help }
+.src { font-size: 12px; font-weight: 800; justify-self: start; padding: 1px 8px; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--surface) }
+.src.real { background: var(--yellow) }
 details.sent pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 12.5px/1.5 var(--mono); background: var(--surface);
   border: 1.5px solid var(--ink); border-radius: 8px; padding: 8px; margin: 6px 0 0; color: var(--fg) }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px }
@@ -397,12 +408,44 @@ function keyMsg(text, ok) { const k = $("keyMsg"); k.textContent = text; k.class
 function summary(findings) {
   return (findings || []).map(f => `${ITEM[f.item] || f.item} ${f.count}건`).join(", ");
 }
+/* 원문(prompt)과 외부 AI가 받은 문장(sent)을 맞대어 가명과 원래 값의 짝을 찾는다(AC-8.11). 서버의 가림 결과에서 거꾸로 읽을 뿐이다.
+   맞출 수 없으면 null(커튼 기록은 AI가 받은 문장만 보인다). 원문에 원래 있던 [전화1] 같은 글자는 짝으로 보지 않는다 */
+function curtainPairs(prompt, sent) {
+  const parts = sent.split(/(\[[가-힣A-Za-z]+\d+\])/);
+  const lits = parts.filter((_, i) => i % 2 === 0), pss = parts.filter((_, i) => i % 2 === 1);
+  function align(i, pos) {
+    if (!prompt.startsWith(lits[i], pos)) return null;
+    pos += lits[i].length;
+    if (i === pss.length) return pos === prompt.length ? [] : null;
+    for (let end = pos + 1; end <= prompt.length; end++) {
+      const rest = align(i + 1, end);
+      if (rest) return [{ ps: pss[i], value: prompt.slice(pos, end), start: pos, end }, ...rest];
+    }
+    return null;
+  }
+  if (pss.length === 0 || pss.length > 60 || prompt.length > 6000) return null;
+  const found = align(0, 0);
+  return found ? found.filter(f => f.value !== f.ps) : null;
+}
+/* text에서 ranges([{start, end, cls, title}])를 mark로 감싸 넣는다. 글자는 모두 textContent로만 넣는다 */
+function marked(tag, cls, text, ranges) {
+  const box = el(tag, cls); let at = 0;
+  for (const r of [...ranges].sort((a, b) => a.start - b.start)) {
+    if (r.start < at) continue;
+    box.appendChild(document.createTextNode(text.slice(at, r.start)));
+    const mk = el("mark", r.cls, text.slice(r.start, r.end)); if (r.title) mk.title = r.title; box.appendChild(mk);
+    at = r.end;
+  }
+  box.appendChild(document.createTextNode(text.slice(at)));
+  return box;
+}
+function findAll(text, needle) { const out = []; if (!needle) return out; let i = text.indexOf(needle); while (i >= 0) { out.push(i); i = text.indexOf(needle, i + needle.length); } return out; }
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 function add(node) { $("empty")?.remove(); $("inner").appendChild(node); $("log").scrollTop = $("log").scrollHeight; }
 
 function addMine(text) { const m = el("div", "msg me"); m.appendChild(el("div", "bubble", text)); add(m); }
 
-function addResult(prompt, status, data) {
+function addResult(prompt, status, data, real) {
   const m = el("div", "msg ai");
   if (status === 400) { m.appendChild(el("div", "notice block", data.message || "보낼 수 없는 입력입니다.")); return add(m); }
   if (!data || !data.action) { m.appendChild(el("div", "notice block", (data && data.message) || "외부 AI 호출에 실패했습니다. 잠시 후 다시 시도하세요.")); return add(m); }
@@ -420,16 +463,41 @@ function addResult(prompt, status, data) {
     no.onclick = () => { ok.disabled = no.disabled = true; n.appendChild(el("div", null, "취소했습니다. 외부로 보낸 내용은 없습니다.")); };
     a.append(ok, no); n.appendChild(a); m.appendChild(n);
   } else {
+    let pairs = null;
     if (data.action === "MASK") {
       const n = el("div", "notice mask"); n.appendChild(el("b", null, "가려서 보냈습니다. "));
       n.appendChild(document.createTextNode(summary(data.findings)));
       if (data.sentPrompt) {
-        const d = el("details", "sent"); d.appendChild(el("summary", null, "외부 AI로 보낸 문장 보기"));
-        d.appendChild(el("pre", null, data.sentPrompt)); n.appendChild(d);
+        pairs = curtainPairs(prompt, data.sentPrompt);
+        const rec = el("dl", "record");
+        rec.appendChild(el("dt", null, "내가 쓴 문장"));
+        rec.appendChild(pairs ? marked("dd", null, prompt, pairs.map(p => ({ start: p.start, end: p.end, cls: "val" }))) : el("dd", null, prompt));
+        rec.appendChild(el("dt", null, "AI가 받은 문장"));
+        const psRanges = [];
+        for (const m2 of data.sentPrompt.matchAll(/\[[가-힣A-Za-z]+\d+\]/g)) {
+          if (!pairs || pairs.some(p => p.ps === m2[0])) psRanges.push({ start: m2.index, end: m2.index + m2[0].length, cls: "ps" });
+        }
+        rec.appendChild(marked("dd", null, data.sentPrompt, psRanges));
+        m.__rec = rec; n.appendChild(rec);
       }
       m.appendChild(n);
     }
-    m.appendChild(el("div", "bubble", data.answer));
+    const canned = (data.answer || "").startsWith("(미리 써 둔 시연용 예시 답변");
+    const src = real ? (getKey() ? "실제 Gemini 답 · 내 키" : "실제 Gemini 답 · 서버 키")
+                     : (canned ? "시연용 예시 답 · 미리 써 둔 답" : "시연 답 · AI를 부르지 않음");
+    m.appendChild(el("div", "src" + (real ? " real" : ""), src));
+    const answer = data.answer || "", restored = [];
+    for (const p of pairs || []) {
+      for (const i of findAll(answer, p.value)) restored.push({ start: i, end: i + p.value.length, cls: "restored", title: `AI는 ${p.ps}(으)로 썼고, 커튼이 원래 값으로 되돌렸습니다` });
+    }
+    m.appendChild(restored.length ? marked("div", "bubble", answer, restored) : el("div", "bubble", answer));
+    if (m.__rec) {
+      const r = el("dd", "result", pairs && pairs.length
+        ? `AI는 원래 값을 보지 못했습니다. 답 속 가명 ${restored.length}곳을 원래 값으로 되돌렸습니다(밑줄).`
+        : "AI는 원래 값을 보지 못했습니다.");
+      if (pairs && pairs.length && restored.length === 0) r.textContent = "AI는 원래 값을 보지 못했습니다. 답에 가명이 없어 되돌린 값은 없습니다.";
+      m.__rec.appendChild(r);
+    }
   }
   add(m);
 }
@@ -437,12 +505,13 @@ function addResult(prompt, status, data) {
 async function send(prompt, confirmed) {
   $("send").disabled = true;
   try {
+    const real = !!getKey() || defaultMode !== "demo";
     const headers = { "Content-Type": "application/json" };
     const key = getKey();
     if (key) headers["X-Gemini-Key"] = key;
     const res = await fetch("api/chat", { method: "POST", headers, body: JSON.stringify({ prompt, confirmed }) });
     let data = null; try { data = await res.json(); } catch (e) { }
-    addResult(prompt, res.status, data);
+    addResult(prompt, res.status, data, real);
   } catch (e) {
     addResult(prompt, 0, null);
   } finally { $("send").disabled = false; }
