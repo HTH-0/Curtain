@@ -18,7 +18,7 @@
 | 유지 | `service.AnswerGenerator`, `GeminiService` | 외부 AI 호출. 인터페이스 하나로 바꿔 끼운다 | FR-5 |
 | 변경 | `log.GatewayLogger` | 범주별 개수, 처리, 길이와 해시, 지연. 원문과 값은 남기지 않는다 | FR-7 |
 | 변경 | `controller.ChatController` | 처리별 응답과 상태 코드, 측정 모드(같은 컴퓨터 제한 유지) | FR-6, FR-9 |
-| 신규 | `static/index.html` | 포털 화면 한 장. 위에서부터 소개 구간(히어로, 문제와 처리 네 가지, 측정 결과), 채팅 구간 순서이다. 이미지는 `static/img/`의 SVG 파일로 분리한다(임시 이미지, 교체 가능) | FR-8 |
+| 신규 | `static/index.html` | 포털 화면 한 장. 위에서부터 소개 구간(히어로, 문제와 처리 네 가지, 측정 결과, AI 앱 연결 안내), 채팅 구간 순서이다. 이미지는 `static/img/`의 SVG 파일로 분리한다(임시 이미지, 교체 가능) | FR-8 |
 | 삭제(3일차) | `judge.*`, `filter.*` (Jev 호출, 패턴 필터, 질문 세트) | 운영 경로는 외부 판정을 부르지 않는다(NFR-4). Z 채점의 Jev 호출은 측정 경로의 Python 도구가 맡는다. 옛 코드는 git 기록에 남아 있다 | NFR-4 |
 
 ## 2. 탐지 규칙 (policy.md 3장의 구현)

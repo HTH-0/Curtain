@@ -6,7 +6,7 @@
 <title>HTH 사내 AI 포털</title>
 <link rel="icon" type="image/svg+xml" href="img/shield.svg">
 <style>
-/* 위에서부터 소개 구간(히어로, 문제, 처리 네 가지, 측정 결과), 채팅 구간 순서이다. 채팅 구간의 동작은 아래 script가 맡고 소개 구간은 검사 로직을 담지 않는다 */
+/* 위에서부터 소개 구간(히어로, 문제, 처리 네 가지, 측정 결과, AI 앱 연결 안내), 채팅 구간 순서이다. 채팅 구간의 동작은 아래 script가 맡고 소개 구간은 검사 로직을 담지 않는다 */
 :root {
   --bg: #f5f6f4; --surface: #ffffff; --fg: #1f2622; --muted: #5f6b65; --line: #d9dfdb;
   --accent: #23634f; --accent-fg: #ffffff; --user: #e4efe9;
@@ -79,6 +79,17 @@ h2 em { font-style: normal; color: var(--accent) }
 .metric .t { font-weight: 700; margin-top: 4px }
 .metric .d { font-size: 13px; color: var(--muted); margin-top: 4px }
 .limit { margin-top: 20px; padding: 14px 16px; border-left: 3px solid var(--warn); background: var(--warn-soft); border-radius: 8px; font-size: 14px }
+.connect { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start }
+.settings { width: 100%; border-collapse: collapse; background: var(--bg); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; font-size: 14px }
+.settings th, .settings td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top }
+.settings tr:last-child th, .settings tr:last-child td { border-bottom: 0 }
+.settings th { width: 34%; color: var(--muted); font-weight: 700 }
+.settings code, .sample code { font: 13px var(--mono); overflow-wrap: anywhere }
+.connect ol { margin: 16px 0 0; padding-left: 20px; color: var(--muted); font-size: 14px }
+.sample { display: grid; gap: 12px }
+.sample .ex { background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 16px }
+.sample .ex > b { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px }
+.sample .ex p { margin: 6px 0 0; font-size: 14px }
 
 /* 채팅 구간 */
 .portal-wrap { padding: 80px 0 60px }
@@ -117,7 +128,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
 
 @media (max-width: 860px) {
   .cards { grid-template-columns: repeat(2, 1fr) }
-  .problem { grid-template-columns: 1fr }
+  .problem, .connect { grid-template-columns: 1fr }
   section.band, .portal-wrap { padding: 56px 0 }
 }
 @media (max-width: 480px) {
@@ -141,6 +152,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
     <div class="cta">
       <a class="pill light" href="#portal">포털 열어보기</a>
       <a class="pill ghost" href="#how">어떻게 동작하나</a>
+      <a class="pill ghost" href="#connect">AI 앱 연결</a>
     </div>
     <div class="shot"><img src="img/hero-laptop.svg" alt="노트북 화면에서 전화번호가 [전화1]로 가려져 외부 AI로 보내지는 포털 화면" width="800" height="450"></div>
   </div>
@@ -167,7 +179,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
     <div class="cards">
       <div class="card allow"><h3>허용</h3><p class="when">탐지된 값이 없을 때</p><p>그대로 외부 AI로 보냅니다.</p></div>
       <div class="card mask"><h3>가림</h3><p class="when">개인정보, 회사 코드명, 고객사</p><p>값을 [전화1] 같은 가명으로 바꿔 보내고, 답에서 원래 값으로 되돌립니다.</p></div>
-      <div class="card warn"><h3>경고</h3><p class="when">개인정보가 20개 이상</p><p>무엇이 들어 있는지 알리고, 확인을 받은 뒤 가려서 보냅니다.</p></div>
+      <div class="card warn"><h3>경고</h3><p class="when">개인정보가 20개 이상</p><p>무엇이 들어 있는지 알리고, 확인을 받은 뒤 가려서 보냅니다. 일반 AI 앱 연결에서는 확인할 방법이 없어 자동으로 가립니다.</p></div>
       <div class="card block"><h3>차단</h3><p class="when">비밀번호, 키, 대외비 표시</p><p>보내지 않고, 무엇을 지우고 다시 보낼지 알립니다.</p></div>
     </div>
     <div class="flow"><img src="img/flow-mask.svg" alt="직원의 문장이 게이트웨이에서 가려져 외부 AI로 가고, 답이 돌아오면 원래 값으로 되돌려지는 흐름" width="900" height="260"></div>
@@ -189,7 +201,38 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   </div>
 </section>
 
-<section class="portal-wrap band alt" id="portal">
+<section class="band alt" id="connect">
+  <div class="wrap">
+    <p class="kicker">쓰던 AI 앱 그대로</p>
+    <h2>앱의 서버 주소만 <em>바꾸면 됩니다</em></h2>
+    <p class="sub">OpenAI 방식으로 말하는 AI 앱(Chatbox 등)이나 개발 도구는 주소를 게이트웨이로 바꾸면, 모든 대화가 검사를 거친 뒤 외부 AI로 나갑니다. 직원은 평소 쓰던 화면을 그대로 씁니다.</p>
+    <div class="connect">
+      <div>
+        <table class="settings">
+          <tr><th>서버 주소</th><td><code>http://localhost:8080/v1</code><br>Chatbox는 API 호스트에 <code>http://localhost:8080</code></td></tr>
+          <tr><th>API 키</th><td>아무 값이나 넣습니다(검사하지 않습니다)</td></tr>
+          <tr><th>모델</th><td><code>deskguard</code></td></tr>
+        </table>
+        <ol>
+          <li>AI 앱의 설정에서 OpenAI 항목을 엽니다.</li>
+          <li>위 세 값을 넣고 저장합니다. 이미지와 도구 사용 기능은 끕니다.</li>
+          <li>평소처럼 대화합니다.</li>
+        </ol>
+      </div>
+      <div class="sample">
+        <div class="ex"><b>가림: 전화번호가 든 요청을 보내면</b>
+          <code>김민수 010-2345-6789 에게 안내 메일 써 줘</code>
+          <p>답 맨 앞에 <code>[Deskguard] 휴대전화 1건을 가려서 보냈습니다.</code> 한 줄이 붙고, 번호는 외부 AI로 나가지 않습니다.</p></div>
+        <div class="ex"><b>차단: 비밀번호가 든 요청을 보내면</b>
+          <code>DB_PASSWORD=Qw7!zLp92x 이 설정 왜 안 돼?</code>
+          <p>보내지 않고 <code>보내지 않았습니다(비밀번호 1건)…</code> 오류로 알립니다.</p></div>
+      </div>
+    </div>
+    <div class="limit"><b>한계:</b> 내 컴퓨터에서 돌리는 시연용이며 로그인이 없습니다. 글자만 받고 이미지와 도구 호출은 받지 않습니다. 예시의 이름, 번호, 비밀번호는 모두 가짜입니다.</div>
+  </div>
+</section>
+
+<section class="portal-wrap band" id="portal">
   <div class="wrap">
     <p class="kicker">직접 해 보기</p>
     <h2>사내 AI 포털</h2>
