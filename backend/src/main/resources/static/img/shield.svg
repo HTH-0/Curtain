@@ -1,6 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 72" role="img" aria-label="방패와 자물쇠">
-<!-- 임시 로고(직접 제작). 파비콘과 상단 로고에 쓴다 -->
-<path d="M32 2 L58 11 V35 C58 52 46 65 32 70 C18 65 6 52 6 35 V11 Z" fill="#7c9bff"/>
-<rect x="22" y="30" width="20" height="16" rx="3" fill="#0b0f14"/>
-<path d="M26 30 V26 a6 6 0 0 1 12 0 V30" fill="none" stroke="#0b0f14" stroke-width="3.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 110" width="100" height="110">
+<!-- 로고와 아이콘용 작은 방패 데스크가드 -->
+<defs>
+<filter id="crayon" x="-10%" y="-10%" width="120%" height="120%">
+<feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="7" result="n"/>
+<feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+</defs>
+<g filter="url(#crayon)" stroke="#1d1b19" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M50 8 C62 14 76 17 88 15 C90 46 84 76 50 100 C16 76 10 46 12 15 C24 17 38 14 50 8 Z" fill="#9ec8ff"/>
+  <circle cx="38" cy="42" r="4.5" fill="#1d1b19" stroke="none"/>
+  <circle cx="62" cy="42" r="4.5" fill="#1d1b19" stroke="none"/>
+  <path d="M42 56 Q50 64 58 56" fill="none" stroke-width="4"/>
+</g>
 </svg>

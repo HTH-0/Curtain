@@ -6,115 +6,123 @@
 <title>HTH 사내 AI 포털</title>
 <link rel="icon" type="image/svg+xml" href="img/shield.svg">
 <style>
-/* 위에서부터 히어로, AI 앱 연결 안내, 채팅 구간 순서이다. 채팅 구간의 동작은 아래 script가 맡고 소개 구간은 검사 로직을 담지 않는다 */
-/* 글꼴은 저장소의 static/fonts에서 불러온다(외부 주소로 요청하지 않는다, AC-8.8). 색은 중립색과 포인트색 하나이며 처리 상태 색만 따로 둔다 */
+/* 위에서부터 히어로, AI 앱 연결 안내, 채팅 구간 순서이다. 채팅 구간의 동작은 아래 script가 맡고 나머지 구간은 검사 로직을 담지 않는다 */
+/* 글꼴(본문 Pretendard, 제목 Jua)은 저장소의 static/fonts에서 불러온다(외부 주소로 요청하지 않는다, AC-8.8). 글자와 버튼은 중립색과 포인트색 하나,
+   파스텔 색은 그림과 처리 상태 표시에만 쓴다. 그림은 직접 그린 SVG이고 파일 하나씩 교체할 수 있다(AC-8.9). 밝은 화면만 지원한다(윤곽선이 검정이다) */
 @font-face { font-family: "Pretendard"; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; font-style: normal; font-display: swap }
+@font-face { font-family: "Jua"; src: url("fonts/Jua-subset.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap }
 :root {
-  --bg: #f5f6f8; --surface: #ffffff; --fg: #191919; --muted: #5b616b; --line: #e3e6ea;
-  --accent: #2b5fff; --accent-fg: #ffffff; --user: #eff3ff;
-  --mask: #2f5d8a; --mask-soft: #e3ebf4; --warn: #8a6a12; --warn-soft: #f6efda; --block: #a8382c; --block-soft: #f7e4e1;
-  --allow: #5b616b;
-  --hero-bg: #0b0f14; --hero-fg: #ffffff; --hero-muted: #a3adbb; --hero-accent: #7c9bff;
+  color-scheme: light;
+  --ink: #1d1b19; --bg: #fbf7ee; --paper2: #f6efdc; --surface: #fffdf8; --fg: #1d1b19; --muted: #665f55;
+  --accent: #2b5fff; --accent-fg: #ffffff; --user: #fff0b8;
+  --sky: #cfe4ff; --pink: #ffc4d1; --yellow: #ffe9a0; --red-soft: #ffc9c9;
+  --mask-soft: var(--sky); --warn-soft: var(--yellow); --block-soft: var(--red-soft);
   --font: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --display: "Jua", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
   --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --wobble: 20px 26px 18px 24px / 24px 18px 26px 20px;
+  --wobble2: 26px 18px 24px 20px / 18px 24px 20px 26px;
 }
-@media (prefers-color-scheme: dark) { :root {
-  --bg: #101216; --surface: #181b21; --fg: #eceef2; --muted: #9aa1ad; --line: #2a2f38;
-  --accent: #7c9bff; --accent-fg: #0b0f14; --user: #1e2740;
-  --mask: #8db7e3; --mask-soft: #1e2b3a; --warn: #e2c25e; --warn-soft: #362f1a; --block: #ee8a7e; --block-soft: #3b2321;
-  --allow: #9aa1ad;
-  color-scheme: dark } }
 * { box-sizing: border-box }
 html { scroll-behavior: smooth }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto } }
-body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.6 var(--font); letter-spacing: -.01em; word-break: keep-all; overflow-wrap: break-word }
-h1, h2, h3 { letter-spacing: -.025em }
+body { margin: 0; background-color: var(--bg); background-image: radial-gradient(rgba(29, 27, 25, .08) 1.2px, transparent 1.4px); background-size: 22px 22px;
+  color: var(--fg); font: 15px/1.6 var(--font); letter-spacing: -.01em; word-break: keep-all; overflow-wrap: break-word }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: -.01em }
 img { max-width: 100%; height: auto }
 a { color: inherit }
 .wrap { max-width: 1040px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-left)) }
-.pill { display: inline-block; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; border-radius: 999px; padding: 12px 26px; border: 1px solid transparent }
-.pill.light { background: #fff; color: #0b0f14 }
-.pill.ghost { background: transparent; color: var(--hero-fg); border-color: #3b4756 }
-.pill:focus-visible { outline: 2px solid var(--hero-accent); outline-offset: 3px }
+.pill { display: inline-block; font: 400 17px/1.2 var(--display); text-decoration: none; cursor: pointer; border-radius: 999px; padding: 12px 24px;
+  border: 2.5px solid var(--ink); background: var(--surface); color: var(--ink); box-shadow: 3px 4px 0 var(--ink); transition: transform .12s, box-shadow .12s }
+.pill:hover { transform: translate(1px, 2px); box-shadow: 2px 2px 0 var(--ink) }
+.pill.dark { background: var(--ink); color: var(--bg) }
+.pill.sm { padding: 8px 18px; font-size: 15px }
+.pill:focus-visible, button:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px }
 
 /* 히어로 */
-.hero { background: radial-gradient(ellipse at 50% 0%, #18233f 0%, var(--hero-bg) 62%); color: var(--hero-fg); text-align: center; position: relative; overflow: hidden }
-.hero::before { content: ""; position: absolute; inset: 0; opacity: .5; pointer-events: none;
-  background-image: linear-gradient(#1b2733 1px, transparent 1px), linear-gradient(90deg, #1b2733 1px, transparent 1px);
-  background-size: 48px 48px; -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 70%); mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 70%) }
-.hero .wrap { position: relative }
-.nav { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; padding-bottom: 20px }
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; letter-spacing: .02em }
-.brand img { width: 24px; height: 27px }
-.nav .pill { padding: 8px 18px; font-size: 13px; background: #1c2631; color: var(--hero-fg) }
-.hero h1 { font-size: clamp(32px, 6.4vw, 60px); line-height: 1.2; margin: 56px 0 18px; font-weight: 800; letter-spacing: -.02em }
-.hero h1 em { font-style: normal; color: var(--hero-accent) }
-.hero .lead { color: var(--hero-muted); font-size: clamp(15px, 2vw, 18px); max-width: 620px; margin: 0 auto 30px }
-.hero .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap }
-.hero .shot { margin: 56px auto 0; max-width: 820px }
-.hero .shot img { display: block; width: 100%; filter: drop-shadow(0 30px 60px rgba(124, 155, 255, .14)) }
+.hero { padding-bottom: 64px }
+.nav { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; padding-bottom: 12px }
+.brand { display: flex; align-items: center; gap: 10px; font: 400 22px var(--display) }
+.brand img { width: 28px; height: 31px }
+.hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; margin-top: 28px }
+.hero h1 { font-size: clamp(36px, 6vw, 64px); line-height: 1.2; margin: 0 0 18px }
+.hero .lead { color: var(--muted); font-size: clamp(15px, 2vw, 18px); max-width: 520px; margin: 0 0 30px }
+.hero .cta { display: flex; gap: 14px; flex-wrap: wrap }
+.art { position: relative; max-width: 420px; margin: 0 auto; width: 100% }
+.art .mascot { display: block; width: 100%; animation: bob 4s ease-in-out infinite }
+.art .phone { position: absolute; right: -6%; bottom: 0; width: 38%; transform: rotate(8deg) }
+@keyframes bob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+@media (prefers-reduced-motion: reduce) { .art .mascot { animation: none } }
 
-/* 소개 구간 */
-section.band { padding: 80px 0 }
-section.band.alt { background: var(--surface) }
-.kicker { color: var(--accent); font-weight: 700; font-size: 14px; margin: 0 0 8px }
-h2 { font-size: clamp(24px, 4vw, 36px); line-height: 1.25; margin: 0 0 14px; font-weight: 700 }
-h2 em { font-style: normal; font-weight: 800; color: inherit }
-.band p.sub { color: var(--muted); max-width: 640px; margin: 0 0 36px }
-.limit { margin-top: 20px; padding: 14px 16px; border-left: 3px solid var(--warn); background: var(--warn-soft); border-radius: 8px; font-size: 14px }
+/* 연결 안내 */
+section.band { padding: 72px 0 }
+section.band.alt { background: var(--paper2); border-top: 2.5px solid var(--ink); border-bottom: 2.5px solid var(--ink) }
+.kicker { color: var(--accent); font: 400 17px var(--display); margin: 0 0 6px }
+h2 { font-size: clamp(26px, 4vw, 38px); line-height: 1.25; margin: 0 0 14px }
+.band p.sub { color: var(--muted); max-width: 640px; margin: 0 0 32px }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 28px }
+.step { border: 2.5px solid var(--ink); border-radius: var(--wobble); padding: 18px 18px 20px; text-align: center; box-shadow: 4px 5px 0 var(--ink) }
+.step:nth-child(1) { background: var(--sky) } .step:nth-child(2) { background: var(--yellow) } .step:nth-child(3) { background: var(--pink) }
+.step img { display: block; width: 84px; height: 84px; margin: 0 auto 8px }
+.step b { display: block; font: 400 20px var(--display); margin-bottom: 4px }
+.step p { margin: 0; font-size: 14px }
 .connect { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start }
-.settings { width: 100%; border-collapse: collapse; background: var(--bg); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; font-size: 14px }
-.settings th, .settings td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top }
+.settings { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--surface); border: 2.5px solid var(--ink); border-radius: var(--wobble2); overflow: hidden; font-size: 14px }
+.settings th, .settings td { text-align: left; padding: 12px 16px; border-bottom: 1.5px dashed rgba(29, 27, 25, .4); vertical-align: top }
 .settings tr:last-child th, .settings tr:last-child td { border-bottom: 0 }
 .settings th { width: 34%; color: var(--muted); font-weight: 700 }
 .settings code, .sample code { font: 13px var(--mono); overflow-wrap: anywhere }
-.connect ol { margin: 16px 0 0; padding-left: 20px; color: var(--muted); font-size: 14px }
-.sample { display: grid; gap: 12px }
-.sample .ex { background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 16px }
-.sample .ex > b { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px }
+.sample { display: grid; gap: 14px }
+.sample .ex { border: 2.5px solid var(--ink); border-radius: var(--wobble); padding: 16px }
+.sample .ex.mask { background: var(--sky) } .sample .ex.block { background: var(--red-soft) }
+.sample .ex > b { display: block; font: 400 17px var(--display); margin-bottom: 8px }
 .sample .ex p { margin: 6px 0 0; font-size: 14px }
+.limit { margin-top: 24px; padding: 14px 18px; border: 2.5px dashed var(--ink); background: var(--yellow); border-radius: 16px; font-size: 14px }
 
 /* 채팅 구간 */
-.portal-wrap { padding: 80px 0 60px }
+.portal-wrap { padding: 72px 0 56px }
 .portal { max-width: 820px; margin: 0 auto; height: min(720px, 86vh); display: flex; flex-direction: column;
-  background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 18px 50px rgba(0, 0, 0, .08) }
-.chat-head { padding: 14px 18px; border-bottom: 1px solid var(--line); background: var(--surface) }
-.chat-head h3 { font-size: 17px; margin: 0; font-weight: 700 }
+  background: var(--surface); border: 2.5px solid var(--ink); border-radius: 26px; overflow: hidden; box-shadow: 5px 6px 0 var(--ink) }
+.chat-head { padding: 14px 18px; border-bottom: 2.5px solid var(--ink); background: var(--sky) }
+.chat-head h3 { font-size: 20px; margin: 0 }
 .sub { color: var(--muted); font-size: 13px }
+.chat-head .sub { color: var(--fg) }
 .chat-log { flex: 1; overflow-y: auto; padding: 16px 18px; background: var(--bg) }
 .msg { display: grid; gap: 6px; margin-bottom: 14px }
-.bubble { padding: 10px 14px; border-radius: 10px; white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100% }
+.bubble { padding: 10px 14px; border-radius: 16px; border: 2px solid var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100% }
 .me .bubble { background: var(--user); justify-self: end }
-.ai .bubble { background: var(--surface); border: 1px solid var(--line) }
-.notice { font-size: 13px; padding: 8px 12px; border-radius: 8px; border-left: 3px solid }
-.notice.mask { background: var(--mask-soft); border-color: var(--mask); color: var(--fg) }
-.notice.warn { background: var(--warn-soft); border-color: var(--warn) }
-.notice.block { background: var(--block-soft); border-color: var(--block) }
+.ai .bubble { background: var(--surface) }
+.notice { font-size: 13px; padding: 8px 12px; border-radius: 12px; border: 2px solid var(--ink) }
+.notice.mask { background: var(--mask-soft) }
+.notice.warn { background: var(--warn-soft) }
+.notice.block { background: var(--block-soft) }
 .notice b { font-weight: 700 }
-.notice.mask b { color: var(--mask) } .notice.warn b { color: var(--warn) } .notice.block b { color: var(--block) }
 details.sent { font-size: 13px; color: var(--muted) }
-details.sent pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 12.5px/1.5 var(--mono); background: var(--bg);
-  border: 1px solid var(--line); border-radius: 6px; padding: 8px; margin: 6px 0 0; color: var(--fg) }
+details.sent pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 12.5px/1.5 var(--mono); background: var(--surface);
+  border: 1.5px solid var(--ink); border-radius: 8px; padding: 8px; margin: 6px 0 0; color: var(--fg) }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px }
-button { font: inherit; cursor: pointer; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); padding: 6px 12px }
-button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent) }
-button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+button { font: inherit; cursor: pointer; border-radius: 12px; border: 2px solid var(--ink); background: var(--surface); color: var(--ink); padding: 6px 12px }
+button.primary { background: var(--ink); color: var(--bg) }
 button:disabled { opacity: .5; cursor: default }
-.chat-foot { border-top: 1px solid var(--line); background: var(--surface); padding: 12px 18px }
+.chat-foot { border-top: 2.5px solid var(--ink); background: var(--surface); padding: 12px 18px }
 .examples { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px }
-.examples button { font-size: 12.5px; padding: 4px 10px; color: var(--muted); border-radius: 999px }
+.examples button { font-size: 12.5px; padding: 4px 10px; border-width: 1.5px; border-radius: 999px }
 form { display: flex; gap: 8px; align-items: flex-end }
-textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font: inherit; color: var(--fg); background: var(--bg);
-  border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px }
-.empty { color: var(--muted); font-size: 14px; padding: 24px 0 }
+textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font: inherit; color: var(--fg); background: var(--surface);
+  border: 2px solid var(--ink); border-radius: 14px; padding: 8px 10px }
+.empty { color: var(--muted); font-size: 14px; padding: 24px 0; text-align: center }
+.empty img { display: block; width: 96px; height: 96px; margin: 0 auto 8px }
 .foot { padding: 28px 0 40px; color: var(--muted); font-size: 13px; text-align: center }
 
 @media (max-width: 860px) {
-  .connect { grid-template-columns: 1fr }
-  section.band, .portal-wrap { padding: 56px 0 }
+  .hero-grid { grid-template-columns: 1fr; text-align: center }
+  .hero .lead { margin-left: auto; margin-right: auto }
+  .hero .cta { justify-content: center }
+  .art { max-width: 340px }
+  .steps, .connect { grid-template-columns: 1fr }
+  section.band, .portal-wrap { padding: 52px 0 }
 }
 @media (max-width: 480px) {
-  .hero h1 { margin-top: 36px }
   .portal { height: 90vh }
   form { flex-direction: column; align-items: stretch }
 }
@@ -126,41 +134,46 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   <div class="wrap">
     <nav class="nav" aria-label="상단">
       <div class="brand"><img src="img/shield.svg" alt="">HTH Deskguard</div>
-      <a class="pill" href="#portal">포털 열기</a>
+      <a class="pill sm" href="#portal">포털 열기</a>
     </nav>
-    <h1>외부 AI에 이 내용을<br><em>보내도 될까요?</em></h1>
-    <p class="lead">직원이 ChatGPT 같은 외부 AI에 보내는 문장을 나가기 전에 검사합니다. 개인정보와 비밀번호, 회사 기밀은 가리거나 막고, 업무는 계속 이어지게 합니다.</p>
-    <div class="cta">
-      <a class="pill light" href="#portal">포털 열어보기</a>
-      <a class="pill ghost" href="#connect">AI 앱 연결</a>
+    <div class="hero-grid">
+      <div class="copy">
+        <h1>외부 AI에 이 내용을<br>보내도 될까요?</h1>
+        <p class="lead">직원이 ChatGPT 같은 외부 AI에 보내는 문장을 나가기 전에 검사합니다. 개인정보와 비밀번호, 회사 기밀은 가리거나 막고, 업무는 계속 이어지게 합니다.</p>
+        <div class="cta">
+          <a class="pill dark" href="#portal">포털 열어보기</a>
+          <a class="pill" href="#connect">AI 앱 연결</a>
+        </div>
+      </div>
+      <div class="art">
+        <img class="mascot" src="img/mascot.svg" alt="방패 모양 캐릭터 데스크가드가 자물쇠를 안고 웃고 있는 그림" width="400" height="400">
+        <img class="phone" src="img/masked-phone.svg" alt="대괄호 안에 숨은 전화기 그림. 가려진 전화번호를 뜻한다" width="260" height="220">
+      </div>
     </div>
-    <div class="shot"><img src="img/hero-laptop.svg" alt="노트북 화면에서 전화번호가 [전화1]로 가려져 외부 AI로 보내지는 포털 화면" width="800" height="450"></div>
   </div>
 </section>
 
 <section class="band alt" id="connect">
   <div class="wrap">
     <p class="kicker">쓰던 AI 앱 그대로</p>
-    <h2>앱의 서버 주소만 <em>바꾸면 됩니다</em></h2>
+    <h2>앱의 서버 주소만 바꾸면 됩니다</h2>
     <p class="sub">OpenAI 방식으로 말하는 AI 앱(Chatbox 등)이나 개발 도구는 주소를 게이트웨이로 바꾸면, 모든 대화가 검사를 거친 뒤 외부 AI로 나갑니다. 직원은 평소 쓰던 화면을 그대로 씁니다.</p>
+    <div class="steps">
+      <div class="step"><img src="img/step-1.svg" alt=""><b>1단계</b><p>AI 앱의 설정에서 OpenAI 항목을 엽니다.</p></div>
+      <div class="step"><img src="img/step-2.svg" alt=""><b>2단계</b><p>아래 세 값을 넣고 저장합니다. 이미지와 도구 사용 기능은 끕니다.</p></div>
+      <div class="step"><img src="img/step-3.svg" alt=""><b>3단계</b><p>평소처럼 대화합니다.</p></div>
+    </div>
     <div class="connect">
-      <div>
-        <table class="settings">
-          <tr><th>서버 주소</th><td><code>http://localhost:8080/v1</code><br>Chatbox는 API 호스트에 <code>http://localhost:8080</code></td></tr>
-          <tr><th>API 키</th><td>아무 값이나 넣습니다(검사하지 않습니다)</td></tr>
-          <tr><th>모델</th><td><code>deskguard</code></td></tr>
-        </table>
-        <ol>
-          <li>AI 앱의 설정에서 OpenAI 항목을 엽니다.</li>
-          <li>위 세 값을 넣고 저장합니다. 이미지와 도구 사용 기능은 끕니다.</li>
-          <li>평소처럼 대화합니다.</li>
-        </ol>
-      </div>
+      <table class="settings">
+        <tr><th>서버 주소</th><td><code>http://localhost:8080/v1</code><br>Chatbox는 API 호스트에 <code>http://localhost:8080</code></td></tr>
+        <tr><th>API 키</th><td>아무 값이나 넣습니다(검사하지 않습니다)</td></tr>
+        <tr><th>모델</th><td><code>deskguard</code></td></tr>
+      </table>
       <div class="sample">
-        <div class="ex"><b>가림: 전화번호가 든 요청을 보내면</b>
+        <div class="ex mask"><b>가림: 전화번호가 든 요청을 보내면</b>
           <code>김민수 010-2345-6789 에게 안내 메일 써 줘</code>
           <p>답 맨 앞에 <code>[Deskguard] 휴대전화 1건을 가려서 보냈습니다.</code> 한 줄이 붙고, 번호는 외부 AI로 나가지 않습니다.</p></div>
-        <div class="ex"><b>차단: 비밀번호가 든 요청을 보내면</b>
+        <div class="ex block"><b>차단: 비밀번호가 든 요청을 보내면</b>
           <code>DB_PASSWORD=Qw7!zLp92x 이 설정 왜 안 돼?</code>
           <p>보내지 않고 <code>보내지 않았습니다(비밀번호 1건)…</code> 오류로 알립니다.</p></div>
       </div>
@@ -180,7 +193,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
         <div class="sub">외부 AI로 보내기 전에 개인정보, 자격증명, 회사 기밀을 검사합니다. 민감한 값은 가려서 보내고, 답에서는 원래 값으로 되돌립니다.</div>
       </div>
       <div class="chat-log" id="log"><div id="inner">
-        <div class="empty" id="empty">아래 예시를 눌러 보거나 직접 입력하세요. 예시의 이름, 번호, 키는 모두 가짜입니다.</div>
+        <div class="empty" id="empty"><img src="img/mascot.svg" alt="" width="96" height="96">아래 예시를 눌러 보거나 직접 입력하세요. 예시의 이름, 번호, 키는 모두 가짜입니다.</div>
       </div></div>
       <div class="chat-foot">
         <div class="examples" id="examples"></div>
