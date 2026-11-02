@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+<!-- 방패 데스크가드: 직접 그린 대표 그림. 굵은 윤곽선과 크레용 질감(필터)은 다른 그림과 같은 방식이다 -->
+<defs>
+<filter id="crayon" x="-8%" y="-8%" width="116%" height="116%">
+<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/>
+<feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+<pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+<line x1="0" y1="0" x2="0" y2="9" stroke="#ffffff" stroke-opacity=".4" stroke-width="3"/>
+</pattern>
+</defs>
+<g filter="url(#crayon)" stroke="#1d1b19" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="40" cy="238" rx="17" ry="27" transform="rotate(25 40 238)" fill="#9ec8ff"/>
+  <ellipse cx="360" cy="238" rx="17" ry="27" transform="rotate(-25 360 238)" fill="#9ec8ff"/>
+  <path d="M200 38 C250 62 308 76 352 66 C362 178 338 292 200 372 C62 292 38 178 48 66 C92 76 150 62 200 38 Z" fill="#9ec8ff"/>
+  <path d="M200 38 C250 62 308 76 352 66 C362 178 338 292 200 372 C62 292 38 178 48 66 C92 76 150 62 200 38 Z" fill="url(#hatch)" stroke="none"/>
+  <circle cx="150" cy="134" r="10" fill="#1d1b19" stroke="none"/>
+  <circle cx="250" cy="134" r="10" fill="#1d1b19" stroke="none"/>
+  <circle cx="153" cy="130" r="3" fill="#ffffff" stroke="none"/>
+  <circle cx="253" cy="130" r="3" fill="#ffffff" stroke="none"/>
+  <ellipse cx="118" cy="176" rx="20" ry="12" fill="#ff9fb2" stroke="none"/>
+  <ellipse cx="282" cy="176" rx="20" ry="12" fill="#ff9fb2" stroke="none"/>
+  <path d="M176 168 Q200 194 224 168" fill="none" stroke-width="6"/>
+  <g transform="translate(0 12)">
+  <path d="M172 252 V232 a28 28 0 0 1 56 0 V252" fill="none"/>
+  <rect x="154" y="250" width="92" height="72" rx="14" fill="#ffd966"/>
+  <rect x="154" y="250" width="92" height="72" rx="14" fill="url(#hatch)" stroke="none"/>
+  <circle cx="200" cy="280" r="8" fill="#1d1b19" stroke="none"/>
+  <path d="M200 286 V304" fill="none" stroke-width="6"/>
+  </g>
+  <path d="M336 70 L342 86 L358 92 L342 98 L336 114 L330 98 L314 92 L330 86 Z" fill="#ffd966" stroke-width="4"/>
+  <path d="M60 300 L65 314 L79 319 L65 324 L60 338 L55 324 L41 319 L55 314 Z" fill="#ff9fb2" stroke-width="4"/>
+</g>
+</svg>

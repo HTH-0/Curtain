@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 220" width="260" height="220">
+<!-- 가려진 전화번호 [ ]: 대괄호 안에 숨은 작은 전화기. 직접 그린 그림 -->
+<defs>
+<filter id="crayon" x="-8%" y="-8%" width="116%" height="116%">
+<feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="3" result="n"/>
+<feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+<pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+<line x1="0" y1="0" x2="0" y2="9" stroke="#ffffff" stroke-opacity=".4" stroke-width="3"/>
+</pattern>
+</defs>
+<g filter="url(#crayon)" stroke="#1d1b19" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none">
+  <path d="M72 30 H40 V190 H72" stroke-width="12"/>
+  <path d="M188 30 H220 V190 H188" stroke-width="12"/>
+  <rect x="85" y="42" width="90" height="136" rx="18" fill="#ffd966"/>
+  <rect x="85" y="42" width="90" height="136" rx="18" fill="url(#hatch)" stroke="none"/>
+  <rect x="97" y="58" width="66" height="84" rx="8" fill="#fffdf8" stroke-width="5"/>
+  <circle cx="119" cy="88" r="5" fill="#1d1b19" stroke="none"/>
+  <circle cx="141" cy="88" r="5" fill="#1d1b19" stroke="none"/>
+  <ellipse cx="108" cy="104" rx="8" ry="5" fill="#ff9fb2" stroke="none"/>
+  <ellipse cx="152" cy="104" rx="8" ry="5" fill="#ff9fb2" stroke="none"/>
+  <path d="M122 106 Q130 116 138 106" stroke-width="4"/>
+  <circle cx="130" cy="160" r="7" stroke-width="4"/>
+</g>
+</svg>

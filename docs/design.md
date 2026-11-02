@@ -18,7 +18,7 @@
 | 유지 | `service.AnswerGenerator`, `GeminiService` | 외부 AI 호출. 인터페이스 하나로 바꿔 끼운다 | FR-5 |
 | 변경 | `log.GatewayLogger` | 범주별 개수, 처리, 길이와 해시, 지연. 원문과 값은 남기지 않는다 | FR-7 |
 | 변경 | `controller.ChatController` | 처리별 응답과 상태 코드, 측정 모드(같은 컴퓨터 제한 유지) | FR-6, FR-9 |
-| 신규 | `static/index.html` | 포털 화면 한 장. 위에서부터 히어로, 요청 경로 지도와 제품 사실 숫자, AI 앱 연결 안내, 채팅 구간 순서이다(문제와 측정 결과 같은 프로젝트 소개는 README에 둔다). 그림은 `static/img/`의 직접 그린 SVG 파일로 분리한다(어두운 전술 화풍, 무기 대신 방패, 파일별 교체 가능, AC-8.9). 글꼴(한글 Pretendard, 영문 제목 Bebas Neue 부분 집합)은 `static/fonts/`에 두고 외부 CDN을 쓰지 않는다(AC-8.8) | FR-8 |
+| 신규 | `static/index.html` | 포털 화면 한 장. 위에서부터 히어로, AI 앱 연결 안내, 채팅 구간 순서이다(문제와 측정 결과 같은 프로젝트 소개는 README에 둔다). 그림은 `static/img/`의 직접 그린 SVG 파일로 분리한다(손그림 크레용 화풍, 파일별 교체 가능, AC-8.9). 글꼴(본문 Pretendard, 제목 Jua 부분 집합)은 `static/fonts/`에 두고 외부 CDN을 쓰지 않는다(AC-8.8) | FR-8 |
 | 삭제(3일차) | `judge.*`, `filter.*` (Jev 호출, 패턴 필터, 질문 세트) | 운영 경로는 외부 판정을 부르지 않는다(NFR-4). Z 채점의 Jev 호출은 측정 경로의 Python 도구가 맡는다. 옛 코드는 git 기록에 남아 있다 | NFR-4 |
 
 ## 2. 탐지 규칙 (policy.md 3장의 구현)
