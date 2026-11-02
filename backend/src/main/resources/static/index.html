@@ -11,7 +11,7 @@
    파스텔 색은 그림과 처리 상태 표시에만 쓴다. 그림은 직접 그린 SVG이고 파일 하나씩 교체할 수 있다(AC-8.9). 밝은 화면만 지원한다(윤곽선이 검정이다) */
 @font-face { font-family: "Pretendard"; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; font-style: normal; font-display: swap }
 /* Jua 부분 집합을 다시 만들면 ?v= 숫자를 올린다. 브라우저가 예전 파일을 캐시해 새 글자가 빠져 보이는 일을 막는다 */
-@font-face { font-family: "Jua"; src: url("fonts/Jua-subset.woff2?v=3") format("woff2"); font-weight: 400; font-style: normal; font-display: swap }
+@font-face { font-family: "Jua"; src: url("fonts/Jua-subset.woff2?v=4") format("woff2"); font-weight: 400; font-style: normal; font-display: swap }
 :root {
   color-scheme: light;
   --ink: #1d1b19; --bg: #e6e9ef; --paper2: #d9dee8; --surface: #f3f5f8; --fg: #1d1b19; --muted: #4f5662;
@@ -51,7 +51,9 @@ a { color: inherit }
 .hero .pill { border-color: var(--night-fg); background: transparent; color: var(--night-fg); box-shadow: 3px 4px 0 var(--night-ink) }
 .hero .pill.dark { background: var(--night-fg); color: var(--ink); border-color: var(--night-fg) }
 .hero .pill:focus-visible { outline-color: var(--yellow) }
-.hero .cta .pill { font-size: 19px; padding: 14px 30px }
+.hero .cta .pill { font-size: 19px; padding: 12px 26px; text-align: center }
+/* 버튼 아래의 작은 설명: 세 버튼이 무엇이 다른지 보이게 한다 */
+.hero .cta .pill small { display: block; margin-top: 3px; font: 600 12px/1.2 var(--font); opacity: .75 }
 .nav { display: flex; align-items: center; justify-content: space-between; padding-top: 26px; padding-bottom: 12px }
 .brand { display: flex; align-items: center; gap: 10px; font: 400 24px var(--display) }
 .brand img { width: 32px; height: 32px }
@@ -187,7 +189,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   <div class="wrap">
     <nav class="nav" aria-label="상단">
       <div class="brand"><img src="img/curtain-icon.svg" alt=""><span>Curt<span class="ai">ai</span>n</span></div>
-      <a class="pill sm" href="#portal">포털 열기</a>
+      <a class="pill sm" href="#portal">바로 체험하기</a>
     </nav>
   </div>
   <div class="wrap main">
@@ -196,8 +198,9 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
         <h1>외부 <span class="ai">AI</span>에<br>이 내용을<br>보내도 될까요?</h1>
         <p class="lead">직원이 ChatGPT 같은 외부 AI에 보내는 문장을 나가기 전에 검사합니다. 개인정보와 비밀번호, 회사 기밀은 가리거나 막고, 업무는 계속 이어지게 합니다.</p>
         <div class="cta">
-          <a class="pill dark" href="#portal">포털 열어보기</a>
-          <a class="pill" href="#connect">AI 앱 연결</a>
+          <a class="pill dark" href="#portal">바로 체험하기<small>키 없이 1분</small></a>
+          <a class="pill" href="#key">내 키로 써 보기<small>Gemini 키로 실제 답</small></a>
+          <a class="pill" href="#connect">내 앱에 연결하기<small>Chatbox 등 PC 앱</small></a>
         </div>
       </div>
       <div class="art">
@@ -241,7 +244,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
 
 <section class="portal-wrap band" id="portal">
   <div class="wrap">
-    <p class="kicker">직접 해 보기</p>
+    <p class="kicker">바로 체험하기</p>
     <h2>사내 AI 포털</h2>
     <p class="sub">아래 예시를 눌러 보거나 직접 입력하세요. 예시의 이름, 번호, 키는 모두 가짜입니다. 가림은 가명으로 바꿔 보내고 답에서 되돌립니다. 경고는 확인을 받은 뒤 가려서 보내고, 차단은 보내지 않고 이유를 알립니다.</p>
     <div class="portal">
@@ -265,7 +268,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
 
 <section class="band alt" id="key">
   <div class="wrap">
-    <p class="kicker">실제로 써 보기</p>
+    <p class="kicker">내 키로 써 보기</p>
     <h2>내 Gemini 키로 실제 AI 답 받기</h2>
     <p class="sub">위 포털은 처음에 시연 응답(받은 문장을 그대로 돌려줌)을 보여 줍니다. 내 Gemini 키를 넣으면 같은 포털에서 실제 Gemini의 답을 받습니다. 가림, 차단, 경고 규칙은 똑같이 적용됩니다.</p>
     <div class="keybox">
@@ -292,7 +295,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
 
 <section class="band" id="connect">
   <div class="wrap">
-    <p class="kicker">내 PC 앱에 연결</p>
+    <p class="kicker">내 앱에 연결하기</p>
     <h2>Chatbox 같은 앱에서도 똑같이</h2>
     <p class="sub">OpenAI 방식으로 말하는 AI 앱(Chatbox 등)은 서버 주소만 이 사이트로 바꾸면, 내 컴퓨터의 앱에서 하는 모든 대화가 Curtain의 검사를 거친 뒤 외부 AI로 나갑니다.</p>
     <div class="steps">
