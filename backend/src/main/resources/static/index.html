@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HTH 사내 AI 포털</title>
+<title>Curtain · HTH 사내 AI 포털</title>
 <link rel="icon" type="image/svg+xml" href="img/shield.svg">
 <style>
 /* 위에서부터 히어로, AI 앱 연결 안내, 채팅 구간 순서이다. 채팅 구간의 동작은 아래 script가 맡고 나머지 구간은 검사 로직을 담지 않는다 */
@@ -49,11 +49,13 @@ a { color: inherit }
 .nav { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; padding-bottom: 12px }
 .brand { display: flex; align-items: center; gap: 10px; font: 400 22px var(--display) }
 .brand img { width: 28px; height: 31px }
+/* 이름 Curtain 안의 ai만 색을 다르게 해서 AI가 숨어 있음을 보여 준다 */
+.brand .ai { color: var(--yellow) }
 .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; margin-top: 28px }
 .hero h1 { font-size: clamp(36px, 6vw, 64px); line-height: 1.2; margin: 0 0 18px }
 .hero .lead { color: var(--night-muted); font-size: clamp(15px, 2vw, 18px); max-width: 520px; margin: 0 0 30px }
 .hero .cta { display: flex; gap: 14px; flex-wrap: wrap }
-.art { position: relative; max-width: 420px; margin: 0 auto; width: 100% }
+.art { position: relative; max-width: 300px; margin: 0 auto; width: 100% }
 .art .mascot { position: relative; display: block; width: 100%; animation: bob 4s ease-in-out infinite }
 .art .phone { position: absolute; right: -6%; bottom: 0; width: 38%; transform: rotate(8deg) }
 @keyframes bob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
@@ -123,7 +125,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   .hero-grid { grid-template-columns: 1fr; text-align: center }
   .hero .lead { margin-left: auto; margin-right: auto }
   .hero .cta { justify-content: center }
-  .art { max-width: 340px }
+  .art { max-width: 240px }
   .steps, .connect { grid-template-columns: 1fr }
   section.band, .portal-wrap { padding: 52px 0 }
 }
@@ -138,7 +140,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
 <section class="hero">
   <div class="wrap">
     <nav class="nav" aria-label="상단">
-      <div class="brand"><img src="img/shield.svg" alt="">HTH Deskguard</div>
+      <div class="brand"><img src="img/shield.svg" alt=""><span>Curt<span class="ai">ai</span>n</span></div>
       <a class="pill sm" href="#portal">포털 열기</a>
     </nav>
     <div class="hero-grid">
@@ -151,7 +153,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
         </div>
       </div>
       <div class="art">
-        <img class="mascot" src="img/mascot.svg" alt="방패 모양 캐릭터 데스크가드가 자물쇠를 안고 웃고 있는 그림" width="400" height="400">
+        <img class="mascot" src="img/mascot.svg" alt="방패 모양 캐릭터가 자물쇠를 안고 웃고 있는 그림" width="400" height="400">
         <img class="phone" src="img/masked-phone.svg" alt="대괄호 안에 숨은 전화기 그림. 가려진 전화번호를 뜻한다" width="260" height="220">
       </div>
     </div>
@@ -211,7 +213,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   </div>
 </section>
 
-<div class="foot wrap">Deskguard는 학습용 포트폴리오 프로젝트이며 실제 서비스가 아닙니다. 화면의 회사 HTH와 모든 값은 가상입니다.</div>
+<div class="foot wrap">Curtain은 학습용 포트폴리오 프로젝트이며 실제 서비스가 아닙니다. 화면의 회사 HTH와 모든 값은 가상입니다.</div>
 
 <script>
 const EXAMPLES = [
