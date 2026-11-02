@@ -6,7 +6,7 @@
 
 ## 1. 한눈에 보기
 
-- **프로젝트:** Curtain(이전 이름 Deskguard, 2026-11-02 변경. 저장소 이름은 그대로). 회사 직원이 ChatGPT 같은 외부 AI에 보내는 프롬프트를 나가기 전에 검사하는 정보 유출 방지 게이트웨이와 사내 AI 포털이다. 왜 만드는지는 [problem.md](problem.md)(최상위 문서)에 있다.
+- **프로젝트:** Curtain(이전 이름 Deskguard, 2026-11-02 변경. 저장소도 `HTH-0/Curtain`으로 바꿈). 회사 직원이 ChatGPT 같은 외부 AI에 보내는 프롬프트를 나가기 전에 검사하는 정보 유출 방지 게이트웨이와 사내 AI 포털이다. 왜 만드는지는 [problem.md](problem.md)(최상위 문서)에 있다.
 - **처리:** 개인정보(D1), 자격증명(D2), 회사 기밀(D3)을 게이트웨이 안의 코드로 탐지하고, 허용, 가림(가명으로 바꿔 보내고 답에서 되돌림), 경고(확인 후 가려서 보냄), 차단으로 처리한다. 운영 경로는 외부 판정 서비스를 부르지 않는다.
 - **브랜치:** `main` 하나만 쓴다(2026-10-30 정리). 클라우드 작업을 쓰지 않으므로 작업 브랜치를 따로 두지 않고 `main`에서 바로 작업하고 커밋한다. 이전 작업 브랜치(`inspiring-shannon`, `upbeat-cori`, `compassionate-pascal`)는 `main`에 합친 뒤 원격과 로컬에서 모두 삭제했다. 삭제 직전 해시는 `inspiring-shannon` 04c41fc(원격은 0b68383), `upbeat-cori` 9df245d이다.
 - **개발 방식:** SDD와 TDD를 병행한다. 기획은 SDD(문제 정의 → 정책 → 명세 → 설계 → 작업 목록), 구현은 TDD(수용 기준 → 실패하는 시험 → 코드)이다. 각 작업의 첫 스텝은 명세 점검이고, 컴파일 오류는 빨강으로 치지 않는다.
@@ -109,8 +109,8 @@ python z_measure.py agree --human ..\..\docs\eval\results\z\human_sheet.csv
 필요한 것: Git, JDK 25 LTS(Temurin), Maven 3.9.x, Python 3, PowerShell
 
 ```powershell
-git clone https://github.com/HTH-0/Deskguard.git
-cd Deskguard
+git clone https://github.com/HTH-0/Curtain.git
+cd Curtain
 
 # 브랜치는 main 하나만 쓴다. 시작할 때마다 다른 원격 브랜치가 없는지 확인한다.
 git fetch origin --prune
