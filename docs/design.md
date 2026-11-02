@@ -96,7 +96,7 @@ gateway:
 
 - `backend/scripts/`의 Python 도구가 맡는다. 운영 코드(`backend/src/main`)는 Jev를 부르지 않는다.
 - 평가 세트 생성: 업무 요청 틀(생성기 출력)과 가짜 값 생성기(`fake_values.py`)를 합치고, 넣은 값의 범주와 위치를 정답으로 저장한다.
-- X, Y, T: 측정 모드 서버에 평가 세트를 보내고 정답과 비교한다(`measure.py`, 옛 HR용 `run_batch.py`는 `backend/scripts/archive_hr/`에 보관).
+- X, Y, T: 측정 모드 서버에 평가 세트를 보내고 정답과 비교한다(`measure.py`, 옛 HR용 `run_batch.py`는 `docs/archive/scripts-hr/`에 보관).
 - Z: 가림 대상 문장마다 Gemini에 원문(가짜 데이터)으로 답 A를, 게이트웨이 경유로 답 B를 받고, 복원 성공률은 코드로, 쓸모는 Jev로 채점한다. Jev 채점은 사람 40~50쌍 판정과 85% 이상 일치할 때 채택한다.
 
 ## 8. 테스트 전략
@@ -173,3 +173,21 @@ POST /v1/chat/completions {model, messages[], stream?}
 - 깨진 JSON이나 Content-Type 오류처럼 게이트웨이에 닿기 전에 거부된 요청은 로그 줄이 남지 않는다(`/api/chat`과 같다).
 - 가림 안내 줄은 클라이언트가 이전 답으로 되보내므로 대화에 남는다. 내용은 개수뿐이라 해롭지 않고 같은 값은 한 번만 세므로 개수가 부풀지 않는다.
 - 응답 모델 없이 시연할 때(`gateway.demo-answer=true`)는 가린 문장이 답에 되돌려져 복원된 것만 보이므로, 실제 가림은 서버 로그의 `action=MASK`와 안내 줄로 확인한다.
+
+## 10. 방문자 키와 공개 시연 (FR-12, 2026-11-02)
+
+설치 없이 공개 사이트에서 시연과 실제 사용을 모두 하게 한다. 서버 키는 두지 않고, 방문자가 자기 Gemini 키를 넣었을 때만 그 요청에 그 키로 Gemini를 부른다.
+
+| 구성요소 | 역할 |
+|---|---|
+| `UserKeyAnswerers` | 요청마다 키를 받아 그 키로 답하는 응답 모델을 만든다. Google 키 형식(`AIza` 39자, `AQ.` 새 형식)만 키로 본다. 다른 서비스의 키를 Google로 보내지 않기 위해서이다. Gemini가 키를 거부하면(400, 401, 403) `UserKeyRejectedException` |
+| `GeminiCall` | Gemini를 한 번 부르는 방법. 서버 키와 방문자 키가 같이 쓴다. 키는 `x-goog-api-key` 헤더로 보내고 주소에 넣지 않는다(예외 메시지에 주소가 실려 로그로 새는 것을 막는다) |
+| `ChatController`, `CompatController` | 포털은 `X-Gemini-Key` 헤더, `/v1`은 `Authorization: Bearer`에서 키를 읽어 형식이면 방문자 응답 모델을, 아니면 `null`(서버 기본)을 게이트웨이에 넘긴다 |
+| `ChatGateway`, `ConversationGateway` | `handle(…, answerer)`. 넘겨받은 응답 모델이 있으면 그 요청에만 쓰고, 없으면 서버 기본(시연 모드면 `DemoAnswerGenerator`, 아니면 서버 키의 `GeminiService`) |
+| `InfoController` | `GET /api/info`로 서버 기본이 시연인지(`demo`) 서버 키인지(`server-key`) 알린다. 화면의 모드 표시에 쓴다 |
+| `DemoAnswerGenerator` | 시연 응답. 포털 예시 5개에는 가명이 든 모범 답(게이트웨이가 실제로 복원), 그 밖에는 받은 문장을 되돌린다(AC-12.8) |
+| `Dockerfile` | 공개 배포 이미지. 시연 모드, 측정 모드 꺼짐, 키 없음, 클라우드가 정한 `PORT` |
+
+- 키는 서버 어디에도 저장하지 않는다. 화면은 sessionStorage(탭)에만 두고 요청마다 헤더로 보낸다.
+- 오류: 방문자 키 거부는 포털 401 `USER_KEY_REJECTED`, `/v1` 401 `invalid_request_error`/`invalid_api_key`. 없는 주소는 404 `NOT_FOUND`(AC-12.9).
+- 화면의 커튼 기록(AC-8.11)은 서버가 돌려준 원문과 가린 문장을 맞대어 가명과 원래 값의 짝을 화면에서 찾는다. 서버 응답 형식은 바꾸지 않았다.
