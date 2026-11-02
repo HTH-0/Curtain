@@ -11,7 +11,7 @@
    파스텔 색은 그림과 처리 상태 표시에만 쓴다. 그림은 직접 그린 SVG이고 파일 하나씩 교체할 수 있다(AC-8.9). 밝은 화면만 지원한다(윤곽선이 검정이다) */
 @font-face { font-family: "Pretendard"; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; font-style: normal; font-display: swap }
 /* Jua 부분 집합을 다시 만들면 ?v= 숫자를 올린다. 브라우저가 예전 파일을 캐시해 새 글자가 빠져 보이는 일을 막는다 */
-@font-face { font-family: "Jua"; src: url("fonts/Jua-subset.woff2?v=4") format("woff2"); font-weight: 400; font-style: normal; font-display: swap }
+@font-face { font-family: "Jua"; src: url("fonts/Jua-subset.woff2?v=5") format("woff2"); font-weight: 400; font-style: normal; font-display: swap }
 :root {
   color-scheme: light;
   --ink: #1d1b19; --bg: #e6e9ef; --paper2: #d9dee8; --surface: #f3f5f8; --fg: #1d1b19; --muted: #4f5662;
@@ -41,9 +41,9 @@ a { color: inherit }
 .pill.sm { padding: 8px 18px; font-size: 15px }
 .pill:focus-visible, button:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px }
 
-/* 히어로: 화면 높이 전체. 넓은 화면에서는 무대(.stage)를 화면 두 배 높이로 두고 히어로를 화면에 붙여 두어,
-   스크롤한 만큼 커튼(.drape)이 닫힌다. 커튼의 위치는 --p 하나로 정한다(0 열림, 1 닫힘, AC-8.10) */
-.stage { position: relative; height: 200vh; background: var(--night); border-bottom: 2.5px solid var(--ink) }
+/* 히어로: 화면 높이 전체. 넓은 화면에서는 무대(.stage)를 화면 2.7배 높이로 두고 히어로를 화면에 붙여 두어,
+   스크롤한 만큼(화면 높이 하나) 커튼(.drape)이 닫히고, 닫힌 채로 흐름도를 보여 준 뒤 다음 구간으로 넘어간다. 커튼의 위치는 --p 하나로 정한다(0 열림, 1 닫힘, AC-8.10) */
+.stage { position: relative; height: 270vh; background: var(--night); border-bottom: 2.5px solid var(--ink) }
 .hero { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: flex; flex-direction: column;
   background: var(--night); color: var(--night-fg); --p: 0; --edge: min(5vw, 64px) }
 .hero .wrap { max-width: 1200px; width: 100%; padding: 0 calc(var(--edge) + 20px); position: relative; z-index: 1 }
@@ -78,8 +78,19 @@ a { color: inherit }
 .drape.right { right: 0; border-left: 4px solid var(--ink); transform: translateX(calc((1 - var(--p)) * (100% - var(--edge)))) }
 .drape-msg { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 16px; text-align: center; pointer-events: none; color: var(--ink); opacity: calc((var(--p) - .75) * 4) }
-.drape-msg b { font: 400 clamp(28px, 4vw, 54px)/1.2 var(--display); background: var(--surface); border: 3px solid var(--ink);
+.drape-msg > b { font: 400 clamp(28px, 4vw, 54px)/1.2 var(--display); background: var(--surface); border: 3px solid var(--ink);
   border-radius: var(--wobble); padding: 14px 30px; box-shadow: 4px 5px 0 var(--ink) }
+/* 흐름도: 핵심 단어만. 커튼 칸은 노란색으로 강조한다 */
+.flow { list-style: none; margin: 8px 0 0; padding: 0; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap }
+.flow li:not(.arrow) { width: 112px; padding: 12px 8px 10px; background: var(--surface); border: 2.5px solid var(--ink); border-radius: var(--wobble);
+  box-shadow: 3px 4px 0 var(--ink); display: flex; flex-direction: column; align-items: center; gap: 2px }
+.flow li.cur { background: var(--yellow) }
+.flow img { width: 48px; height: 48px }
+.flow b { font: 400 20px var(--display) }
+.flow span { font-size: 13px; font-weight: 700; color: var(--muted) }
+.flow .arrow { font: 400 28px var(--display); color: var(--ink) }
+.flow-block { margin: 6px 0 0; font-size: 15px; background: var(--red-soft); border: 2px solid var(--ink); border-radius: 999px; padding: 5px 16px }
+.flow-block b { font-weight: 800 }
 
 /* 연결 안내 */
 section.band { padding: 72px 0 }
@@ -166,7 +177,18 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   .hero { position: relative; height: auto; min-height: 100svh }
   .scroll-hint { display: none }
 }
-@media (prefers-reduced-motion: reduce) { .drape, .drape-msg, .rod { display: none } }
+@media (prefers-reduced-motion: reduce) { .drape, .rod { display: none } }
+@media (max-width: 860px), (prefers-reduced-motion: reduce) {
+  .drape-msg { position: relative; inset: auto; z-index: 1; opacity: 1; padding: 8px 16px 48px }
+  .drape-msg > b { font-size: 26px; padding: 10px 20px }
+  .flow .arrow { color: var(--night-fg) }
+}
+@media (max-width: 860px) {
+  .flow { flex-direction: column; gap: 4px }
+  .flow li:not(.arrow) { width: 180px; flex-direction: row; justify-content: center; gap: 10px; padding: 8px 12px }
+  .flow img { width: 34px; height: 34px }
+  .flow .arrow { transform: rotate(90deg); font-size: 22px; line-height: 1 }
+}
 @media (max-width: 860px) {
   .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 24px; padding: 20px 0 }
   .hero .lead { margin-left: auto; margin-right: auto }
@@ -211,12 +233,26 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   <div class="scroll-hint" aria-hidden="true">아래로 내리면 커튼이 닫힙니다 ↓</div>
   <div class="drape left" aria-hidden="true"></div>
   <div class="drape right" aria-hidden="true"></div>
-  <div class="drape-msg" aria-hidden="true"><b>민감한 내용은 커튼 뒤로</b></div>
+  <div class="drape-msg">
+    <b>민감한 내용은 커튼 뒤로</b>
+    <ol class="flow" aria-label="처리 흐름: 나, 커튼(가림), AI(가명만 봄), 커튼(복원), 나(완성된 답)">
+      <li><img src="img/me.svg" alt=""><b>나</b><span>원문</span></li>
+      <li class="arrow" aria-hidden="true">→</li>
+      <li class="cur"><img src="img/curtain-icon.svg" alt=""><b>커튼</b><span>가림</span></li>
+      <li class="arrow" aria-hidden="true">→</li>
+      <li><img src="img/step-3.svg" alt=""><b>AI</b><span>가명만</span></li>
+      <li class="arrow" aria-hidden="true">→</li>
+      <li class="cur"><img src="img/curtain-icon.svg" alt=""><b>커튼</b><span>복원</span></li>
+      <li class="arrow" aria-hidden="true">→</li>
+      <li><img src="img/me.svg" alt=""><b>나</b><span>완성</span></li>
+    </ol>
+    <p class="flow-block">비밀번호·키는 커튼에서 <b>차단</b></p>
+  </div>
 </section>
 </div>
 <script>
 /* 커튼 효과(AC-8.10). 외부 라이브러리 없이 히어로의 --p(0 열림, 1 닫힘)만 바꾼다.
-   들어올 때 닫힌 채로 잠시 머문 뒤 열리고, 넓은 화면에서는 무대를 스크롤한 만큼 다시 닫힌다. 애니메이션 줄이기 설정이면 아무것도 하지 않는다 */
+   들어올 때 닫힌 채로 잠시 머문 뒤 열리고, 넓은 화면에서는 화면 높이 하나만큼 스크롤하면 다시 닫히며, 그 뒤 잠시 닫힌 채로 흐름도를 보여 준다. 애니메이션 줄이기 설정이면 아무것도 하지 않는다 */
 (() => {
   const hero = document.querySelector(".hero"), stage = document.querySelector(".stage");
   if (!hero || !stage || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -225,8 +261,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   let intro = 1;
   const scrollP = () => {
     if (!wide.matches) return 0;
-    const range = stage.offsetHeight - innerHeight;
-    return range > 0 ? Math.min(1, Math.max(0, (scrollY - stage.offsetTop) / range)) : 0;
+    return Math.min(1, Math.max(0, (scrollY - stage.offsetTop) / innerHeight));
   };
   const draw = () => hero.style.setProperty("--p", Math.max(intro, scrollP()).toFixed(4));
   const tick = (now) => {

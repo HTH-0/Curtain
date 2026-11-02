@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<!-- 흐름도의 "나"(직원). 직접 그린 그림 -->
+<defs>
+<filter id="crayon" x="-10%" y="-10%" width="120%" height="120%">
+<feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="4" result="n"/>
+<feDisplacementMap in="SourceGraphic" in2="n" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+</defs>
+<g filter="url(#crayon)" stroke="#1d1b19" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 92 Q18 64 50 64 Q82 64 82 92 Z" fill="#e3cf86"/>
+  <circle cx="50" cy="38" r="22" fill="#ffe2cc"/>
+  <circle cx="42" cy="36" r="3.2" fill="#1d1b19" stroke="none"/>
+  <circle cx="58" cy="36" r="3.2" fill="#1d1b19" stroke="none"/>
+  <path d="M43 46 Q50 52 57 46" fill="none" stroke-width="3.5"/>
+</g>
+</svg>
