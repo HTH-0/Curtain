@@ -184,7 +184,14 @@ button.primary { background: var(--ink); color: var(--bg) }
 button:disabled { opacity: .5; cursor: default }
 .chat-foot { border-top: 2.5px solid var(--ink); background: var(--surface); padding: 12px 18px }
 .examples { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px }
-.examples button { font-size: 12.5px; padding: 4px 10px; border-width: 1.5px; border-radius: 999px }
+/* 예시 버튼: 테두리 색으로 처리 종류를 구분한다(가림 파랑, 차단 빨강, 경고 주황, 허용 초록). 종류 이름은 같은 색 글자로 앞에 둔다 */
+.examples button { font-size: 12.5px; padding: 4px 11px; border: 2px solid var(--kind, var(--ink)); border-radius: 999px; background: var(--surface) }
+.examples button b { color: var(--kind-text, var(--ink)); font-weight: 800; margin-right: 4px }
+.examples button:hover { background: var(--kind-soft, var(--bg)) }
+.examples .k-mask { --kind: #4a7fc1; --kind-text: #2f5d94; --kind-soft: #e4eefa }
+.examples .k-block { --kind: #c0504d; --kind-text: #a33a37; --kind-soft: #fae6e5 }
+.examples .k-warn { --kind: #d48a1f; --kind-text: #a3650c; --kind-soft: #fbf0dd }
+.examples .k-allow { --kind: #4f9a48; --kind-text: #357a2f; --kind-soft: #e6f3e2 }
 form { display: flex; gap: 8px; align-items: flex-end }
 textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font: inherit; color: var(--fg); background: var(--surface);
   border: 2px solid var(--ink); border-radius: 14px; padding: 8px 10px }
@@ -567,7 +574,10 @@ fetch("api/info").then(r => r.json()).then(d => { defaultMode = d.defaultMode ||
 if (getKey()) $("toPortal").hidden = false;
 showMode();
 for (const [label, text] of EXAMPLES) {
-  const b = el("button", null, label); b.type = "button";
+  const [kindName, rest] = label.split(": ");
+  const kind = { "가림": "k-mask", "차단": "k-block", "경고": "k-warn", "허용": "k-allow" }[kindName];
+  const b = el("button", kind || null); b.type = "button";
+  if (kind) { b.appendChild(el("b", null, kindName)); b.appendChild(document.createTextNode(rest)); } else { b.textContent = label; }
   b.onclick = () => { $("prompt").value = text; $("prompt").focus(); };
   $("examples").appendChild(b);
 }
