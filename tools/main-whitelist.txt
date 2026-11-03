@@ -1,0 +1,26 @@
+# main(공개용)에 올릴 경로 목록. publish-main.sh가 dev의 커밋된 상태에서 이 경로만 골라 main을 만든다.
+# 한 줄에 경로 하나. 폴더는 아래 전체를 뜻한다. '!'로 시작하면 제외한다. '#'은 주석이다.
+
+# 실행과 배포
+.dockerignore
+.gitignore
+Dockerfile
+backend
+
+# 첫 화면 문서
+README.md
+THIRD_PARTY_NOTICES.md
+docs/images
+
+# 핵심 문서(만드는 이유, 정책, 명세, 설계)
+docs/problem.md
+docs/policy.md
+docs/spec.md
+docs/design.md
+docs/dummy-company.md
+docs/open-risks.md
+
+# 측정(평가 세트, 틀, 보고서). Z 원자료는 dev에만 둔다
+docs/eval
+!docs/eval/results/z
+!docs/eval/results/z2
