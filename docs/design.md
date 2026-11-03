@@ -1,6 +1,6 @@
 # 설계서 v2
 
-[명세서 v2](spec.md)를 어떻게 만들지 정한다. 기존 패키지 `com.promptgateway`를 유지하고, 탐지와 가림은 새 패키지 `detect`, `mask`에 둔다. 주제 재정의 이전 설계는 [archive/design-v1-hr.md](archive/design-v1-hr.md)에 있다.
+[명세서 v2](spec.md)를 어떻게 만들지 정한다. 기존 패키지 `com.promptgateway`를 유지하고, 탐지와 가림은 새 패키지 `detect`, `mask`에 둔다. 주제 재정의 이전 설계는 [archive/design-v1-hr.md](https://github.com/HTH-0/Curtain/blob/dev/docs/archive/design-v1-hr.md)에 있다.
 
 상태: 확정 (2026-10-29, 일주일 일정의 하루 단위 승인에 포함). 구현 중 어긋나면 이 문서를 먼저 고치고 DECISIONS.md에 기록한다.
 

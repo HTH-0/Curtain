@@ -1,6 +1,6 @@
 # 업무 요청 틀 생성 지시문 (5일차 평가 세트용)
 
-주제 재정의 이후의 새 지시문이다. 옛 HR용 지시문은 [generation_prompt.md](../archive/eval-hr/generation_prompt.md)이며 쓰지 않는다. 명세 AC-10.1을 따른다.
+주제 재정의 이후의 새 지시문이다. 옛 HR용 지시문은 [generation_prompt.md](https://github.com/HTH-0/Curtain/blob/dev/docs/archive/eval-hr/generation_prompt.md)이며 쓰지 않는다. 명세 AC-10.1을 따른다.
 
 ## 사용 순서
 

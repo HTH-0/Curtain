@@ -25,3 +25,7 @@ Thumbs.db
 # 디자인 참고용 이미지(저작권이 있는 캐릭터가 들어 있어 저장소에 올리지 않는다)
 귀여운.jpg
 실사.jpg
+
+# 개인 메모 (저장소에 올리지 않는다)
+PORTFOLIO_NOTES.md
+plan.md

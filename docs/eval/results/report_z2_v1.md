@@ -1,6 +1,6 @@
 # Z 2차 측정 결과: 가명 안내문을 붙였을 때 (평가 세트 v1)
 
-측정일: 2026-11-01. 대상: 1차와 같은 263문장. 응답 모델: `gemini-3.5-flash-lite`. 바꾼 것은 하나이다: 가림 요청 앞에 고정 안내문(`ChatGateway.MASK_NOTICE`, AC-4.6)을 붙였다. 답 A는 1차의 것을 그대로 다시 썼고(`collect --reuse-a`), 답 B만 안내문을 켠 게이트웨이(`--gateway.mask-notice=true`)로 새로 받았다. 결정과 방식은 [DECISIONS.md](../../../DECISIONS.md) 2026-11-01에 있고, 원자료는 [z2/](z2/)에 있다. 1차 결과는 [report_z_v1.md](report_z_v1.md)이다.
+측정일: 2026-11-01. 대상: 1차와 같은 263문장. 응답 모델: `gemini-3.5-flash-lite`. 바꾼 것은 하나이다: 가림 요청 앞에 고정 안내문(`ChatGateway.MASK_NOTICE`, AC-4.6)을 붙였다. 답 A는 1차의 것을 그대로 다시 썼고(`collect --reuse-a`), 답 B만 안내문을 켠 게이트웨이(`--gateway.mask-notice=true`)로 새로 받았다. 결정과 방식은 [DECISIONS.md](https://github.com/HTH-0/Curtain/blob/dev/DECISIONS.md) 2026-11-01에 있고, 원자료는 [z2/](https://github.com/HTH-0/Curtain/tree/dev/docs/eval/results/z2)에 있다. 1차 결과는 [report_z_v1.md](report_z_v1.md)이다.
 
 ## 요약
 
@@ -43,7 +43,7 @@
 
 ## 한계
 
-1. **사람 판정을 하지 않았다.** 쓸모 개선은 Jev 참고값뿐이다. 사람 판정 20문장(1차 45문장 중 seed 20261101로 뽑음)을 하려고 시트와 화면을 만들어 두었으나([z2/human_judge.html](z2/human_judge.html)) 하지 않기로 했다(DECISIONS 2026-11-02, 이후 사용자 결정). 하게 되면 1차 사람 판정과 나란히 비교한다.
+1. **사람 판정을 하지 않았다.** 쓸모 개선은 Jev 참고값뿐이다. 사람 판정 20문장(1차 45문장 중 seed 20261101로 뽑음)을 하려고 시트와 화면을 만들어 두었으나([z2/human_judge.html](https://github.com/HTH-0/Curtain/blob/dev/docs/eval/results/z2/human_judge.html)) 하지 않기로 했다(DECISIONS 2026-11-02, 이후 사용자 결정). 하게 되면 1차 사람 판정과 나란히 비교한다.
 2. **Jev가 믿을 만하지 않다.** 사람과의 일치율 48.9%, 같은 답의 판정 반복 일치 약 73%. 유지율 상승이 실제인지는 알 수 없다.
 3. **답 A 판정을 1차 값으로 고정했다.** Jev로 다시 채점하면 A 판정이 263문장 중 5개 달라졌다. 비교를 깨끗하게 하려고 1차 판정을 썼다.
 4. **응답 모델이 하나이고 약하다**(`gemini-3.5-flash-lite`). 더 큰 모델에서도 같다는 근거는 없다. 안내문 한 종류만 시험했다.

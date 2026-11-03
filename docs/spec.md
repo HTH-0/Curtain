@@ -2,7 +2,7 @@
 
 직원이 외부 AI에 보내는 프롬프트를 나가기 전에 검사하는 게이트웨이가 무엇을 해야 하는지 정한다. 왜 만드는지는 [문제 정의서](problem.md), 무엇을 지키고 어떻게 처리하는지는 [위협 모델과 데이터 정책](policy.md)이 정하고, 이 문서는 그것을 수용 기준(AC)으로 옮긴다. 어떻게 만들지는 설계서(`design.md`, 2일차 작성)에서 다룬다.
 
-상태: 확정 (2026-10-29 사용자 승인, 4장 결정 권장대로). 주제 재정의 이전의 명세(HR 헬프데스크 챗봇)는 [archive/spec-v1-hr.md](archive/spec-v1-hr.md)에 보관했다. 일정 때문에 AC 표 중심으로 짧게 쓴다.
+상태: 확정 (2026-10-29 사용자 승인, 4장 결정 권장대로). 주제 재정의 이전의 명세(HR 헬프데스크 챗봇)는 [archive/spec-v1-hr.md](https://github.com/HTH-0/Curtain/blob/dev/docs/archive/spec-v1-hr.md)에 보관했다. 일정 때문에 AC 표 중심으로 짧게 쓴다.
 
 ## 1. 처리 흐름
 
@@ -144,7 +144,7 @@ POST /api/chat {prompt, confirmed?}
 
 ### FR-11 OpenAI 호환 입구 (2026-11-02 추가)
 
-직원이 쓰는 AI 도구가 서버 주소만 게이트웨이로 바꾸면 모든 요청이 검사를 거치게 한다. 기존 `POST /api/chat`(FR-1~FR-9)은 그대로 두고 입구를 하나 더 둔다. 탐지, 결정, 가림, 복원은 같은 부품을 쓴다. 근거는 [DECISIONS.md](../DECISIONS.md) 2026-11-02(O1~O7)이다.
+직원이 쓰는 AI 도구가 서버 주소만 게이트웨이로 바꾸면 모든 요청이 검사를 거치게 한다. 기존 `POST /api/chat`(FR-1~FR-9)은 그대로 두고 입구를 하나 더 둔다. 탐지, 결정, 가림, 복원은 같은 부품을 쓴다. 근거는 [DECISIONS.md](https://github.com/HTH-0/Curtain/blob/dev/DECISIONS.md) 2026-11-02(O1~O7)이다.
 
 | 번호 | 수용 기준 |
 |---|---|

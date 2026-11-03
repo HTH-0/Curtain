@@ -1,6 +1,6 @@
 # 평가 자료
 
-Curtain의 탐지와 가림이 얼마나 잘 동작하는지 재는 자료이다. 기준은 명세 FR-10(AC-10.1~10.7)이고, 결과 요약은 README의 "측정 결과"에 있다. 모든 문장은 **가짜 값**으로 만든 합성 문장이며 실제 개인정보는 없다. 주제를 바꾸기 전(HR 챗봇)의 평가 자료는 [../archive/eval-hr/](../archive/eval-hr/README.md)로 옮겼다.
+Curtain의 탐지와 가림이 얼마나 잘 동작하는지 재는 자료이다. 기준은 명세 FR-10(AC-10.1~10.7)이고, 결과 요약은 README의 "측정 결과"에 있다. 모든 문장은 **가짜 값**으로 만든 합성 문장이며 실제 개인정보는 없다. 주제를 바꾸기 전(HR 챗봇)의 평가 자료는 [../archive/eval-hr/](https://github.com/HTH-0/Curtain/blob/dev/docs/archive/eval-hr/README.md)로 옮겼다.
 
 ## 파일
 
