@@ -72,7 +72,7 @@ SOFTWARE.
 
 - 출처: The Jua Project Authors, 「Jua」(주아체, 배달의민족 폰트를 바탕으로 한 Google Fonts 글꼴). <https://github.com/google/fonts/tree/main/ofl/jua>
 - 라이선스: SIL Open Font License 1.1. 전문은 `backend/src/main/resources/static/fonts/Jua-OFL.txt`에 있다(2026-11-02 원본 저장소에서 받음).
-- 가공: 화면에 쓰는 글자만 남기도록 부분 집합으로 줄였다(`Jua-subset.woff2`, 2026-11-02 흐름도를 넣으며 다시 만들어 436자, 약 88KB, `pyftsubset`). 화면의 글자를 바꿔 새 글자가 생기면 글꼴을 다시 만들어야 하며, 없는 글자는 Pretendard로 대신 보인다. 라이선스 원문의 저작권 줄(`Copyright 2018 The Jua Project Authors`)에는 예약 글꼴 이름(Reserved Font Name) 지정이 없다(2026-11-02 원문 확인). 그래서 부분 집합 파일에도 같은 라이선스 전문을 함께 둔다.
+- 가공: 화면에 쓰는 글자만 남기도록 부분 집합으로 줄였다(`Jua-subset.woff2`, 2026-11-03 변환 줄과 대기 말풍선을 넣으며 다시 만들어 477자, 약 94KB, `pyftsubset`). 화면의 글자를 바꿔 새 글자가 생기면 글꼴을 다시 만들어야 하며, 없는 글자는 Pretendard로 대신 보인다. 라이선스 원문의 저작권 줄(`Copyright 2018 The Jua Project Authors`)에는 예약 글꼴 이름(Reserved Font Name) 지정이 없다(2026-11-02 원문 확인). 그래서 부분 집합 파일에도 같은 라이선스 전문을 함께 둔다.
 
 ## 5-0-2. 웹 화면의 그림
 

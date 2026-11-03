@@ -11,7 +11,7 @@
    파스텔 색은 그림과 처리 상태 표시에만 쓴다. 그림은 직접 그린 SVG이고 파일 하나씩 교체할 수 있다(AC-8.9). 밝은 화면만 지원한다(윤곽선이 검정이다) */
 @font-face { font-family: "Pretendard"; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"), url("fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; font-style: normal; font-display: swap }
 /* Jua 부분 집합을 다시 만들면 ?v= 숫자를 올린다. 브라우저가 예전 파일을 캐시해 새 글자가 빠져 보이는 일을 막는다 */
-@font-face { font-family: "Jua"; src: url("fonts/Jua-subset.woff2?v=5") format("woff2"); font-weight: 400; font-style: normal; font-display: swap }
+@font-face { font-family: "Jua"; src: url("fonts/Jua-subset.woff2?v=6") format("woff2"); font-weight: 400; font-style: normal; font-display: swap }
 :root {
   color-scheme: light;
   --ink: #1d1b19; --bg: #e6e9ef; --paper2: #d9dee8; --surface: #f3f5f8; --fg: #1d1b19; --muted: #4f5662;
@@ -43,8 +43,8 @@ a { color: inherit }
 .pill:focus-visible, button:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px }
 
 /* 히어로: 화면 높이 전체. 넓은 화면에서는 무대(.stage)를 화면 2.7배 높이로 두고 히어로를 화면에 붙여 두어,
-   스크롤한 만큼(화면 높이 하나) 커튼(.drape)이 닫히고, 닫힌 채로 흐름도를 보여 준 뒤 다음 구간으로 넘어간다. 커튼의 위치는 --p 하나로 정한다(0 열림, 1 닫힘, AC-8.10) */
-.stage { position: relative; height: 270vh; background: var(--night); border-bottom: 2.5px solid var(--ink) }
+   스크롤한 만큼(화면 높이 하나) 커튼(.drape)이 닫히고, 닫힌 채로 흐름도를 보이며 스크롤마다 한 칸씩(다섯 칸) 켠 뒤 다음 구간으로 넘어간다. 커튼의 위치는 --p 하나로 정한다(0 열림, 1 닫힘, AC-8.10) */
+.stage { position: relative; height: 420vh; background: var(--night); border-bottom: 2.5px solid var(--ink) }
 .hero { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: flex; flex-direction: column;
   background: var(--night); color: var(--night-fg); --p: 0; --edge: min(5vw, 64px) }
 .hero .wrap { max-width: 1200px; width: 100%; padding: 0 calc(var(--edge) + 20px); position: relative; z-index: 1 }
@@ -78,11 +78,11 @@ a { color: inherit }
 .drape.left { left: 0; border-right: 4px solid var(--ink); transform: translateX(calc((var(--p) - 1) * (100% - var(--edge)))) }
 .drape.right { right: 0; border-left: 4px solid var(--ink); transform: translateX(calc((1 - var(--p)) * (100% - var(--edge)))) }
 .drape-msg { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 16px; text-align: center; pointer-events: none; color: var(--ink); opacity: calc((var(--p) - .75) * 4) }
+  gap: 12px; text-align: center; pointer-events: none; color: var(--ink); opacity: calc((var(--p) - .75) * 4) }
 .drape-msg > b { font: 400 clamp(28px, 4vw, 54px)/1.2 var(--display); background: var(--surface); border: 3px solid var(--ink);
   border-radius: var(--wobble); padding: 14px 30px; box-shadow: 4px 5px 0 var(--ink) }
 /* 흐름도: 핵심 단어만. 커튼 칸은 노란색으로 강조한다 */
-.flow { list-style: none; margin: 40px 0 6px; padding: 0; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap }
+.flow { list-style: none; margin: clamp(14px, 4vh, 40px) 0 6px; padding: 0; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap }
 .flow li:not(.arrow):not(.gate) { width: 112px; padding: 12px 8px 10px; background: var(--surface); border: 2.5px solid var(--ink); border-radius: var(--wobble);
   box-shadow: 3px 4px 0 var(--ink); display: flex; flex-direction: column; align-items: center; gap: 2px }
 /* 커튼 칸은 카드가 아니라 나와 AI 사이에 선 문처럼 크게 그린다. 가는 길은 닫힌 커튼(가림), 돌아오는 길은 걷힌 커튼(복원) */
@@ -93,6 +93,21 @@ a { color: inherit }
 .flow b { font: 400 20px var(--display) }
 .flow span { font-size: 13px; font-weight: 700; color: var(--muted) }
 .flow .arrow { font: 400 28px var(--display); color: var(--ink) }
+/* 전화번호가 바뀌는 과정: 흐름도 다섯 칸과 짝을 이룬다. 넓은 화면에서는(.stepping) 스크롤마다 한 칸씩 켜고, 그 밖에는 모두 켠 채로 보인다 */
+.conv { list-style: none; margin: 4px 0 0; padding: 0; display: flex; align-items: stretch; justify-content: center; gap: 8px; flex-wrap: wrap }
+.conv li:not(.arrow) { min-width: 150px; padding: 8px 10px; background: var(--surface); border: 2.5px solid var(--ink); border-radius: 14px; box-shadow: 3px 4px 0 var(--ink);
+  display: flex; flex-direction: column; align-items: center; gap: 2px; transition: opacity .3s, transform .3s, filter .3s }
+.conv li.arrow { align-self: center; font: 400 24px var(--display) }
+.conv code { font: 800 15px var(--mono); color: var(--ink) }
+.conv code.ps { background: var(--yellow); border-radius: 6px; padding: 0 6px }
+.conv small { font-size: 12px; font-weight: 700; color: var(--muted) }
+.conv-note { margin: 6px 0 0; font: 400 clamp(20px, 2.4vw, 30px)/1.3 var(--display); color: var(--ink); background: var(--yellow); border: 3px solid var(--ink);
+  border-radius: var(--wobble); padding: 8px 22px; box-shadow: 3px 4px 0 var(--ink); transition: opacity .3s, transform .3s }
+.hero.stepping .flow li[data-s]:not(.on), .hero.stepping .conv li[data-s]:not(.on) { opacity: .28; filter: grayscale(.7) }
+.hero.stepping .flow li[data-s].now, .hero.stepping .conv li[data-s].now { transform: translateY(-5px) scale(1.05) }
+.hero.stepping .flow li.gate { transition: opacity .3s, transform .3s, filter .3s }
+.hero.stepping .flow li:not(.arrow):not(.gate) { transition: opacity .3s, transform .3s, filter .3s }
+.hero.stepping:not(.ai-knows) .conv-note { opacity: 0; transform: translateY(8px) }
 .flow-block { margin: 6px 0 0; font-size: 15px; background: var(--red-soft); border: 2px solid var(--ink); border-radius: 999px; padding: 5px 16px }
 .flow-block b { font-weight: 800 }
 
@@ -170,6 +185,14 @@ details.sent { font-size: 13px; color: var(--muted) }
 mark.val { background: var(--red-soft); color: inherit; border-radius: 4px; padding: 0 2px; text-decoration: line-through; text-decoration-thickness: 1.5px }
 mark.ps { background: var(--yellow); color: inherit; border-radius: 4px; padding: 0 2px; font-weight: 700 }
 mark.restored { background: transparent; color: inherit; text-decoration: underline; text-decoration-color: #c9a227; text-decoration-thickness: 3px; text-underline-offset: 3px; cursor: help }
+/* 답을 기다리는 말풍선(AC-8.12): 점 세 개가 움직이고, 오래 걸리면 이유를 알린다 */
+.wait .bubble { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; color: var(--muted); width: max-content; max-width: 100%; white-space: normal }
+.dots { display: inline-flex; align-items: center; gap: 4px; flex: none }
+.dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--ink); animation: dot 1.1s ease-in-out infinite }
+.dots i:nth-child(2) { animation-delay: .18s } .dots i:nth-child(3) { animation-delay: .36s }
+@keyframes dot { 0%, 80%, 100% { opacity: .25; transform: translateY(0) } 40% { opacity: 1; transform: translateY(-4px) } }
+@media (prefers-reduced-motion: reduce) { .dots i { animation: none; opacity: .6 } }
+.wait small { flex-basis: 100%; font-size: 12.5px }
 .src { font-size: 12px; font-weight: 800; justify-self: start; padding: 1px 8px; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--red-soft) }
 .src.real { background: var(--green-soft) }
 /* 커튼 기록 묶음: 가장 최근 것만 펼치고 이전 것은 접는다 */
@@ -209,7 +232,7 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
 @media (max-width: 860px), (prefers-reduced-motion: reduce) {
   .drape-msg { position: relative; inset: auto; z-index: 1; opacity: 1; padding: 8px 16px 48px }
   .drape-msg > b { font-size: 26px; padding: 10px 20px }
-  .flow .arrow { color: var(--night-fg) }
+  .flow .arrow, .conv li.arrow { color: var(--night-fg) }
 }
 @media (max-width: 860px) {
   .flow { flex-direction: column; gap: 4px }
@@ -219,6 +242,10 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   .flow li.gate img { width: 80px; height: 80px; padding: 5px }
   .flow img { width: 34px; height: 34px }
   .flow .arrow { transform: rotate(90deg); font-size: 22px; line-height: 1 }
+  .conv { flex-direction: column; align-items: center; gap: 2px }
+  .conv li:not(.arrow) { width: 200px }
+  .conv li.arrow { transform: rotate(90deg); font-size: 20px; line-height: 1 }
+  .conv-note { font-size: 19px; padding: 8px 16px }
 }
 @media (max-width: 860px) {
   .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 24px; padding: 20px 0 }
@@ -267,23 +294,35 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
   <div class="drape-msg">
     <b>민감한 내용은 커튼 뒤로</b>
     <ol class="flow" aria-label="처리 흐름: 나의 원문이 닫힌 커튼에서 가려지고, AI는 가명만 보며, 돌아오는 답은 걷힌 커튼에서 복원되어 나에게 완성된 답으로 온다">
-      <li><img src="img/me.svg" alt=""><b>나</b><span>원문</span></li>
+      <li data-s="1"><img src="img/me.svg" alt=""><b>나</b><span>원문</span></li>
       <li class="arrow" aria-hidden="true">→</li>
-      <li class="gate"><img src="img/curtain-closed.svg" alt=""><span>가림</span></li>
+      <li class="gate" data-s="2"><img src="img/curtain-closed.svg" alt=""><span>가림</span></li>
       <li class="arrow" aria-hidden="true">→</li>
-      <li><img src="img/step-3.svg" alt=""><b>AI</b><span>가명만</span></li>
+      <li data-s="3"><img src="img/step-3.svg" alt=""><b>AI</b><span>가명만</span></li>
       <li class="arrow" aria-hidden="true">→</li>
-      <li class="gate"><img src="img/curtain-open.svg" alt=""><span>복원</span></li>
+      <li class="gate" data-s="4"><img src="img/curtain-open.svg" alt=""><span>복원</span></li>
       <li class="arrow" aria-hidden="true">→</li>
-      <li><img src="img/me.svg" alt=""><b>나</b><span>완성</span></li>
+      <li data-s="5"><img src="img/me.svg" alt=""><b>나</b><span>완성</span></li>
     </ol>
+    <ol class="conv" aria-label="전화번호가 바뀌는 과정: 010-1111-2222가 커튼에서 [전화1]로 가려지고, AI는 [전화1]만 보며, AI의 답 속 [전화1]이 커튼에서 다시 010-1111-2222로 되돌려진다">
+      <li data-s="1"><code>010-1111-2222</code><small>내가 쓴 번호</small></li>
+      <li class="arrow" aria-hidden="true">→</li>
+      <li data-s="2"><code class="ps">[전화1]</code><small>커튼이 가려요</small></li>
+      <li class="arrow" aria-hidden="true">→</li>
+      <li data-s="3"><code class="ps">[전화1]</code><small>AI가 받아요</small></li>
+      <li class="arrow" aria-hidden="true">→</li>
+      <li data-s="4"><code class="ps">[전화1]</code><small>AI의 답 속에도</small></li>
+      <li class="arrow" aria-hidden="true">→</li>
+      <li data-s="5"><code>010-1111-2222</code><small>커튼이 되돌려요</small></li>
+    </ol>
+    <p class="conv-note">AI는 실제 전화번호가 어떤 건지 몰라요</p>
     <p class="flow-block">비밀번호·키는 커튼에서 <b>차단</b></p>
   </div>
 </section>
 </div>
 <script>
 /* 커튼 효과(AC-8.10). 외부 라이브러리 없이 히어로의 --p(0 열림, 1 닫힘)만 바꾼다.
-   들어올 때 닫힌 채로 잠시 머문 뒤 열리고, 넓은 화면에서는 화면 높이 하나만큼 스크롤하면 다시 닫히며, 그 뒤 잠시 닫힌 채로 흐름도를 보여 준다. 애니메이션 줄이기 설정이면 아무것도 하지 않는다 */
+   들어올 때 닫힌 채로 잠시 머문 뒤 열리고, 넓은 화면에서는 화면 높이 하나만큼 스크롤하면 다시 닫히며, 그 뒤 스크롤마다 흐름도와 전화번호 변환 줄이 한 칸씩 켜진다. 애니메이션 줄이기 설정이면 아무것도 하지 않는다 */
 (() => {
   const hero = document.querySelector(".hero"), stage = document.querySelector(".stage");
   if (!hero || !stage || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -294,7 +333,24 @@ textarea { flex: 1; min-height: 52px; max-height: 200px; resize: vertical; font:
     if (!wide.matches) return 0;
     return Math.min(1, Math.max(0, (scrollY - stage.offsetTop) / innerHeight));
   };
-  const draw = () => hero.style.setProperty("--p", Math.max(intro, scrollP()).toFixed(4));
+  /* 닫힌 뒤 화면 높이의 0.45만큼 스크롤할 때마다 흐름도와 변환 줄이 한 칸씩 켜진다(1~5). 넓은 화면이 아니면 모두 켠 채로 둔다 */
+  const STEP_VH = 0.45;
+  const stepNow = () => {
+    if (!wide.matches) return 5;
+    const past = scrollY - stage.offsetTop - innerHeight;
+    return past < 0 ? 0 : Math.min(5, Math.floor(past / (innerHeight * STEP_VH)) + 1);
+  };
+  const lit = (step) => {
+    hero.classList.toggle("stepping", wide.matches);
+    hero.classList.toggle("ai-knows", step >= 3);
+    hero.dataset.step = step;
+    for (const el of hero.querySelectorAll("[data-s]")) {
+      const k = Number(el.dataset.s);
+      el.classList.toggle("on", k <= step);
+      el.classList.toggle("now", k === step);
+    }
+  };
+  const draw = () => { hero.style.setProperty("--p", Math.max(intro, scrollP()).toFixed(4)); lit(stepNow()); };
   const tick = (now) => {
     const k = Math.min(1, Math.max(0, (now - t0 - HOLD_MS) / OPEN_MS));
     intro = Math.pow(1 - k, 3);
@@ -525,8 +581,19 @@ function addResult(prompt, status, data, real) {
   add(m);
 }
 
+/* 답을 기다리는 말풍선(AC-8.12). 8초 넘게 걸리면 서버가 깨어나는 중일 수 있다고 알린다 */
+function showWaiting() {
+  const m = el("div", "msg ai wait"); m.setAttribute("role", "status"); m.setAttribute("aria-live", "polite");
+  const b = el("div", "bubble"); const dots = el("span", "dots"); for (let i = 0; i < 3; i++) dots.appendChild(el("i"));
+  b.appendChild(dots); b.appendChild(el("span", null, "커튼 뒤에서 처리하는 중…"));
+  const slow = el("small", null, ""); b.appendChild(slow); m.appendChild(b); add(m);
+  const t = setTimeout(() => { slow.textContent = "조금 오래 걸리고 있어요. 서버가 쉬다가 깨어나는 중이면 최대 1분쯤 걸려요."; $("log").scrollTop = $("log").scrollHeight; }, 8000);
+  return () => { clearTimeout(t); m.remove(); };
+}
+
 async function send(prompt, confirmed) {
   $("send").disabled = true;
+  const stopWaiting = showWaiting();
   try {
     const real = !!getKey() || defaultMode !== "demo";
     const headers = { "Content-Type": "application/json" };
@@ -534,10 +601,12 @@ async function send(prompt, confirmed) {
     if (key) headers["X-Gemini-Key"] = key;
     const res = await fetch("api/chat", { method: "POST", headers, body: JSON.stringify({ prompt, confirmed }) });
     let data = null; try { data = await res.json(); } catch (e) { }
+    stopWaiting();
     addResult(prompt, res.status, data, real);
   } catch (e) {
+    stopWaiting();
     addResult(prompt, 0, null);
-  } finally { $("send").disabled = false; }
+  } finally { stopWaiting(); $("send").disabled = false; }
 }
 
 $("form").addEventListener("submit", (e) => {
