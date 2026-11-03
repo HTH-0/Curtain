@@ -9,7 +9,8 @@
 | `spec-v1-hr.md`, `design-v1-hr.md`, `domain-policy-hr.md`, `handoff-v1-hr.md` | 주제를 바꾸기 전의 명세, 설계, 정책, 인수인계 | 2026-10-29 |
 | `review-sheet.md`, `rule-selection.md`, `llm_guardrail_rule_filters.md`, `rule-criteria.md` | 가드레일 룰 후보와 선정 기준 | 2026-10-29, `rule-criteria.md`는 2026-11-02 |
 | `AI보안_프로젝트_주제_후보.md`, `프로젝트_정리.md` | 주제를 고를 때의 후보와 정리 | 2026-10-29 |
-| `dataset.csv` | 프롬프트 주입, 탈옥 문장 560행(외부 공개 데이터 일부 포함, 출처는 THIRD_PARTY_NOTICES 1, 2절) | 2026-11-02 |
+| `constitution.md` | HR 시절의 불변 원칙(초안). 이 폴더의 문서들이 링크한다 | 2026-11-03 |
+| `dataset.csv` (제거됨) | 프롬프트 주입, 탈옥 문장 560행(외부 공개 데이터 일부 포함, 출처는 THIRD_PARTY_NOTICES 1, 2절). 재배포 조건 때문에 2026-11-03 작업 트리에서 제거했다. 과거 커밋과 태그 `before-cleanup`에는 있다 | 2026-11-02 |
 | `poc/` | 판정 모델 초기 실험(PoC)의 입력과 결과 | 2026-11-02 |
 | `tools/` | 초기 실험과 룰 점검에 쓴 코드 | 2026-11-02 |
 | `research/` | 도메인 평가 자료 조사 | 2026-11-02 |

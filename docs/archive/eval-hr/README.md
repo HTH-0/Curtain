@@ -8,7 +8,7 @@
 | `raw/` | 생성형 AI 3종이 만든 원본 질문 |
 | `domain_candidates.csv`, `domain_filter_report.md` | 자동 필터를 거친 후보와 보고 |
 | `domain_labeling_sheet.csv`, `labeling_guide.md` | 블라인드 라벨링 시트와 안내(라벨링은 하지 않고 주제를 바꿨다) |
-| `koica_hr_questions_raw.csv` | 현실성 세트 원본(아래 출처) |
+| `koica_hr_questions_raw.csv` (제거됨) | 현실성 세트 원본(아래 출처). 2026-11-03 작업 트리에서 제거했고 과거 커밋과 태그 `before-cleanup`에는 있다 |
 | `paused_6_2/` | 중단한 분석 도구의 빈 껍데기와 시험 |
 
 ## KOICA 질의응답 세트의 출처

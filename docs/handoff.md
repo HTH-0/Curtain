@@ -35,8 +35,8 @@
 | 1 | 저장소 비공개 전환 | 사용자가 2026-10-29에 "정리를 마치면 비공개"로 정했다. 비공개여도 Render는 GitHub 연결 권한으로 배포한다. 평가자가 저장소를 봐야 하면 공개로 둔다. **결정 대기** |
 | 2 | 커튼 기록의 정확도 보완 | 서버가 가명과 위치를 직접 알려 주면 화면의 짝 추측이 필요 없다(DECISIONS 2026-11-02 커튼 기록 단점). 선택 |
 | 3 | 개선 후보 | 가린 대화에 가명 안내문 넣기(모델이 가명을 쓰는 비율), 입력 정규화(우회), 사용자 인증, 회사 안 설치 안내 |
-| 4 | 코드 읽기 | 사용자가 보류했다. 진행 기록은 [code-reading/progress.md](code-reading/progress.md) |
-| 5 | `constitution.md` 확정, 저장소 `LICENSE` | 보류 |
+| 4 | 코드 읽기 | 사용자가 보류했다. 가이드와 진행 기록은 2026-11-03 저장소에서 제거해 내 컴퓨터의 백업 폴더(`Curtain_백업_2026-11-03`)에 있다 |
+| 5 | 저장소 `LICENSE` | 2026-11-03 두지 않기로 했다(열람용 공개). `constitution.md`는 HR 시절 문서라 `docs/archive/`로 옮겼다 |
 | 6 | **README와 포트폴리오용 화면 사진 3장 다시 찍기** | `docs/images/hero.png`, `flow.png`, `portal-demo.png`는 2026-11-02 16:54에 찍어 11-03의 화면 정리(여백, 글꼴, 흐름도 속도, 변환 줄) 전 모습이다. 공개 사이트에서 같은 장면(첫 화면, 흐름도 5단계, 포털의 가림 예시 결과)을 다시 찍어 바꾸고, 커밋과 푸시는 사용자에게 먼저 묻는다 |
 | 7 | 공개 사이트에서 챗 박스 점검 다시 돌리기 | Render 배포는 푸시 약 60초 뒤 새 버전(`conv-note`, 글꼴 `?v=7`)이 된 것을 확인했다. 그 뒤 공개 사이트에서 돌리던 챗 박스 30개 점검은 사용자가 중단해 끝내지 못했다. 내 PC 서버에서는 30/30, 흐름도 단계 21/21 통과했다 |
 | 8 | `PORTFOLIO_NOTES.md` 다루기 | 저장소가 공개라서 일부러 **커밋하지 않았다**(추적되지 않은 파일). 파일 이름을 직접 지정해 커밋하고, `git add -A`는 쓰지 않는다. `.gitignore`에 넣을지는 결정 대기 |
@@ -103,5 +103,4 @@ python -m unittest test_fake_values test_measure test_build_eval_set test_build_
 | [worklog.md](worklog.md) | 세션별 작업 기록 |
 | [eval/](eval/README.md) | 평가 자료(업무 요청 틀, 동결한 평가 세트, 측정 결과)와 측정 재현 방법 |
 | [archive/](archive/README.md) | 주제를 바꾸기 전 자료(보관) |
-| [code-reading/](code-reading/) | 코드 읽기 가이드와 진행 기록 |
 | [../THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) | 외부 자료, 글꼴, 그림의 출처와 라이선스 |
