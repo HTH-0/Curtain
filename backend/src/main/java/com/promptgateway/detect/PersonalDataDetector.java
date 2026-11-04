@@ -89,7 +89,8 @@ public class PersonalDataDetector implements Detector {
             Matcher m = ACCOUNT.matcher(text).region(context.end(), windowEnd);
             if (m.find()) {
                 long digits = m.group().chars().filter(Character::isDigit).count();
-                if (digits >= 10 && digits <= 14 && !PHONE.matcher(m.group()).matches()) {
+                boolean trackingNumber = "우체국".equals(context.group()) && m.group().chars().allMatch(Character::isDigit);
+                if (digits >= 10 && digits <= 14 && !trackingNumber && !PHONE.matcher(m.group()).matches()) {
                     found.add(new Finding(Item.ACCOUNT, m.start(), m.end(), m.group()));
                 }
             }

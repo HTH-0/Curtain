@@ -54,6 +54,13 @@ class PersonalDataDetectorTest {
         assertThat(items("계좌 개설 2024 10 12 안내")).isEmpty();
     }
 
+    @Test
+    @DisplayName("AC-13.4 우체국 뒤의 구분자 없는 긴 숫자는 택배 송장번호일 수 있어 계좌로 보지 않고, 구분자가 있으면 찾는다")
+    void postOfficeTrackingNumberIsNotAnAccount() {
+        assertThat(items("우체국 택배 송장번호 1234567890123 조회")).isEmpty();
+        assertThat(items("우체국 012345-02-123456 로 입금")).containsExactly(Item.ACCOUNT);
+    }
+
     @ParameterizedTest(name = "AC-2.2 검증에 실패하는 주민번호 모양은 찾지 않는다: {0}")
     @ValueSource(strings = {"000000-0000000", "901301-1234567", "900230-1234567", "900101-9234567", "1900101-1234567"})
     void invalidResidentNumbers(String text) {
