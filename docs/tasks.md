@@ -108,3 +108,14 @@ a: 8건 모두 `NONE`(5건) 또는 `JUDGE`(3건), 판정 실패와 오류 0건. 
 - [x] 6b. 이전 코드와 새 코드 비교 측정, `report_bypass_v2.md` 작성(v2 26.2%에서 79.8%, 블라인드 v3 12.1%에서 48.3%)
 - [x] 7. 기록 갱신(DECISIONS, handoff, open-risks R15, README, eval README, worklog)
 - [x] 8. 푸시: `dev` `6eb2445`, `main` `c278b82`, 공개 사이트 새 버전 확인
+
+## Z 3차 판정 개선 진행 체크 (2026-11-04~)
+
+완료한 항목만 체크한다. 근거는 [spec.md](spec.md) AC-10.8a~c와 [eval/z3_rubric.md](eval/z3_rubric.md).
+
+- [x] 1. 현재 자료 점검과 루브릭 초안, 명세 AC-10.8 초안 작성(승인 대기)
+- [x] 2. 루브릭과 AC-10.8 승인(2026-11-04)
+- [x] 3. 판정 시트 생성(24쌍, 순서 섞기, 대응표 별도 보관)과 시험(`z3_sheet.py`, Python 시험 8건, 화면은 헤드리스 Chrome 스크린샷과 가짜 DOM 전체 클릭 시험으로 확인)
+- [ ] 4. 사용자 판정
+- [ ] 5. 집계와 `report_z3_v1.md`
+- [ ] 6. 기록 갱신(DECISIONS, handoff, README 수치와 한계), 푸시와 `main` 반영은 따로 승인
