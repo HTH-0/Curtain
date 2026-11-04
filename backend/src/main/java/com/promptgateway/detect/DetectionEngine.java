@@ -31,12 +31,28 @@ public class DetectionEngine {
         this.allowlist = allowlist.stream().map(DetectionEngine::key).collect(Collectors.toUnmodifiableSet());
     }
 
+    /**
+     * 원문과 정규화 사본(AC-13.1)에 모두 탐지기를 돌려 합친다. 사본에서 찾은 값은 시작, 끝, 값을 원문 기준으로 되돌린다(AC-13.2).
+     * 원문 탐지를 그대로 두므로 정규화 전에 찾던 값은 줄어들지 않는다(AC-13.3).
+     */
     public List<Finding> detect(String text) {
         List<Finding> all = new ArrayList<>();
         for (Detector d : detectors) {
             for (Finding f : d.detect(text)) {
                 if (!allowlist.contains(key(f.value()))) {
                     all.add(f);
+                }
+            }
+        }
+        Normalizer.Result normalized = Normalizer.normalize(text);
+        if (!normalized.text().equals(text)) {
+            for (Detector d : detectors) {
+                for (Finding f : d.detect(normalized.text())) {
+                    if (!allowlist.contains(key(f.value()))) {
+                        int start = normalized.toOriginalStart(f.start());
+                        int end = normalized.toOriginalEnd(f.end());
+                        all.add(new Finding(f.item(), start, end, text.substring(start, end)));
+                    }
                 }
             }
         }

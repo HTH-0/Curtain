@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  * D1 개인정보 탐지(docs/design.md 2장). 형식에 더해 검증 규칙을 적용해서, 예시 값과 숫자만 비슷한 문장(날짜, 버전, 주문번호)을 걸러 낸다.
  *
- *   주민/외국인등록번호  생년월일이 실제 날짜이고 뒷자리 첫 숫자가 1~4(주민) 또는 5~8(외국인). 검증 숫자는 요구하지 않는다
+ *   주민/외국인등록번호  생년월일이 실제 날짜이고 뒷자리 첫 숫자가 1~4(주민) 또는 5~8(외국인). 앞뒤 사이의 구분자는 없음, 하이픈, 공백, 점(AC-13.4). 검증 숫자는 요구하지 않는다
  *                      (2020년 10월 이후 발급 번호는 검증 숫자 체계가 없다)
  *   휴대전화            010 등으로 시작. 가운데와 끝이 모두 같은 숫자면 예시 값으로 본다
  *   이메일              example.com 같은 예시 도메인은 뺀다
@@ -20,12 +20,12 @@ import java.util.regex.Pattern;
  */
 public class PersonalDataDetector implements Detector {
 
-    private static final Pattern RESIDENT = Pattern.compile("(?<!\\d)(\\d{2})(\\d{2})(\\d{2})-?([1-8])\\d{6}(?!\\d)");
+    private static final Pattern RESIDENT = Pattern.compile("(?<!\\d)(\\d{2})(\\d{2})(\\d{2})[-. ]?([1-8])\\d{6}(?!\\d)");
     private static final Pattern PHONE = Pattern.compile("(?<!\\d)01[016789][-. ]?(\\d{3,4})[-. ]?(\\d{4})(?!\\d)");
     private static final Pattern EMAIL = Pattern.compile("(?<![\\w.+-])[\\w.+-]+@([A-Za-z0-9-]+(?:\\.[A-Za-z0-9-]+)+)");
     private static final Pattern ACCOUNT_CONTEXT = Pattern.compile("(은행|뱅크|계좌|농협|신협|새마을금고|우체국)");
-    private static final Pattern ACCOUNT = Pattern.compile("(?<![\\d-])\\d{2,6}(?:-\\d{2,8}){1,3}(?![\\d-])");
-    private static final Pattern CARD = Pattern.compile("(?<!\\d)[3-6]\\d{3}(?:[- ]?\\d{4}){2}[- ]?\\d{1,7}(?!\\d)");
+    private static final Pattern ACCOUNT = Pattern.compile("(?<![\\d-])(?:\\d{2,6}(?:[-. ]\\d{2,8}){1,3}|\\d{10,14})(?![\\d-])");
+    private static final Pattern CARD = Pattern.compile("(?<!\\d)[3-6]\\d{3}(?:[-. ]?\\d{4}){2}[-. ]?\\d{1,7}(?!\\d)");
     private static final Set<String> EXAMPLE_DOMAINS = Set.of("example.com", "example.org", "example.net", "test.com", "domain.com");
 
     @Override
@@ -89,7 +89,7 @@ public class PersonalDataDetector implements Detector {
             Matcher m = ACCOUNT.matcher(text).region(context.end(), windowEnd);
             if (m.find()) {
                 long digits = m.group().chars().filter(Character::isDigit).count();
-                if (digits >= 10 && digits <= 14) {
+                if (digits >= 10 && digits <= 14 && !PHONE.matcher(m.group()).matches()) {
                     found.add(new Finding(Item.ACCOUNT, m.start(), m.end(), m.group()));
                 }
             }
@@ -99,7 +99,7 @@ public class PersonalDataDetector implements Detector {
     private static void cards(String text, List<Finding> found) {
         Matcher m = CARD.matcher(text);
         while (m.find()) {
-            String digits = m.group().replaceAll("[- ]", "");
+            String digits = m.group().replaceAll("[-. ]", "");
             if (digits.length() >= 13 && digits.length() <= 19 && luhn(digits)) {
                 found.add(new Finding(Item.CARD, m.start(), m.end(), m.group()));
             }
