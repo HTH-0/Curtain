@@ -1,0 +1,27 @@
+{
+ "frozen_at_commit": "45b2865b630247fb5a62553a1c64bf68dd346147",
+ "compare_commit": "1066460",
+ "detection_code_sha256": "460ca522f43cb5736902eeac83acd5e9b168565396e06e5bfba5b2bde50054b4",
+ "detection_code_method": "detect/*.java를 경로 순으로 정렬, 각 파일마다 상대경로(/ 구분) + \\n + 내용(CRLF를 LF로) + \\n 을 이어 붙인 바이트의 SHA-256",
+ "company_dictionary_sha256": "774725a744b548650e5489859f48df1a5ba9a6901e6ad8e612cc53bfbf98a212",
+ "application_yml_sha256": "79fd22793ddcbda0f68976d4930e824037dd0e15d46d6f7b0af628c3936a8f30",
+ "sets": {
+  "eval_v1": {
+   "path": "docs/eval/set/eval_v1.jsonl",
+   "sha256": "cd492ebcaa282d8b3419dd4808e9fbd3239590d8f9813157716788b69570bd06"
+  },
+  "bypass_v2": {
+   "path": "docs/eval/set/bypass_v2.jsonl",
+   "sha256": "e5bc41e11cfded638fd2286dab5e7584f2a8c694443d39a5d6827c8779c036f4"
+  },
+  "bypass_v3_blind": {
+   "path": "docs/eval/set/bypass_v3.jsonl",
+   "sha256": "6afb8d3a5a9441ef92e829a0a5d5679a6df43fcbe10e4470291edc41e78305dd"
+  },
+  "benign_v1": {
+   "path": "docs/eval/set/benign_v1.jsonl",
+   "sha256": "f074b7b1b062cc4e937dd52448794bb7d5d4215652c4b56e9e352fe76ba8af18"
+  }
+ },
+ "note": "측정 전 동결(명세 AC-13.11). 동결 뒤에는 결과를 보고 탐지 코드와 세트를 바꾸지 않는다."
+}

@@ -84,5 +84,21 @@ class BuildTest(unittest.TestCase):
         self.assertEqual((len(records), h), (120, digest))
 
 
+class ReplicatesTest(unittest.TestCase):
+    def test_값_개수를_늘리면_문장이_비례해_늘어난다(self):
+        self.assertEqual(len(bb.build_bypass_set("t", replicates=10)), 600)
+
+    def test_기본_값은_v1과_같다(self):
+        self.assertEqual(bb.build_bypass_set("t"), bb.build_bypass_set("t", replicates=2))
+
+    def test_다른_세트와_겹치는_값을_찾는다_사전_항목은_제외(self):
+        a = bb.build_bypass_set("t", replicates=3)
+        self.assertEqual(bb.overlap_with(a, a) != [], True)
+        b = bb.build_bypass_set("u", replicates=3)
+        self.assertEqual(bb.overlap_with(a, b), [])
+        dict_only = [r for r in a if r["item"] in bb.DICTIONARY_ITEMS]
+        self.assertEqual(bb.overlap_with(dict_only, dict_only), [])
+
+
 if __name__ == "__main__":
     unittest.main()
