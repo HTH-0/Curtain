@@ -28,6 +28,39 @@ class PersonalDataDetectorTest {
         assertThat(items("외국인 직원 880315-5123456")).containsExactly(Item.FRN);
     }
 
+    @Test
+    @DisplayName("AC-13.4 주민번호와 외국인등록번호의 앞뒤 사이에 공백이나 점이 있어도 찾는다")
+    void residentNumbersWithSeparators() {
+        assertThat(items("주민번호 900101 1234567")).containsExactly(Item.RRN);
+        assertThat(items("주민번호 900101.1234567")).containsExactly(Item.RRN);
+        assertThat(items("외국인 880315 5123456")).containsExactly(Item.FRN);
+        assertThat(items("검증 실패 901301 1234567 과 000000 0000000")).isEmpty();
+    }
+
+    @Test
+    @DisplayName("AC-13.4 카드번호 묶음 사이에 점이 있어도 Luhn을 통과하면 찾는다")
+    void cardWithDots() {
+        assertThat(items("카드 4111.1111.1111.1111 결제")).containsExactly(Item.CARD);
+        assertThat(items("카드 4111.1111.1111.1112 결제")).isEmpty();
+    }
+
+    @Test
+    @DisplayName("AC-13.4 계좌번호는 구분자가 없거나 공백, 점이어도 은행 표시 뒤에서만 찾는다")
+    void accountsWithOtherSeparators() {
+        assertThat(items("국민은행 12345678901 로 입금")).containsExactly(Item.ACCOUNT);
+        assertThat(items("국민은행 123 456789 01 234 로 입금")).containsExactly(Item.ACCOUNT);
+        assertThat(items("국민은행 123.456789.01.234 로 입금")).containsExactly(Item.ACCOUNT);
+        assertThat(items("주문번호 12345678901 확인 부탁")).isEmpty();
+        assertThat(items("계좌 개설 2024 10 12 안내")).isEmpty();
+    }
+
+    @Test
+    @DisplayName("AC-13.4 우체국 뒤의 구분자 없는 긴 숫자는 택배 송장번호일 수 있어 계좌로 보지 않고, 구분자가 있으면 찾는다")
+    void postOfficeTrackingNumberIsNotAnAccount() {
+        assertThat(items("우체국 택배 송장번호 1234567890123 조회")).isEmpty();
+        assertThat(items("우체국 012345-02-123456 로 입금")).containsExactly(Item.ACCOUNT);
+    }
+
     @ParameterizedTest(name = "AC-2.2 검증에 실패하는 주민번호 모양은 찾지 않는다: {0}")
     @ValueSource(strings = {"000000-0000000", "901301-1234567", "900230-1234567", "900101-9234567", "1900101-1234567"})
     void invalidResidentNumbers(String text) {

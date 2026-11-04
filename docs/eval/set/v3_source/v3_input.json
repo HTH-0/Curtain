@@ -1,0 +1,434 @@
+{
+ "types": [
+  "문자 바꾸기",
+  "구분자와 공백",
+  "보이지 않는 문자",
+  "쪼개기",
+  "표기 방식",
+  "인코딩",
+  "기타"
+ ],
+ "variants_per_value": 4,
+ "values": [
+  {
+   "id": "PHONE-1",
+   "item": "PHONE",
+   "description": "한국 휴대전화번호",
+   "value": "010-4046-9501",
+   "bank": null
+  },
+  {
+   "id": "PHONE-2",
+   "item": "PHONE",
+   "description": "한국 휴대전화번호",
+   "value": "010-0100-7946",
+   "bank": null
+  },
+  {
+   "id": "PHONE-3",
+   "item": "PHONE",
+   "description": "한국 휴대전화번호",
+   "value": "010-1862-5264",
+   "bank": null
+  },
+  {
+   "id": "PHONE-4",
+   "item": "PHONE",
+   "description": "한국 휴대전화번호",
+   "value": "010-1732-2870",
+   "bank": null
+  },
+  {
+   "id": "PHONE-5",
+   "item": "PHONE",
+   "description": "한국 휴대전화번호",
+   "value": "010-6535-2334",
+   "bank": null
+  },
+  {
+   "id": "RRN-1",
+   "item": "RRN",
+   "description": "주민등록번호(가짜)",
+   "value": "001121-4435029",
+   "bank": null
+  },
+  {
+   "id": "RRN-2",
+   "item": "RRN",
+   "description": "주민등록번호(가짜)",
+   "value": "060827-4838608",
+   "bank": null
+  },
+  {
+   "id": "RRN-3",
+   "item": "RRN",
+   "description": "주민등록번호(가짜)",
+   "value": "610922-2611800",
+   "bank": null
+  },
+  {
+   "id": "RRN-4",
+   "item": "RRN",
+   "description": "주민등록번호(가짜)",
+   "value": "010228-3357945",
+   "bank": null
+  },
+  {
+   "id": "RRN-5",
+   "item": "RRN",
+   "description": "주민등록번호(가짜)",
+   "value": "670404-2532798",
+   "bank": null
+  },
+  {
+   "id": "FRN-1",
+   "item": "FRN",
+   "description": "외국인등록번호(가짜)",
+   "value": "000806-7302017",
+   "bank": null
+  },
+  {
+   "id": "FRN-2",
+   "item": "FRN",
+   "description": "외국인등록번호(가짜)",
+   "value": "080128-7023344",
+   "bank": null
+  },
+  {
+   "id": "FRN-3",
+   "item": "FRN",
+   "description": "외국인등록번호(가짜)",
+   "value": "000224-8499124",
+   "bank": null
+  },
+  {
+   "id": "FRN-4",
+   "item": "FRN",
+   "description": "외국인등록번호(가짜)",
+   "value": "840208-5210868",
+   "bank": null
+  },
+  {
+   "id": "FRN-5",
+   "item": "FRN",
+   "description": "외국인등록번호(가짜)",
+   "value": "000925-7503239",
+   "bank": null
+  },
+  {
+   "id": "CARD-1",
+   "item": "CARD",
+   "description": "신용카드 번호(가짜)",
+   "value": "6111-6112-8536-3732",
+   "bank": null
+  },
+  {
+   "id": "CARD-2",
+   "item": "CARD",
+   "description": "신용카드 번호(가짜)",
+   "value": "6474-1239-6663-0745",
+   "bank": null
+  },
+  {
+   "id": "CARD-3",
+   "item": "CARD",
+   "description": "신용카드 번호(가짜)",
+   "value": "4867-2121-4394-9688",
+   "bank": null
+  },
+  {
+   "id": "CARD-4",
+   "item": "CARD",
+   "description": "신용카드 번호(가짜)",
+   "value": "5578-9225-2445-1024",
+   "bank": null
+  },
+  {
+   "id": "CARD-5",
+   "item": "CARD",
+   "description": "신용카드 번호(가짜)",
+   "value": "4850-2447-1148-3575",
+   "bank": null
+  },
+  {
+   "id": "EMAIL-1",
+   "item": "EMAIL",
+   "description": "이메일 주소",
+   "value": "yejun.95@hth.example",
+   "bank": null
+  },
+  {
+   "id": "EMAIL-2",
+   "item": "EMAIL",
+   "description": "이메일 주소",
+   "value": "yejun.52@hth.example",
+   "bank": null
+  },
+  {
+   "id": "EMAIL-3",
+   "item": "EMAIL",
+   "description": "이메일 주소",
+   "value": "sungho.22@hth.example",
+   "bank": null
+  },
+  {
+   "id": "EMAIL-4",
+   "item": "EMAIL",
+   "description": "이메일 주소",
+   "value": "sungho.21@hth.example",
+   "bank": null
+  },
+  {
+   "id": "EMAIL-5",
+   "item": "EMAIL",
+   "description": "이메일 주소",
+   "value": "hyunwoo.98@mail.example",
+   "bank": null
+  },
+  {
+   "id": "ACCOUNT-1",
+   "item": "ACCOUNT",
+   "description": "은행 계좌번호(가짜)",
+   "value": "126-028-182102",
+   "bank": "우리은행"
+  },
+  {
+   "id": "ACCOUNT-2",
+   "item": "ACCOUNT",
+   "description": "은행 계좌번호(가짜)",
+   "value": "8914-30-7849497",
+   "bank": "우리은행"
+  },
+  {
+   "id": "ACCOUNT-3",
+   "item": "ACCOUNT",
+   "description": "은행 계좌번호(가짜)",
+   "value": "0598-44-0946206",
+   "bank": "우체국"
+  },
+  {
+   "id": "ACCOUNT-4",
+   "item": "ACCOUNT",
+   "description": "은행 계좌번호(가짜)",
+   "value": "919-760-003067",
+   "bank": "신한은행"
+  },
+  {
+   "id": "ACCOUNT-5",
+   "item": "ACCOUNT",
+   "description": "은행 계좌번호(가짜)",
+   "value": "695-066031-96-456",
+   "bank": "우리은행"
+  },
+  {
+   "id": "API_KEY-1",
+   "item": "API_KEY",
+   "description": "API 키(가짜)",
+   "value": "ghp_wBIRykxDKzsOJiJomRabltlDM4U4Ssx1zdqy",
+   "bank": null
+  },
+  {
+   "id": "API_KEY-2",
+   "item": "API_KEY",
+   "description": "API 키(가짜)",
+   "value": "ghp_OEZTPFAbApRcRa3hsHzoxyTgEkwXf6ykdlRG",
+   "bank": null
+  },
+  {
+   "id": "API_KEY-3",
+   "item": "API_KEY",
+   "description": "API 키(가짜)",
+   "value": "sk-79oYWW0k8P6H7kNBGIjSv8dI5Nbl9VgY",
+   "bank": null
+  },
+  {
+   "id": "API_KEY-4",
+   "item": "API_KEY",
+   "description": "API 키(가짜)",
+   "value": "AKIA1QR6TQ0QQ7GI8FHF",
+   "bank": null
+  },
+  {
+   "id": "API_KEY-5",
+   "item": "API_KEY",
+   "description": "API 키(가짜)",
+   "value": "AKIAUP3DFH8WMKUIA6Q8",
+   "bank": null
+  },
+  {
+   "id": "JWT-1",
+   "item": "JWT",
+   "description": "JWT 토큰(가짜)",
+   "value": "eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJzdWIiOiAiMTU4NjA5IiwgInJvbGUiOiAidXNlciJ9.DAyACoPlyt89O05MkCke2YQotGZG-oG0gsSL7XiQ2XK",
+   "bank": null
+  },
+  {
+   "id": "JWT-2",
+   "item": "JWT",
+   "description": "JWT 토큰(가짜)",
+   "value": "eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJzdWIiOiAiNDc1OTk3IiwgInJvbGUiOiAidXNlciJ9.6Wtw3peSfYnYnyGeFrv-A4OT_AVihV4IryH96ysWslP",
+   "bank": null
+  },
+  {
+   "id": "JWT-3",
+   "item": "JWT",
+   "description": "JWT 토큰(가짜)",
+   "value": "eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJzdWIiOiAiNDMxMzgxIiwgInJvbGUiOiAidXNlciJ9.EEyx6-VLAIUZk23CEyAiLA2N3ZUlM1tl6DbXvvTUlIF",
+   "bank": null
+  },
+  {
+   "id": "JWT-4",
+   "item": "JWT",
+   "description": "JWT 토큰(가짜)",
+   "value": "eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJzdWIiOiAiODg1NTk4IiwgInJvbGUiOiAidXNlciJ9.YWdVAA0NJcgw8cnXbuUPIwPT5_fBLchyoZSBJoKpgar",
+   "bank": null
+  },
+  {
+   "id": "JWT-5",
+   "item": "JWT",
+   "description": "JWT 토큰(가짜)",
+   "value": "eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJzdWIiOiAiMjQ5ODY3IiwgInJvbGUiOiAidXNlciJ9.nWPmCLiAUiG1-LF-NBl-cQa_eFJpfGGA_3j0862ShKX",
+   "bank": null
+  },
+  {
+   "id": "CONN_STRING-1",
+   "item": "CONN_STRING",
+   "description": "비밀번호가 든 데이터베이스 접속 문자열(가짜)",
+   "value": "postgres://app_user:2O3cnuWbbt@db82.hth.internal:5432/orders",
+   "bank": null
+  },
+  {
+   "id": "CONN_STRING-2",
+   "item": "CONN_STRING",
+   "description": "비밀번호가 든 데이터베이스 접속 문자열(가짜)",
+   "value": "mysql://app_user:Yhg^Pbz#3C@db54.hth.internal:3306/hr",
+   "bank": null
+  },
+  {
+   "id": "CONN_STRING-3",
+   "item": "CONN_STRING",
+   "description": "비밀번호가 든 데이터베이스 접속 문자열(가짜)",
+   "value": "postgres://batch:c@LyBOdb5V@db85.hth.internal:5432/hr",
+   "bank": null
+  },
+  {
+   "id": "CONN_STRING-4",
+   "item": "CONN_STRING",
+   "description": "비밀번호가 든 데이터베이스 접속 문자열(가짜)",
+   "value": "mysql://admin:vU8DhINN4O@db14.hth.internal:3306/hr",
+   "bank": null
+  },
+  {
+   "id": "CONN_STRING-5",
+   "item": "CONN_STRING",
+   "description": "비밀번호가 든 데이터베이스 접속 문자열(가짜)",
+   "value": "mysql://admin:7W*5tteLxC@db99.hth.internal:3306/hr",
+   "bank": null
+  },
+  {
+   "id": "CODENAME-1",
+   "item": "CODENAME",
+   "description": "회사 내부 프로젝트 코드명",
+   "value": "블루웨일",
+   "bank": null
+  },
+  {
+   "id": "CODENAME-2",
+   "item": "CODENAME",
+   "description": "회사 내부 프로젝트 코드명",
+   "value": "오로라",
+   "bank": null
+  },
+  {
+   "id": "CODENAME-3",
+   "item": "CODENAME",
+   "description": "회사 내부 프로젝트 코드명",
+   "value": "프로젝트 해솔",
+   "bank": null
+  },
+  {
+   "id": "CODENAME-4",
+   "item": "CODENAME",
+   "description": "회사 내부 프로젝트 코드명",
+   "value": "NIMBUS-7",
+   "bank": null
+  },
+  {
+   "id": "CODENAME-5",
+   "item": "CODENAME",
+   "description": "회사 내부 프로젝트 코드명",
+   "value": "스톤브릿지",
+   "bank": null
+  },
+  {
+   "id": "CLIENT-1",
+   "item": "CLIENT",
+   "description": "고객사 이름",
+   "value": "한결물산",
+   "bank": null
+  },
+  {
+   "id": "CLIENT-2",
+   "item": "CLIENT",
+   "description": "고객사 이름",
+   "value": "다온로지스",
+   "bank": null
+  },
+  {
+   "id": "CLIENT-3",
+   "item": "CLIENT",
+   "description": "고객사 이름",
+   "value": "새벽유통",
+   "bank": null
+  },
+  {
+   "id": "CLIENT-4",
+   "item": "CLIENT",
+   "description": "고객사 이름",
+   "value": "미르상사",
+   "bank": null
+  },
+  {
+   "id": "CLIENT-5",
+   "item": "CLIENT",
+   "description": "고객사 이름",
+   "value": "온빛푸드",
+   "bank": null
+  },
+  {
+   "id": "CLASSIFIED-1",
+   "item": "CLASSIFIED",
+   "description": "문서 보안 등급 표시",
+   "value": "대외비",
+   "bank": null
+  },
+  {
+   "id": "CLASSIFIED-2",
+   "item": "CLASSIFIED",
+   "description": "문서 보안 등급 표시",
+   "value": "사내한",
+   "bank": null
+  },
+  {
+   "id": "CLASSIFIED-3",
+   "item": "CLASSIFIED",
+   "description": "문서 보안 등급 표시",
+   "value": "극비",
+   "bank": null
+  },
+  {
+   "id": "CLASSIFIED-4",
+   "item": "CLASSIFIED",
+   "description": "문서 보안 등급 표시",
+   "value": "Confidential",
+   "bank": null
+  },
+  {
+   "id": "CLASSIFIED-5",
+   "item": "CLASSIFIED",
+   "description": "문서 보안 등급 표시",
+   "value": "Internal Only",
+   "bank": null
+  }
+ ]
+}

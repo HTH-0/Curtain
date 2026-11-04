@@ -13,6 +13,8 @@ Curtain의 탐지와 가림이 얼마나 잘 동작하는지 재는 자료이다
 | `set/freeze.json`, `set/freeze_bypass.json`, `*.sha256` | 측정 전에 동결한 해시(평가 세트, 틀, 탐지 설정, 대량 기준). **고치지 않는다** |
 | `results/report_xyt_v1.md`, `xyt_v1.json` | X(범주별 탐지율), Y(정상 문장 오탐율), T(지연) |
 | `results/report_bypass_v1.md`, `bypass_v1.json` | 우회 시험 |
+| `set/bypass_v2.jsonl`, `set/bypass_v3.jsonl`, `set/benign_v1.jsonl`, `set/freeze_v2.json`, `set/v3_source/` | 입력 정규화(FR-13) 측정용: 우회 v2(알려진 유형, 값 10개씩), 블라인드 v3(서브에이전트가 만든 변형과 그 원본·지시), 정상 유사 세트, 동결 해시 |
+| `results/report_bypass_v2.md`, `results/norm_v2/` | 이전 코드와 새 코드를 같은 세트로 잰 비교와 원자료 |
 | `results/report_z_v1.md`, `results/z/` | Z 1차: 가림 후 답의 쓸모(사람 판정 45쌍이 주 결과, Jev 채점은 일치율 48.9%로 채택하지 않음) |
 | `results/report_z2_v1.md`, `results/z2/` | Z 2차: 가림 요청에 가명 안내문을 붙였을 때(사람 판정 없이 코드 지표 중심) |
 

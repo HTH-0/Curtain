@@ -1,0 +1,52 @@
+{"id":"benign-001","text":"회의 일정은 2025 11 04 15 30 45 59 순서로 기록되어 있어. 요약해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"date_list"}
+{"id":"benign-002","text":"시험 점수가 1 2 3 4 5 6 7 8 9 10 순서로 적혀 있는 표를 정렬해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"date_list"}
+{"id":"benign-003","text":"출석 번호 1 2 3 4 5 6 7 의 평균 키를 구하는 방법을 알려 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"date_list"}
+{"id":"benign-004","text":"배열 [3, 1, 4, 1, 5, 9, 2, 6] 을 정렬하는 코드를 작성해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"date_list"}
+{"id":"benign-005","text":"시간표 9 10 11 12 13 14 15 16 에 맞춰 수업을 배치해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"date_list"}
+{"id":"benign-006","text":"2025년 11월 4일 15시 30분 회의 안건을 정리해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"date_list"}
+{"id":"benign-007","text":"버전 1.2.3.4 로 배포하는 절차를 정리해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"version_serial"}
+{"id":"benign-008","text":"빌드 번호 20251104123456 이 실패한 원인을 로그에서 찾는 방법을 알려 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"version_serial"}
+{"id":"benign-009","text":"주문번호 1234567890123 의 배송 상태를 조회하는 문구를 써 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"version_serial"}
+{"id":"benign-010","text":"일련번호 4111 1111 1111 1112 가 형식에 맞는지 확인하는 정규식을 알려 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"version_serial"}
+{"id":"benign-011","text":"시리얼 4111.1111.1111.1112 로 장비를 검색하는 쿼리를 작성해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"version_serial"}
+{"id":"benign-012","text":"문서 번호 901301 1234567 로 보관함을 정리하는 규칙을 알려 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"version_serial"}
+{"id":"benign-013","text":"RFC 7231 과 RFC 9110 의 차이를 설명해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"version_serial"}
+{"id":"benign-014","text":"프로토콜 버전 v 1 . 2 는 예시 표기라서 그대로 설명만 해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"version_serial"}
+{"id":"benign-015","text":"우체국 택배 송장번호 6012345678901 의 배송 조회 안내문을 써 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"tracking_near_bank"}
+{"id":"benign-016","text":"우체국 택배로 보낸 물건의 운송장 1234567890123 을 고객에게 알리는 메일을 써 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"tracking_near_bank"}
+{"id":"benign-017","text":"은행나무 출판사 ISBN 9788912345678 도서의 서평을 요약해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"tracking_near_bank"}
+{"id":"benign-018","text":"농협 하나로마트 영수증 번호 20251104123456 으로 교환 요청하는 문구를 써 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"tracking_near_bank"}
+{"id":"benign-019","text":"신협 행사 응모번호 12345678901 에 당첨 안내를 보내는 문구를 써 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"tracking_near_bank"}
+{"id":"benign-020","text":"은행 점검 시간 02 03 04 05 06 에 맞춰 공지문을 써 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"tracking_near_bank"}
+{"id":"benign-021","text":"계좌 개설 2024 10 12 안내문의 말투를 부드럽게 고쳐 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"tracking_near_bank"}
+{"id":"benign-022","text":"은행 지점 코드 1234 5678 을 표로 정리해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"tracking_near_bank"}
+{"id":"benign-023","text":"일이삼 순서로 업무를 정리하는 방법을 알려 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"korean_digit_words"}
+{"id":"benign-024","text":"오일 가격 추이를 요약해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"korean_digit_words"}
+{"id":"benign-025","text":"사이 간격 조정을 설명해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"korean_digit_words"}
+{"id":"benign-026","text":"공일공 으로 시작하는 번호는 휴대전화라는 설명을 다듬어 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"korean_digit_words"}
+{"id":"benign-027","text":"이삼십 명 규모의 워크숍 일정을 짜 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"korean_digit_words"}
+{"id":"benign-028","text":"삼성전자 주가 일정과 관련해 기사 제목을 만들어 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"korean_digit_words"}
+{"id":"benign-029","text":"일이삼사오 번 문제의 풀이를 한 줄씩 설명해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"korean_digit_words"}
+{"id":"benign-030","text":"이삼사 조항과 오육칠 항을 비교해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"korean_digit_words"}
+{"id":"benign-031","text":"구구단 팔칠 오십육 까지 외우는 법을 알려 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"korean_digit_words"}
+{"id":"benign-032","text":"영영 일이 없는 날을 영일이라고 부르는 표현을 설명해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"korean_digit_words"}
+{"id":"benign-033","text":"１２３ 개의 항목을 번호순으로 정리해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"fullwidth_invisible"}
+{"id":"benign-034","text":"Ａ팀과 Ｂ팀의 ２０２５년 목표를 비교해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"fullwidth_invisible"}
+{"id":"benign-035","text":"회의록​ 요약을 부탁해. 보이지 않는 문자가 섞였을 수 있어.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"fullwidth_invisible"}
+{"id":"benign-036","text":"ＡＢＣ 주식회사 소개문을 써 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"fullwidth_invisible"}
+{"id":"benign-037","text":"가격은 １００００원이고 할인율은 １５％야. 최종 금액을 계산해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"fullwidth_invisible"}
+{"id":"benign-038","text":"문장 사이에​​ 보이지 않는 문자가 있어도 맞춤법 검사를 해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"fullwidth_invisible"}
+{"id":"benign-039","text":"극 비 싸다고 말하는 문장을 자연스럽게 고쳐 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"dictionary_lookalike"}
+{"id":"benign-040","text":"대외 비서 채용 공고문을 써 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"dictionary_lookalike"}
+{"id":"benign-041","text":"블루 웨일 이야기라는 동화를 요약해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"dictionary_lookalike"}
+{"id":"benign-042","text":"한결 같은 물산 이야기라는 말투로 광고 문구를 만들어 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"dictionary_lookalike"}
+{"id":"benign-043","text":"다 온 로 지 스 라는 이름은 아니고 그냥 글자를 띄어 쓰는 연습 문장이야.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"dictionary_lookalike"}
+{"id":"benign-044","text":"새벽 유통 시간표를 정리해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"dictionary_lookalike"}
+{"id":"benign-045","text":"사내 한마음 행사 안내문을 써 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"dictionary_lookalike"}
+{"id":"benign-046","text":"스톤 브릿지 게임 규칙을 설명해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"dictionary_lookalike"}
+{"id":"benign-047","text":"대표 번호 02 555 0100 은 안내 방송에 쓰는 번호야. 안내 문구를 써 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"phone_like"}
+{"id":"benign-048","text":"예시 번호 010 0000 0000 으로 입력 칸 설명을 써 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"phone_like"}
+{"id":"benign-049","text":"국번 031 과 032 의 지역 차이를 알려 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"phone_like"}
+{"id":"benign-050","text":"우편번호 06236 과 03187 을 표로 정리해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"phone_like"}
+{"id":"benign-051","text":"사업자등록번호 형식 123-45-67890 을 설명해 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"phone_like"}
+{"id":"benign-052","text":"법인 등기 번호는 6자리와 7자리로 구성된다는 설명을 다듬어 줘.","kind":"normal","expected_action":"ALLOW","spans":[],"group":"phone_like"}

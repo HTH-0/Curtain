@@ -107,13 +107,22 @@ def _make(item, category, transform, k, seed):
             "value_original": original, "value_sent": sent}
 
 
-def build_bypass_set(seed="deskguard-bypass-v1"):
+def build_bypass_set(seed="deskguard-bypass-v1", replicates=REPLICATES):
     records = []
     for item, (category, transforms) in PLAN.items():
         for transform in ["control", *transforms]:
-            for k in range(1, REPLICATES + 1):
+            for k in range(1, replicates + 1):
                 records.append(_make(item, category, transform, k, seed))
     return records
+
+
+DICTIONARY_ITEMS = {"CODENAME", "CLIENT", "CLASSIFIED"}
+
+
+def overlap_with(records, other_records):
+    """사전 항목을 뺀 원래 값 중 다른 세트와 겹치는 것(AC-13.8). 사전 항목은 값이 사전 단어 5개뿐이라 겹침을 허용한다."""
+    seen = {r["value_original"] for r in other_records if r["item"] not in DICTIONARY_ITEMS}
+    return sorted({r["value_original"] for r in records if r["item"] not in DICTIONARY_ITEMS and r["value_original"] in seen})
 
 
 write_dataset = be.write_dataset
@@ -123,8 +132,18 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description="우회 시험 세트를 만든다")
     ap.add_argument("--out", required=True)
     ap.add_argument("--seed", default="deskguard-bypass-v1")
+    ap.add_argument("--replicates", type=int, default=REPLICATES, help="변형마다 서로 다른 값 개수(기본 2, v2는 10)")
+    ap.add_argument("--avoid", help="이 JSONL의 값과 겹치면 실패한다(사전 항목 제외)")
     args = ap.parse_args(argv)
-    records = build_bypass_set(args.seed)
+    records = build_bypass_set(args.seed, args.replicates)
+    if args.avoid:
+        import json
+        with open(args.avoid, encoding="utf-8") as f:
+            other = [json.loads(line) for line in f if line.strip()]
+        dup = overlap_with(records, other)
+        if dup:
+            print(f"겹치는 값 {len(dup)}개: 다른 seed를 쓰세요", file=sys.stderr)
+            return 1
     digest = write_dataset(records, args.out)
     print(f"만든 문장 {len(records)}개, 해시 {digest}")
     return 0
