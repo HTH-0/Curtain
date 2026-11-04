@@ -1,0 +1,107 @@
+{
+  "n": 52,
+  "x": {
+    "D1": {
+      "gold": 0,
+      "tp": 0,
+      "item_wrong": 0,
+      "fn": 0,
+      "rate": null,
+      "ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "D2": {
+      "gold": 0,
+      "tp": 0,
+      "item_wrong": 0,
+      "fn": 0,
+      "rate": null,
+      "ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "D3": {
+      "gold": 0,
+      "tp": 0,
+      "item_wrong": 0,
+      "fn": 0,
+      "rate": null,
+      "ci": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "x_by_item": {},
+  "by_transform": {},
+  "misses": [
+    {
+      "id": "benign-019",
+      "type": "FP_normal",
+      "item": "ACCOUNT",
+      "action": "MASK"
+    },
+    {
+      "id": "benign-043",
+      "type": "FP_normal",
+      "item": "CLIENT",
+      "action": "MASK"
+    }
+  ],
+  "action_mismatches": [
+    {
+      "id": "benign-019",
+      "expected": "ALLOW",
+      "actual": "MASK"
+    },
+    {
+      "id": "benign-043",
+      "expected": "ALLOW",
+      "actual": "MASK"
+    }
+  ],
+  "x_extra_false_positives": 0,
+  "y": {
+    "n": 52,
+    "false_positives": 2,
+    "rate": 0.038461538461538464,
+    "ci": [
+      0.010611488322077554,
+      0.12981428744365978
+    ]
+  },
+  "action_accuracy": {
+    "correct": 50,
+    "n": 52,
+    "ci": [
+      0.8701857125563401,
+      0.9893885116779224
+    ]
+  },
+  "t": {
+    "detectMs": {
+      "n": 52,
+      "median": 0.0,
+      "p95": 0
+    },
+    "maskMs": {
+      "n": 52,
+      "median": 0.0,
+      "p95": 0
+    },
+    "restoreMs": {
+      "n": 2,
+      "median": 0.0,
+      "p95": 0
+    },
+    "rttMs": {
+      "n": 52,
+      "median": 11.769849999836879,
+      "p95": 13.285799999721348
+    }
+  },
+  "dataset_sha256": "f074b7b1b062cc4e937dd52448794bb7d5d4215652c4b56e9e352fe76ba8af18"
+}

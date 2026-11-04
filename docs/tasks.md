@@ -105,5 +105,5 @@ a: 8건 모두 `NONE`(5건) 또는 `JUDGE`(3건), 판정 실패와 오류 0건. 
 - [x] 4. 구분자 확대(주민번호, 카드, 계좌, 사전어 글자 띄어쓰기)(Java 206건 통과)
 - [x] 5. 회귀 확인: Java 206건, Python 79건 통과. 평가 세트 v1을 새 코드로 다시 쟀더니 X, Y, 처리 정확도(552/596)가 기존과 같고 새로 틀린 문장 0개(AC-13.3 충족)
 - [x] 6a. 세트 준비와 동결: 우회 세트 v2(600문장), 블라인드 v3(240문장, 서브에이전트가 변형 생성, 표본 20개 확인), 정상 유사 세트(52문장), `freeze_v2.json`(커밋 `45b2865`)
-- [ ] 6b. 이전 코드와 새 코드 비교 측정, `report_bypass_v2.md` 작성
-- [ ] 7. 기록 갱신(DECISIONS, handoff, open-risks R15, README)
+- [x] 6b. 이전 코드와 새 코드 비교 측정, `report_bypass_v2.md` 작성(v2 26.2%에서 79.8%, 블라인드 v3 12.1%에서 48.3%)
+- [x] 7. 기록 갱신(DECISIONS, handoff, open-risks R15, README, eval README, worklog)

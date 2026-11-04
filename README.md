@@ -51,13 +51,13 @@
 | 정상 문장 오탐 | 0 / 106 |
 | 처리 지연 | 서버 중앙값 0ms, 95백분위 1ms 이하 |
 | 가려도 답을 쓸 수 있는 비율 | 91.7% (사람이 판정한 45쌍 중, 원문으로 쓸 수 있던 답 36개 가운데 33개) |
-| 우회 문장 탐지율 | 26% (변형 96문장 중 25개) |
+| 우회 문장 탐지율 | 정규화 전 26%(변형 96문장 중 25개). 정규화 후 79.8%(알려진 유형 480문장), 48.3%(처음 보는 변형 240문장) |
 
-상세 수치와 신뢰구간은 [탐지 보고서](./docs/eval/results/report_xyt_v1.md), [우회 보고서](./docs/eval/results/report_bypass_v1.md), [가림 후 유용성 보고서](./docs/eval/results/report_z_v1.md)에 있다.
+상세 수치와 신뢰구간은 [탐지 보고서](./docs/eval/results/report_xyt_v1.md), [우회 보고서](./docs/eval/results/report_bypass_v1.md), [입력 정규화 보고서](./docs/eval/results/report_bypass_v2.md), [가림 후 유용성 보고서](./docs/eval/results/report_z_v1.md)에 있다.
 
 **한계**
 
-- 전각 숫자, 한글 숫자, 글자 띄어쓰기 같은 우회에 약하다. 입력 정규화가 다음 과제이다.
+- 입력 정규화로 전각 숫자, 한글 숫자, 글자 띄어쓰기, 보이지 않는 문자는 대부분 막는다. 그러나 줄바꿈으로 쪼갠 값, 퍼센트 인코딩이나 HTML 엔터티, 숫자 대신 `O`와 `l`을 쓴 값처럼 처음 보는 변형은 절반 넘게 놓친다(블라인드 시험 48.3% 탐지).
 - 값 모양만으로는 구분할 수 없는 비밀번호와 계좌 번호를 놓친다.
 - 합성 문장으로 측정해서 실제 직원 문장보다 높게 나왔을 수 있다.
 - 사용자 인증이 없고, 모델이 답에 가명을 쓰지 않으면 복원할 것이 없다. 남은 위험은 [open-risks.md](./docs/open-risks.md)에 정리했다.
@@ -76,7 +76,7 @@ mvn spring-boot:run
 
 # 자동 시험: Java 183건, Python 79건
 mvn -B test
-cd scripts && python -m unittest test_fake_values test_measure test_build_eval_set test_build_bypass_set test_z_measure
+cd scripts && python -m unittest test_fake_values test_measure test_build_eval_set test_build_bypass_set test_z_measure test_build_blind_set test_freeze_v2
 ```
 
 공개 사이트는 저장소의 `Dockerfile`로 Render에 배포하며, `main`에 올리면 자동으로 다시 배포된다.

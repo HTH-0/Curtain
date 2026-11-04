@@ -1,0 +1,83 @@
+{
+  "n": 52,
+  "x": {
+    "D1": {
+      "gold": 0,
+      "tp": 0,
+      "item_wrong": 0,
+      "fn": 0,
+      "rate": null,
+      "ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "D2": {
+      "gold": 0,
+      "tp": 0,
+      "item_wrong": 0,
+      "fn": 0,
+      "rate": null,
+      "ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "D3": {
+      "gold": 0,
+      "tp": 0,
+      "item_wrong": 0,
+      "fn": 0,
+      "rate": null,
+      "ci": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "x_by_item": {},
+  "by_transform": {},
+  "misses": [],
+  "action_mismatches": [],
+  "x_extra_false_positives": 0,
+  "y": {
+    "n": 52,
+    "false_positives": 0,
+    "rate": 0.0,
+    "ci": [
+      0.0,
+      0.06879459041288215
+    ]
+  },
+  "action_accuracy": {
+    "correct": 52,
+    "n": 52,
+    "ci": [
+      0.9312054095871178,
+      1.0
+    ]
+  },
+  "t": {
+    "detectMs": {
+      "n": 52,
+      "median": 0.0,
+      "p95": 0
+    },
+    "maskMs": {
+      "n": 52,
+      "median": 0.0,
+      "p95": 0
+    },
+    "restoreMs": {
+      "n": 0,
+      "median": null,
+      "p95": null
+    },
+    "rttMs": {
+      "n": 52,
+      "median": 11.761900001147296,
+      "p95": 14.150700000755023
+    }
+  },
+  "dataset_sha256": "f074b7b1b062cc4e937dd52448794bb7d5d4215652c4b56e9e352fe76ba8af18"
+}
